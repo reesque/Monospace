@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Simplify" parent="SimplifyTheme">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/bg_black</item>
+        <item name="colorPrimaryVariant">@color/bg_black</item>
+        <item name="colorOnPrimary">@color/bg_black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/bg_black</item>
+        <item name="colorSecondaryVariant">@color/text_gray</item>
+        <item name="colorOnSecondary">@color/text_gray</item>
+        <!-- Status bar color -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>

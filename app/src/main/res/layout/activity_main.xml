@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:fitsSystemWindows="false"
+    android:background="@color/bg_black_blur">
+
+    <TextView
+        android:id="@+id/dow_sun"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="S"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/left_padding" />
+
+    <TextView
+        android:id="@+id/dow_mon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="M"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_sun" />
+
+    <TextView
+        android:id="@+id/dow_tue"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="T"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_mon" />
+
+    <TextView
+        android:id="@+id/dow_wed"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="W"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_tue" />
+
+    <TextView
+        android:id="@+id/dow_thu"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="T"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_wed" />
+
+    <TextView
+        android:id="@+id/dow_fri"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="F"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_thu" />
+
+    <TextView
+        android:id="@+id/dow_sat"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="S"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:padding="3dp"
+        app:layout_constraintTop_toBottomOf="@id/header_top"
+        app:layout_constraintStart_toEndOf="@id/dow_fri" />
+
+    <TextView
+        android:id="@+id/month_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="###"
+        android:textColor="@color/white"
+        android:textSize="90sp"
+        android:textStyle="bold"
+        android:layout_marginTop="-5dp"
+        app:layout_constraintStart_toEndOf="@id/left_padding"
+        app:layout_constraintTop_toBottomOf="@id/dow_sun" />
+
+    <TextView
+        android:id="@+id/dom_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="##"
+        android:textColor="@color/white"
+        android:textSize="90sp"
+        android:fontFamily="monospace"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@id/month_main"
+        app:layout_constraintTop_toTopOf="@id/month_main" />
+
+    <TextView
+        android:id="@+id/time_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="##:##"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@id/left_padding"
+        app:layout_constraintTop_toBottomOf="@id/month_main" />
+
+    <TextView
+        android:id="@+id/mer_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="monospace"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:text="##"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/time_main"
+        app:layout_constraintStart_toEndOf="@id/time_main" />
+
+    <ImageView
+        android:id="@+id/cursor_main"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cursor_white"
+        app:layout_constraintBottom_toBottomOf="@id/time_main"
+        app:layout_constraintEnd_toEndOf="@id/right_padding"
+        app:layout_constraintTop_toTopOf="@id/dow_sun" />
+
+    <LinearLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/content_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/header_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/content_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
