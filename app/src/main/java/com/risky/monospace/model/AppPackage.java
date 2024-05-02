@@ -4,20 +4,20 @@ import android.graphics.drawable.Drawable;
 
 import java.util.Comparator;
 
-public class AppListItem {
+public class AppPackage {
     public final String packageName;
     public final String name;
     public final Drawable icon;
 
-    public AppListItem(String packageName, String name, Drawable icon) {
+    public AppPackage(String packageName, String name, Drawable icon) {
         this.name = name;
         this.icon = icon;
         this.packageName = packageName;
     }
 
-    public static class ItemComparator implements Comparator<AppListItem> {
+    public static class ItemComparator implements Comparator<AppPackage> {
         @Override
-        public int compare(AppListItem o1, AppListItem o2) {
+        public int compare(AppPackage o1, AppPackage o2) {
             return o1.name.compareTo(o2.name);
         }
     }

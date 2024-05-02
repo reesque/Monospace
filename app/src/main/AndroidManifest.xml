@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receiver.InstallReceiver"
+        <receiver android:name=".receiver.AppPackageReceiver"
             android:label="Monospace Package Manager"
             android:exported="false">
             <intent-filter >

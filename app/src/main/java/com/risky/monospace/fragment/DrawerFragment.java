@@ -20,9 +20,13 @@ import androidx.fragment.app.Fragment;
 
 import com.risky.monospace.R;
 import com.risky.monospace.model.AppListAdapter;
-import com.risky.monospace.model.AppListItem;
+import com.risky.monospace.model.AppPackage;
+import com.risky.monospace.service.AppPackageService;
+import com.risky.monospace.util.PacManSubscriber;
 
-public class DrawerFragment extends Fragment {
+import java.util.List;
+
+public class DrawerFragment extends Fragment implements PacManSubscriber {
     private View view;
     private Context context;
     private InputMethodManager imm;
@@ -44,15 +48,12 @@ public class DrawerFragment extends Fragment {
         appSearch = view.findViewById(R.id.app_search_edit);
 
         // ### App list ###
-        PackageManager pm = context.getPackageManager();
-
-        // ### Adapter ###
-        adapter = new AppListAdapter(context);
-        appList.setAdapter(adapter);
+        AppPackageService.subscribe(this);
 
         // ### Search app ###
+        PackageManager pm = context.getPackageManager();
         appList.setOnItemClickListener((parent, view, position, id) -> {
-            String pname = ((AppListItem) parent.getItemAtPosition(position)).packageName;
+            String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
             Intent launchIntent = pm.getLaunchIntentForPackage(pname);
             startActivity(launchIntent);
         });
@@ -83,5 +84,11 @@ public class DrawerFragment extends Fragment {
         appSearch.requestFocus();
 
         return view;
+    }
+
+    @Override
+    public void update(List<AppPackage> packages) {
+        adapter = new AppListAdapter(context, packages);
+        appList.setAdapter(adapter);
     }
 }

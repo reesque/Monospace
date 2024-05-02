@@ -8,6 +8,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,11 +111,7 @@ public class GreetFragment extends Fragment implements NotificationSubscriber {
             params.setMargins(0, 0, 10, 0);
             notifIcon.setLayoutParams(params);
             notifIcon.setImageDrawable(icon);
-
-            ColorMatrix matrix = new ColorMatrix();
-            matrix.setSaturation(0);  // 0 means grayscale
-            ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
-            notifIcon.setColorFilter(cf);
+            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
 
             notificationPanel.addView(notifIcon);
             notificationCount--;

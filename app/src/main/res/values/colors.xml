@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
-
     <color name="black">#2A2A2A</color>
     <color name="terminal_green">#388E3C</color>
     <color name="bg_black_blur">#992A2A2A</color>

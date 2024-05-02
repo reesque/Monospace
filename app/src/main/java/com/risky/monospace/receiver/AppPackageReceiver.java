@@ -4,11 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.risky.monospace.service.AppCacheService;
+import com.risky.monospace.service.AppPackageService;
 
-public class InstallReceiver extends BroadcastReceiver {
-    public InstallReceiver(Context context) {
-        AppCacheService.refresh(context);
+public class AppPackageReceiver extends BroadcastReceiver {
+    public AppPackageReceiver(Context context) {
+        AppPackageService.refresh(context);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class InstallReceiver extends BroadcastReceiver {
         switch (intent.getAction()) {
             case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_REMOVED:
-                AppCacheService.refresh(context);
+                AppPackageService.refresh(context);
                 break;
         }
     }

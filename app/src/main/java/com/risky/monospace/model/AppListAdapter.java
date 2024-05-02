@@ -15,22 +15,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
-import com.risky.monospace.service.AppCacheService;
+import com.risky.monospace.service.AppPackageService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppListAdapter extends ArrayAdapter<AppListItem> implements Filterable {
-    private List<AppListItem> originalItems;
+public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterable {
+    private final List<AppPackage> originalItems;
 
-    public AppListAdapter(Context context) {
-        super(context, 0, new ArrayList<>(AppCacheService.get()));
-        originalItems = new ArrayList<>(AppCacheService.get());
+    public AppListAdapter(Context context, List<AppPackage> packages) {
+        super(context, 0, new ArrayList<>(packages));
+        originalItems = new ArrayList<>(packages);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        AppListItem item = getItem(position);
+        AppPackage item = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.app_list_item, parent, false);
@@ -58,7 +58,7 @@ public class AppListAdapter extends ArrayAdapter<AppListItem> implements Filtera
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-                List<AppListItem> filteredArrayNames = new ArrayList<>();
+                List<AppPackage> filteredArrayNames = new ArrayList<>();
 
                 results.count = originalItems.size();
                 results.values = originalItems;
@@ -84,7 +84,7 @@ public class AppListAdapter extends ArrayAdapter<AppListItem> implements Filtera
             protected void publishResults(CharSequence constraint, FilterResults results) {clear();
                 clear();
                 if (results.count != 0) {
-                    addAll((List<AppListItem>) results.values);
+                    addAll((List<AppPackage>) results.values);
                 }
                 notifyDataSetChanged();
             }
