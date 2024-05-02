@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="bg_black">#2A2A2A</color>
-    <color name="text_gray">#808080</color>
-    <color name="terminal_green">#2E7D32</color>
+    <color name="black">#2A2A2A</color>
+    <color name="terminal_green">#388E3C</color>
     <color name="bg_black_blur">#992A2A2A</color>
+    <color name="bg_dark_black_blur">#EE2A2A2A</color>
     <color name="bg_white_blur">#99FFFFFF</color>
 </resources>

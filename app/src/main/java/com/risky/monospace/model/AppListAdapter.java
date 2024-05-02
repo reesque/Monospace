@@ -1,4 +1,4 @@
-package com.risky.simplify.model;
+package com.risky.monospace.model;
 
 import android.content.Context;
 import android.graphics.ColorMatrix;
@@ -14,9 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.risky.simplify.R;
-import com.risky.simplify.model.AppListItem;
-import com.risky.simplify.service.AppCacheService;
+import com.risky.monospace.R;
+import com.risky.monospace.service.AppCacheService;
 
 import java.util.ArrayList;
 import java.util.List;

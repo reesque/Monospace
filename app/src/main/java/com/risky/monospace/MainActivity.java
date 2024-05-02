@@ -1,36 +1,38 @@
-package com.risky.simplify;
+package com.risky.monospace;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.risky.simplify.fragment.DrawerFragment;
-import com.risky.simplify.fragment.GreetFragment;
-import com.risky.simplify.util.InstallReceiver;
+import com.risky.monospace.fragment.DrawerFragment;
+import com.risky.monospace.fragment.GreetFragment;
+import com.risky.monospace.receiver.InstallReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
     private TextView time;
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView thu;
     private TextView fri;
     private TextView sat;
-    private ImageView cursor;
     private LinearLayout contentFragment;
 
     private final SimpleDateFormat domFormat = new SimpleDateFormat("dd");
@@ -51,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private final SimpleDateFormat merFormat = new SimpleDateFormat("a");
     private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMM");
 
+    private InstallReceiver installReceiver;
+
     private boolean isHome = true;
-    private AnimationDrawable cursorAnim;
 
     // For swipe detection
     private float y1, y2;
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Get elements
+        mainPanel = findViewById(R.id.main);
         month = findViewById(R.id.month_main);
         dom = findViewById(R.id.dom_main);
         time = findViewById(R.id.time_main);
@@ -89,26 +92,13 @@ public class MainActivity extends AppCompatActivity {
         thu = findViewById(R.id.dow_thu);
         fri = findViewById(R.id.dow_fri);
         sat = findViewById(R.id.dow_sat);
-        cursor = findViewById(R.id.cursor_main);
         contentFragment = findViewById(R.id.fragment_container);
 
         // ###  Clock control ###
         updateTime();
 
         Handler handler = new Handler();
-        Runnable dateTimeRunnable = this::updateTime;
-        handler.postDelayed(dateTimeRunnable, 60000);
-
-        // ### Blinking cursor control ###
-        cursorAnim = new AnimationDrawable();
-        cursorAnim.addFrame(
-                ContextCompat.getDrawable(this, R.drawable.cursor_transparent), 1000);
-        cursorAnim.addFrame(
-                ContextCompat.getDrawable(this, R.drawable.cursor_white), 1000);
-        cursorAnim.setOneShot(false);
-
-        cursor.setImageDrawable(cursorAnim);
-        cursorAnim.start();
+        handler.postDelayed(this::updateTime, 1000);
 
         // ### Greeter ###
         getSupportFragmentManager()
@@ -128,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (delta < -MIN_DISTANCE) {
                         isHome = false;
+                        setBackgroundColor(true);
                         getSupportFragmentManager()
                                 .beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_anim, R.anim.fade_out_anim)
@@ -146,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addDataScheme("package");
-        registerReceiver(new InstallReceiver(this), intentFilter);
+        installReceiver = new InstallReceiver(this);
+        registerReceiver(installReceiver, intentFilter);
 
         // ### Back ###
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
@@ -154,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (!isHome) {
                     isHome = true;
+                    setBackgroundColor(false);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.fade_in_anim, R.anim.fade_out_anim)
@@ -164,12 +157,15 @@ public class MainActivity extends AppCompatActivity {
         };
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+
+        // TODO: ASK FOR NOTIFICATION PERMISSION
+        // Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        // startActivity(intent);
     }
 
     @Override
     protected void onPause() {
         getOnBackPressedDispatcher().onBackPressed();
-        cursorAnim.stop();
 
         super.onPause();
     }
@@ -189,8 +185,12 @@ public class MainActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+    }
 
-        cursorAnim.run();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(installReceiver);
     }
 
     @SuppressLint("SetTextI18n")
@@ -204,25 +204,41 @@ public class MainActivity extends AppCompatActivity {
 
         int dow = calendar.get(Calendar.DAY_OF_WEEK);
         mon.setBackgroundResource(dow == 2 ? R.drawable.round : 0);
-        mon.setTextColor(dow == 2 ? ContextCompat.getColor(this, R.color.bg_black)
+        mon.setTextColor(dow == 2 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         tue.setBackgroundResource(dow == 3 ? R.drawable.round : 0);
-        tue.setTextColor(dow == 3 ? ContextCompat.getColor(this, R.color.bg_black)
+        tue.setTextColor(dow == 3 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         wed.setBackgroundResource(dow == 4 ? R.drawable.round : 0);
-        wed.setTextColor(dow == 4 ? ContextCompat.getColor(this, R.color.bg_black)
+        wed.setTextColor(dow == 4 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         thu.setBackgroundResource(dow == 5 ? R.drawable.round : 0);
-        thu.setTextColor(dow == 5 ? ContextCompat.getColor(this, R.color.bg_black)
+        thu.setTextColor(dow == 5 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         fri.setBackgroundResource(dow == 6 ? R.drawable.round : 0);
-        fri.setTextColor(dow == 6 ? ContextCompat.getColor(this, R.color.bg_black)
+        fri.setTextColor(dow == 6 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         sat.setBackgroundResource(dow == 7 ? R.drawable.round : 0);
-        sat.setTextColor(dow == 7 ? ContextCompat.getColor(this, R.color.bg_black)
+        sat.setTextColor(dow == 7 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
         sun.setBackgroundResource(dow == 1 ? R.drawable.round : 0);
-        sun.setTextColor(dow == 1 ? ContextCompat.getColor(this, R.color.bg_black)
+        sun.setTextColor(dow == 1 ? ContextCompat.getColor(this, R.color.black)
                 : ContextCompat.getColor(this, R.color.white));
+    }
+
+    private void setBackgroundColor(boolean reversed) {
+        int colorMain = ContextCompat.getColor(MainActivity.this, R.color.bg_black_blur);
+        int colorSub = ContextCompat.getColor(MainActivity.this, R.color.bg_dark_black_blur);
+
+        ValueAnimator colorAnimation = null;
+        if (reversed) {
+            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorMain, colorSub);
+        } else {
+            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
+        }
+        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.addUpdateListener(animator ->
+                mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
+        colorAnimation.start();
     }
 }

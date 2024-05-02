@@ -17,9 +17,10 @@
             android:id="@+id/drawer_prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="/usr/bin/>"
+            android:text="/search/>"
             android:textColor="@color/terminal_green"
             android:textSize="20dp"
+            android:layout_marginStart="5dp"
             android:fontFamily="monospace" />
 
         <EditText
@@ -30,7 +31,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="monospace"
             android:inputType="textNoSuggestions"
-            android:textColor="@color/bg_black"
+            android:textColor="@color/black"
             android:textCursorDrawable="@drawable/cursor_black"
             android:textSize="20dp"
             android:imeOptions="actionDone"

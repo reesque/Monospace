@@ -1,4 +1,4 @@
-package com.risky.simplify.model;
+package com.risky.monospace.model;
 
 import android.graphics.drawable.Drawable;
 

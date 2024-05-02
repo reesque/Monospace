@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Simplify</string>
-    <string name="notif_service">Simplify Notification Service</string>
+    <string name="app_name">Monospace</string>
+    <string name="notif_service">Monospace Notification Service</string>
 </resources>

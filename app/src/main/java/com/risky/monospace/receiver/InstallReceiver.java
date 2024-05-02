@@ -1,10 +1,10 @@
-package com.risky.simplify.util;
+package com.risky.monospace.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.risky.simplify.service.AppCacheService;
+import com.risky.monospace.service.AppCacheService;
 
 public class InstallReceiver extends BroadcastReceiver {
     public InstallReceiver(Context context) {
@@ -13,7 +13,7 @@ public class InstallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch (intent.getAction()){
+        switch (intent.getAction()) {
             case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_REMOVED:
                 AppCacheService.refresh(context);

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.risky.simplify'
+    namespace 'com.risky.monospace'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.risky.simplify"
+        applicationId "com.risky.monospace"
         minSdk 28
         targetSdk 34
         versionCode 1
@@ -29,7 +29,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity

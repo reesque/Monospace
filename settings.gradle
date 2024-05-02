@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Simplify"
+rootProject.name = "Monospace"
 include ':app'

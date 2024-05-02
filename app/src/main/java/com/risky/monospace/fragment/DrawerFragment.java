@@ -1,16 +1,11 @@
-package com.risky.simplify.fragment;
-
-import static androidx.core.content.ContextCompat.getSystemService;
+package com.risky.monospace.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
@@ -18,20 +13,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.risky.simplify.MainActivity;
-import com.risky.simplify.R;
-import com.risky.simplify.model.AppListAdapter;
-import com.risky.simplify.model.AppListItem;
-import com.risky.simplify.service.AppCacheService;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.risky.monospace.R;
+import com.risky.monospace.model.AppListAdapter;
+import com.risky.monospace.model.AppListItem;
 
 public class DrawerFragment extends Fragment {
     private View view;

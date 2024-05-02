@@ -1,11 +1,11 @@
-package com.risky.simplify.service;
+package com.risky.monospace.service;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
-import com.risky.simplify.model.AppListItem;
+import com.risky.monospace.model.AppListItem;
 
 import java.util.ArrayList;
 import java.util.Collections;

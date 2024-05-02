@@ -21,6 +21,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:padding="3dp"
+        android:layout_marginStart="-2dp"
         app:layout_constraintTop_toBottomOf="@id/header_top"
         app:layout_constraintStart_toEndOf="@id/left_padding" />
 
@@ -122,7 +123,7 @@
         android:lineSpacingExtra="0dp"
         android:text="###"
         android:textColor="@color/white"
-        android:textSize="90sp"
+        android:textSize="100sp"
         android:textStyle="bold"
         android:layout_marginTop="-5dp"
         app:layout_constraintStart_toEndOf="@id/left_padding"
@@ -136,7 +137,7 @@
         android:lineSpacingExtra="0dp"
         android:text="##"
         android:textColor="@color/white"
-        android:textSize="90sp"
+        android:textSize="100sp"
         android:fontFamily="monospace"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@id/month_main"
@@ -159,8 +160,8 @@
         android:id="@+id/mer_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:fontFamily="monospace"
+        android:layout_marginStart="7dp"
+        android:textStyle="bold"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
         android:text="##"
@@ -168,15 +169,6 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/time_main"
         app:layout_constraintStart_toEndOf="@id/time_main" />
-
-    <ImageView
-        android:id="@+id/cursor_main"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:src="@drawable/cursor_white"
-        app:layout_constraintBottom_toBottomOf="@id/time_main"
-        app:layout_constraintEnd_toEndOf="@id/right_padding"
-        app:layout_constraintTop_toTopOf="@id/dow_sun" />
 
     <LinearLayout
         android:id="@+id/fragment_container"
@@ -194,13 +186,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.04" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/right_padding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/header_top"
