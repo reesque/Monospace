@@ -1,4 +1,4 @@
-package com.risky.monospace.util;
+package com.risky.monospace.service.subscribers;
 
 import com.risky.monospace.model.BluetoothStatus;
 

@@ -1,14 +1,12 @@
 package com.risky.monospace.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +25,25 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.risky.monospace.R;
+import com.risky.monospace.dialog.GeoDialog;
 import com.risky.monospace.model.Notification;
+import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.service.NotificationService;
-import com.risky.monospace.util.NotificationSubscriber;
+import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.NotificationSubscriber;
+import com.risky.monospace.service.subscribers.WeatherSubscriber;
 
-public class GreetFragment extends Fragment implements NotificationSubscriber {
+public class GreetFragment extends Fragment implements NotificationSubscriber, WeatherSubscriber {
     private View view;
     private Context context;
-    private TextView greeter;
+    private TextView temperature;
+    private ImageView weatherIcon;
+    private ImageView notifIcon;
     private LinearLayout notificationPanel;
+
+    // TEMPORARY
+    private float LAT = 52.52f;
+    private float LONG = 13.41f;
 
     public GreetFragment(Context context) {
         this.context = context;
@@ -46,23 +54,19 @@ public class GreetFragment extends Fragment implements NotificationSubscriber {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.greet_fragment, container, false);
 
-        greeter = view.findViewById(R.id.greeter);
         notificationPanel = view.findViewById(R.id.notification_container);
-
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-
-        if(timeOfDay < 12){
-            greeter.setText("Good Morning");
-        } else if(timeOfDay < 18){
-            greeter.setText("Good Afternoon");
-        } else if(timeOfDay < 22){
-            greeter.setText("Good Evening");
-        } else {
-            greeter.setText("Good Night");
-        }
+        temperature = view.findViewById(R.id.weather_temp);
+        weatherIcon = view.findViewById(R.id.weather_icon);
+        notifIcon = view.findViewById(R.id.notification_icon);
 
         NotificationService.subscribe(this);
+        WeatherService.subscribe(this);
+
+        weatherIcon.setOnClickListener(v -> new GeoDialog(context).show());
+        notifIcon.setOnClickListener(v -> {
+            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        });
 
         return view;
     }
@@ -87,11 +91,11 @@ public class GreetFragment extends Fragment implements NotificationSubscriber {
                 moreIcon.setText("+" + notificationCount);
                 params.setMargins(8, 0, 0, 0);
                 moreIcon.setLayoutParams(params);
-                moreIcon.setTextColor(ContextCompat.getColor(context, R.color.black));
+                moreIcon.setTextColor(ContextCompat.getColor(context, R.color.white));
                 moreIcon.setTextSize(10);
                 moreIcon.setGravity(Gravity.CENTER);
                 moreIcon.setTypeface(moreIcon.getTypeface(), Typeface.BOLD);
-                moreIcon.setBackgroundResource(R.drawable.round);
+                moreIcon.setBackgroundResource(R.drawable.round_black);
 
                 notificationPanel.addView(moreIcon);
                 break;
@@ -102,7 +106,6 @@ public class GreetFragment extends Fragment implements NotificationSubscriber {
                 Resources res = context.getPackageManager()
                         .getResourcesForApplication(n.packageName);
                 icon = ResourcesCompat.getDrawable(res, n.icon, null);
-                //icon = res.getDrawable(n.icon, null);
             } catch (PackageManager.NameNotFoundException e) {
                 continue;
             }
@@ -111,10 +114,22 @@ public class GreetFragment extends Fragment implements NotificationSubscriber {
             params.setMargins(0, 0, 10, 0);
             notifIcon.setLayoutParams(params);
             notifIcon.setImageDrawable(icon);
-            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.black));
 
             notificationPanel.addView(notifIcon);
             notificationCount--;
+        }
+    }
+
+    @Override
+    public void update(Double temperature, WeatherCondition condition) {
+        if (condition != null) {
+            this.temperature.setText(temperature + "°C");
+            this.weatherIcon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
+                    ? condition.getIconDay() : condition.getIconNight());
+        } else {
+            this.temperature.setText("N/A");
+            this.weatherIcon.setImageResource(R.drawable.no_service);
         }
     }
 }

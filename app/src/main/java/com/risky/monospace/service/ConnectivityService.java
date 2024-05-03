@@ -4,9 +4,9 @@ import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.ConnectivityType;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
-import com.risky.monospace.util.BluetoothSubscriber;
-import com.risky.monospace.util.LocationSubscriber;
-import com.risky.monospace.util.NetworkSubscriber;
+import com.risky.monospace.service.subscribers.BluetoothSubscriber;
+import com.risky.monospace.service.subscribers.LocationSubscriber;
+import com.risky.monospace.service.subscribers.NetworkSubscriber;
 
 public class ConnectivityService {
     private static NetworkStatus networkStatus = NetworkStatus.UNAVAILABLE;

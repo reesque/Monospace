@@ -1,7 +1,7 @@
 package com.risky.monospace.service;
 
 import com.risky.monospace.model.Notification;
-import com.risky.monospace.util.NotificationSubscriber;
+import com.risky.monospace.service.subscribers.NotificationSubscriber;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import com.risky.monospace.model.AppPackage;
-import com.risky.monospace.util.PacManSubscriber;
+import com.risky.monospace.service.subscribers.PacManSubscriber;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 
-import com.risky.monospace.util.BatterySubscriber;
+import com.risky.monospace.service.subscribers.BatterySubscriber;
 
 public class BatteryReceiver extends BroadcastReceiver {
     private BatterySubscriber subscriber;

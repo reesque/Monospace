@@ -1,19 +1,22 @@
 package com.risky.monospace;
 
+import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +29,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -35,19 +39,27 @@ import androidx.core.view.WindowInsetsCompat;
 import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
 import com.risky.monospace.model.BluetoothStatus;
+import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
+import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
 import com.risky.monospace.service.ConnectivityService;
-import com.risky.monospace.util.BatterySubscriber;
-import com.risky.monospace.util.BluetoothSubscriber;
-import com.risky.monospace.util.LocationSubscriber;
-import com.risky.monospace.util.NetworkSubscriber;
+import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.BatterySubscriber;
+import com.risky.monospace.service.subscribers.BluetoothSubscriber;
+import com.risky.monospace.service.subscribers.LocationSubscriber;
+import com.risky.monospace.service.subscribers.NetworkSubscriber;
+import com.risky.monospace.util.NetworkUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -86,6 +98,9 @@ public class MainActivity extends AppCompatActivity
     private BluetoothReceiver bluetoothReceiver;
     private LocationReceiver locationReceiver;
 
+    private static Handler clockHandler;
+    private static Runnable clockRunner;
+
     private boolean isHome = true;
 
     // For swipe detection
@@ -96,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         EdgeToEdge.enable(this);
 
         setContentView(R.layout.activity_main);
@@ -131,9 +146,12 @@ public class MainActivity extends AppCompatActivity
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
 
+        // ### Settings data ###
+        SharedPreferences sharedPref = getSharedPreferences("settings", MODE_PRIVATE);
+
         // ###  Clock control ###
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
+        clockHandler = new Handler();
+        clockRunner = new Runnable() {
             @Override
             public void run() {
                 Calendar calendar = Calendar.getInstance(Locale.getDefault());
@@ -144,31 +162,32 @@ public class MainActivity extends AppCompatActivity
                 month.setText(monthFormat.format(calendar.getTime()));
 
                 int dow = calendar.get(Calendar.DAY_OF_WEEK);
-                mon.setBackgroundResource(dow == 2 ? R.drawable.round : 0);
+                mon.setBackgroundResource(dow == 2 ? R.drawable.round_white : 0);
                 mon.setTextColor(dow == 2 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                tue.setBackgroundResource(dow == 3 ? R.drawable.round : 0);
+                tue.setBackgroundResource(dow == 3 ? R.drawable.round_white : 0);
                 tue.setTextColor(dow == 3 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                wed.setBackgroundResource(dow == 4 ? R.drawable.round : 0);
+                wed.setBackgroundResource(dow == 4 ? R.drawable.round_white : 0);
                 wed.setTextColor(dow == 4 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                thu.setBackgroundResource(dow == 5 ? R.drawable.round : 0);
+                thu.setBackgroundResource(dow == 5 ? R.drawable.round_white : 0);
                 thu.setTextColor(dow == 5 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                fri.setBackgroundResource(dow == 6 ? R.drawable.round : 0);
+                fri.setBackgroundResource(dow == 6 ? R.drawable.round_white : 0);
                 fri.setTextColor(dow == 6 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                sat.setBackgroundResource(dow == 7 ? R.drawable.round : 0);
+                sat.setBackgroundResource(dow == 7 ? R.drawable.round_white : 0);
                 sat.setTextColor(dow == 7 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-                sun.setBackgroundResource(dow == 1 ? R.drawable.round : 0);
+                sun.setBackgroundResource(dow == 1 ? R.drawable.round_white : 0);
                 sun.setTextColor(dow == 1 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
 
-                handler.postDelayed(this, 60000);
+                clockHandler.postDelayed(this, 60000);
             }
-        });
+        };
+        clockHandler.post(clockRunner);
 
         // ### Greeter ###
         getSupportFragmentManager()
@@ -224,6 +243,12 @@ public class MainActivity extends AppCompatActivity
         batteryReceiver = new BatteryReceiver(this);
         registerReceiver(batteryReceiver, batteryFilter);
 
+        // ### Start weather service ###
+        WeatherService.set(new GeoPosition(
+                Double.parseDouble(sharedPref.getString("weatherLat", "0.0")),
+                Double.parseDouble(sharedPref.getString("weatherLong", "0.0"))));
+        WeatherService.initialize();
+
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
         appPackageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -249,10 +274,6 @@ public class MainActivity extends AppCompatActivity
         };
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
-
-        // TODO: ASK FOR NOTIFICATION PERMISSION
-        // Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-        // startActivity(intent);
     }
 
     @Override
@@ -282,10 +303,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         networkMonitor.unregister();
         unregisterReceiver(batteryReceiver);
         unregisterReceiver(appPackageReceiver);
         unregisterReceiver(bluetoothReceiver);
+        unregisterReceiver(locationReceiver);
+
+        clockHandler.removeCallbacks(clockRunner);
+        WeatherService.destroy();
     }
 
     private void setBackgroundColor(boolean reversed) {

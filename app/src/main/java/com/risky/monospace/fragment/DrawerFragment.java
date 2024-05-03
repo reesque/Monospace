@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import com.risky.monospace.R;
 import com.risky.monospace.model.AppListAdapter;
 import com.risky.monospace.model.AppPackage;
 import com.risky.monospace.service.AppPackageService;
-import com.risky.monospace.util.PacManSubscriber;
+import com.risky.monospace.service.subscribers.PacManSubscriber;
 
 import java.util.List;
 
