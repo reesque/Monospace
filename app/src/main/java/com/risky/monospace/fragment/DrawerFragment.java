@@ -1,9 +1,12 @@
 package com.risky.monospace.fragment;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -33,10 +37,11 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
     private AppListAdapter adapter;
     private ListView appList;
     private EditText appSearch;
+    private LinearLayout searchBar;
 
     public DrawerFragment(Context context) {
         this.context = context;
-        imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
     }
 
     @Nullable
@@ -46,6 +51,7 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
 
         appList = view.findViewById(R.id.app_list);
         appSearch = view.findViewById(R.id.app_search_edit);
+        searchBar = view.findViewById(R.id.drawer_search_bar);
 
         // ### App list ###
         AppPackageService.subscribe(this);
@@ -79,6 +85,13 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
                 return true;
             }
             return false;
+        });
+
+        // Make sure keyboard can popup more reliably
+        searchBar.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(appSearch.findFocus(), 0);
         });
 
         appSearch.requestFocus();
