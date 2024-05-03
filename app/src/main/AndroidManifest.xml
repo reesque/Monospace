@@ -33,7 +33,7 @@
         </activity>
         <receiver android:name=".receiver.AppPackageReceiver"
             android:label="Monospace Package Manager"
-            android:exported="false">
+            android:exported="true">
             <intent-filter >
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
@@ -44,15 +44,17 @@
         <service android:name=".receiver.NotificationReceiver"
             android:label="Monospace Notification Manager"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
         <receiver android:name=".receiver.BatteryReceiver"
+            android:label="Monospace Battery Manager"
             android:exported="false"/>
         <receiver android:name=".receiver.BluetoothReceiver"
-            android:exported="false">
+            android:label="Monospace Bluetooth Manager"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>

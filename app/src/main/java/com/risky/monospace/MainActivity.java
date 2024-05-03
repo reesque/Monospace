@@ -1,22 +1,15 @@
 package com.risky.monospace;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,7 +22,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -42,7 +34,6 @@ import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
-import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
@@ -54,18 +45,13 @@ import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
-import com.risky.monospace.util.NetworkUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber, View.OnClickListener {
     private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
@@ -189,6 +175,11 @@ public class MainActivity extends AppCompatActivity
         };
         clockHandler.post(clockRunner);
 
+        dom.setOnClickListener(this);
+        month.setOnClickListener(this);
+        time.setOnClickListener(this);
+        mer.setOnClickListener(this);
+
         // ### Greeter ###
         getSupportFragmentManager()
                 .beginTransaction()
@@ -298,6 +289,8 @@ public class MainActivity extends AppCompatActivity
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        WeatherService.notifySubscriber();
     }
 
     @Override
@@ -373,6 +366,16 @@ public class MainActivity extends AppCompatActivity
             case ON:
                 location.setImageResource(R.drawable.location);
                 break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.month_main || v.getId() == R.id.dom_main ||
+                v.getId() == R.id.time_main || v.getId() == R.id.mer_main) {
+            Intent launchIntent =  getPackageManager()
+                    .getLaunchIntentForPackage("com.android.deskclock");
+            startActivity(launchIntent);
         }
     }
 }

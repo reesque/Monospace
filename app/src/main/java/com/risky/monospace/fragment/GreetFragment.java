@@ -27,17 +27,22 @@ import java.util.List;
 
 import com.risky.monospace.R;
 import com.risky.monospace.dialog.GeoDialog;
+import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.WeatherCondition;
+import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 
-public class GreetFragment extends Fragment implements NotificationSubscriber, WeatherSubscriber {
+public class GreetFragment extends Fragment
+        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber {
     private View view;
     private Context context;
     private TextView temperature;
+    private TextView track;
     private ImageView weatherIcon;
     private ImageView notifIcon;
     private LinearLayout notificationPanel;
@@ -58,10 +63,12 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
         notificationPanel = view.findViewById(R.id.notification_container);
         temperature = view.findViewById(R.id.weather_temp);
         weatherIcon = view.findViewById(R.id.weather_icon);
+        track = view.findViewById(R.id.media_track);
         notifIcon = view.findViewById(R.id.notification_icon);
 
         NotificationService.subscribe(this);
         WeatherService.subscribe(this);
+        MediaService.subscribe(this);
 
         weatherIcon.setOnLongClickListener(v -> {
             new GeoDialog(context).show();
@@ -84,6 +91,9 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
             startActivity(intent);
             return true;
         });
+
+        // Funny scrolling title
+        track.setSelected(true);
 
         return view;
     }
@@ -145,8 +155,23 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
             this.weatherIcon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
                     ? condition.getIconDay() : condition.getIconNight());
         } else {
-            this.temperature.setText("N/A");
+            this.temperature.setText("None");
             this.weatherIcon.setImageResource(R.drawable.no_service);
         }
+    }
+
+    @Override
+    public void update(Media media) {
+        if (media == null) {
+            track.setText("None");
+            return;
+        }
+
+        if (media.artist == null) {
+            track.setText(media.track);
+            return;
+        }
+
+        track.setText(String.format("%s - %s", media.track, media.artist));
     }
 }
