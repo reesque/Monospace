@@ -3,10 +3,14 @@ package com.risky.monospace;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothA2dp;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -29,15 +34,26 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
+import com.risky.monospace.model.BluetoothStatus;
+import com.risky.monospace.model.LocationStatus;
+import com.risky.monospace.model.NetworkStatus;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
+import com.risky.monospace.receiver.BluetoothReceiver;
+import com.risky.monospace.receiver.LocationReceiver;
+import com.risky.monospace.receiver.NetworkStateMonitor;
+import com.risky.monospace.service.ConnectivityService;
 import com.risky.monospace.util.BatterySubscriber;
+import com.risky.monospace.util.BluetoothSubscriber;
+import com.risky.monospace.util.LocationSubscriber;
+import com.risky.monospace.util.NetworkSubscriber;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements BatterySubscriber {
+public class MainActivity extends AppCompatActivity
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
     private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
@@ -53,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
     private TextView sat;
 
     private TextView battPerc;
-    private ImageView battery;
+    private ProgressBar battery;
+    private ImageView network;
+    private ImageView bluetooth;
+    private ImageView location;
     private LinearLayout contentFragment;
 
     private final SimpleDateFormat domFormat = new SimpleDateFormat("dd");
@@ -63,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
 
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
+    private NetworkStateMonitor networkMonitor;
+    private BluetoothReceiver bluetoothReceiver;
+    private LocationReceiver locationReceiver;
 
     private boolean isHome = true;
 
@@ -104,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
         sat = findViewById(R.id.dow_sat);
         battPerc = findViewById(R.id.battery_perc_main);
         battery = findViewById(R.id.battery_main);
+        network = findViewById(R.id.network_main);
+        bluetooth = findViewById(R.id.bluetooth_main);
+        location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
 
         // ###  Clock control ###
@@ -177,6 +202,23 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
             return true;
         });
 
+        // ### Read network ###
+        networkMonitor = new NetworkStateMonitor(this);
+        networkMonitor.register();
+        ConnectivityService.subscribe((NetworkSubscriber) MainActivity.this);
+
+        // ### Read bluetooth ###
+        IntentFilter bluetoothFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        bluetoothReceiver = new BluetoothReceiver();
+        registerReceiver(bluetoothReceiver, bluetoothFilter);
+        ConnectivityService.subscribe((BluetoothSubscriber) MainActivity.this);
+
+        // ### Read location ###
+        IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+        locationReceiver = new LocationReceiver(this);
+        registerReceiver(locationReceiver, locationFilter);
+        ConnectivityService.subscribe((LocationSubscriber) MainActivity.this);
+
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryReceiver = new BatteryReceiver(this);
@@ -240,8 +282,10 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        networkMonitor.unregister();
         unregisterReceiver(batteryReceiver);
         unregisterReceiver(appPackageReceiver);
+        unregisterReceiver(bluetoothReceiver);
     }
 
     private void setBackgroundColor(boolean reversed) {
@@ -263,24 +307,46 @@ public class MainActivity extends AppCompatActivity implements BatterySubscriber
     @SuppressLint("DefaultLocale")
     @Override
     public void update(int level, boolean isCharging, boolean isFull) {
-        battPerc.setText(String.format("%d%%", level));
+        battPerc.setText(String.format("%d", level));
+        battery.setSecondaryProgress(level);
+    }
 
-        if (isCharging) {
-            battery.setImageResource(R.drawable.battery_charging);
-        } else if (isFull || level >= 99) {
-            battery.setImageResource(R.drawable.battery_full);
-        } else if (level >= 84) {
-            battery.setImageResource(R.drawable.battery6);
-        } else if (level >= 66) {
-            battery.setImageResource(R.drawable.battery5);
-        } else if (level >= 50) {
-            battery.setImageResource(R.drawable.battery4);
-        } else if (level >= 34) {
-            battery.setImageResource(R.drawable.battery3);
-        } else if (level >= 20) {
-            battery.setImageResource(R.drawable.battery2);
-        } else {
-            battery.setImageResource(R.drawable.battery1);
+    @Override
+    public void update(NetworkStatus status) {
+        switch (status) {
+            case UNAVAILABLE:
+                network.setImageResource(R.drawable.no_connection);
+                break;
+            case WIFI:
+                network.setImageResource(R.drawable.wifi);
+                break;
+            case MOBILE_DATA:
+                network.setImageResource(R.drawable.mobile_data);
+                break;
+        }
+    }
+
+    @Override
+    public void update(BluetoothStatus status) {
+        switch (status) {
+            case UNAVAILABLE:
+                bluetooth.setImageResource(R.drawable.bluetooth_disable);
+                break;
+            case ON:
+                bluetooth.setImageResource(R.drawable.bluetooth);
+                break;
+        }
+    }
+
+    @Override
+    public void update(LocationStatus status) {
+        switch (status) {
+            case UNAVAILABLE:
+                location.setImageResource(R.drawable.location_disable);
+                break;
+            case ON:
+                location.setImageResource(R.drawable.location);
+                break;
         }
     }
 }

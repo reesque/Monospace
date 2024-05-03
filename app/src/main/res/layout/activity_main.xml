@@ -171,30 +171,84 @@
         app:layout_constraintBottom_toBottomOf="@id/time_main"
         app:layout_constraintStart_toEndOf="@id/time_main" />
 
-    <TextView
-        android:id="@+id/battery_perc_main"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="0dp"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:fontFamily="monospace"
-        android:text="##%"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="20dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toBottomOf="@id/time_main"
         app:layout_constraintTop_toTopOf="@id/time_main"
-        app:layout_constraintStart_toEndOf="@id/mer_main" />
+        app:layout_constraintStart_toEndOf="@id/mer_main"
+        android:background="@drawable/status_bar"
+        android:padding="2dp"
+        android:gravity="center">
 
-    <ImageView
-        android:id="@+id/battery_main"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/battery0"
-        app:layout_constraintBottom_toBottomOf="@id/time_main"
-        app:layout_constraintTop_toTopOf="@id/time_main"
-        app:layout_constraintStart_toEndOf="@id/battery_perc_main"/>
+        <RelativeLayout
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="8dp">
+
+            <ProgressBar
+                android:id="@+id/battery_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="?android:progressBarStyleHorizontal"
+                android:max="100"
+                android:indeterminate="false"
+                android:rotation="-90"
+                android:progress="100"
+                android:progressDrawable="@drawable/battery_bar"/>
+
+            <TextView
+                android:id="@+id/battery_perc_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="0dp"
+                android:textSize="9sp"
+                android:textColor="@color/black"
+                android:fontFamily="monospace"
+                android:text="###"
+                android:gravity="center"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/network_main"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/no_connection"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/separator"/>
+
+        <ImageView
+            android:id="@+id/bluetooth_main"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/bluetooth_disable"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/separator"/>
+
+        <ImageView
+            android:id="@+id/location_main"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/location_disable"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fragment_container"

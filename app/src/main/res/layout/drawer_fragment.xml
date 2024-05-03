@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="/search/>"
             android:textColor="@color/terminal_green"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_marginStart="5dp"
             android:fontFamily="monospace" />
 
@@ -33,7 +33,7 @@
             android:inputType="textNoSuggestions"
             android:textColor="@color/black"
             android:textCursorDrawable="@drawable/cursor_black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:imeOptions="actionDone"
             android:singleLine="true" />
 
@@ -47,5 +47,5 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="10dp"
         android:divider="@null"
-        android:scrollbars="none" />
+        android:scrollbars="none"/>
 </LinearLayout>
