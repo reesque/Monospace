@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class WeatherService {
+    private static int UPDATE_INTERVAL = 3600000;
     private static GeoPosition position = new GeoPosition(0.0, 0.0);
     private static Double temperature;
     private static WeatherCondition condition;
@@ -27,10 +28,7 @@ public class WeatherService {
     public static void set(GeoPosition pos) {
         position = pos;
 
-        if (weatherHandler != null) {
-            weatherHandler.removeCallbacks(weatherRunner);
-            weatherHandler.post(weatherRunner);
-        }
+        update();
     }
 
     public static void initialize() {
@@ -59,11 +57,18 @@ public class WeatherService {
                 }
 
                 new Handler(Looper.getMainLooper()).post(WeatherService::notifySubscriber);
-                weatherHandler.postDelayed(this, 14400000);
+                weatherHandler.postDelayed(this, UPDATE_INTERVAL);
             }
         };
 
         weatherHandler.post(weatherRunner);
+    }
+
+    public static void update() {
+        if (weatherHandler != null) {
+            weatherHandler.removeCallbacks(weatherRunner);
+            weatherHandler.post(weatherRunner);
+        }
     }
 
     public static void destroy() {

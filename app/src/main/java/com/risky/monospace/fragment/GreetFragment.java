@@ -1,5 +1,6 @@
 package com.risky.monospace.fragment;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -62,10 +63,26 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
         NotificationService.subscribe(this);
         WeatherService.subscribe(this);
 
-        weatherIcon.setOnClickListener(v -> new GeoDialog(context).show());
+        weatherIcon.setOnLongClickListener(v -> {
+            new GeoDialog(context).show();
+            return true;
+        });
+
+        weatherIcon.setOnClickListener(v -> {
+            WeatherService.update();
+        });
+
         notifIcon.setOnClickListener(v -> {
+            NotificationManager notificationManager = (
+                    NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            NotificationService.clear();
+        });
+
+        notifIcon.setOnLongClickListener(v -> {
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
+            return true;
         });
 
         return view;
@@ -86,7 +103,7 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
         for (Notification n : notifications) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
 
-            if (notificationCount == notifications.size() - 4) {
+            if (notificationCount == notifications.size() - 5) {
                 TextView moreIcon = new TextView(context);
                 moreIcon.setText("+" + notificationCount);
                 params.setMargins(8, 0, 0, 0);
@@ -114,7 +131,7 @@ public class GreetFragment extends Fragment implements NotificationSubscriber, W
             params.setMargins(0, 0, 10, 0);
             notifIcon.setLayoutParams(params);
             notifIcon.setImageDrawable(icon);
-            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.black));
+            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
 
             notificationPanel.addView(notifIcon);
             notificationCount--;

@@ -23,6 +23,11 @@ public class NotificationService {
         notifySubscriber();
     }
 
+    public static void clear() {
+        notificationList.clear();
+        notifySubscriber();
+    }
+
     public static void subscribe(NotificationSubscriber sub) {
         subscriber = sub;
         notifySubscriber();

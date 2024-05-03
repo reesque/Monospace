@@ -8,8 +8,6 @@ import com.risky.monospace.model.Notification;
 import com.risky.monospace.service.NotificationService;
 
 public class NotificationReceiver extends NotificationListenerService {
-    private String mPreviousNotificationKey;
-
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
