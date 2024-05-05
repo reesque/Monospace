@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -34,7 +35,7 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
     private Context context;
     private InputMethodManager imm;
     private AppListAdapter adapter;
-    private ListView appList;
+    private GridView appList;
     private EditText appSearch;
     private LinearLayout searchBar;
 
