@@ -52,13 +52,9 @@ public class NotificationReceiver extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         mediaUpdate();
 
-        if (sbn.getNotification().category != null
-                && (sbn.getNotification().flags
-                & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
-            NotificationService.remove(new Notification(sbn.getId(),
-                    sbn.getNotification().getSmallIcon().getResId(),
-                    sbn.getPackageName()));
-        }
+        NotificationService.remove(new Notification(sbn.getId(),
+                sbn.getNotification().getSmallIcon().getResId(),
+                sbn.getPackageName()));
     }
 
     private void mediaUpdate() {

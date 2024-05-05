@@ -79,13 +79,6 @@ public class GreetFragment extends Fragment
             WeatherService.update();
         });
 
-        notifIcon.setOnClickListener(v -> {
-            NotificationManager notificationManager = (
-                    NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-            NotificationService.clear();
-        });
-
         notifIcon.setOnLongClickListener(v -> {
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
