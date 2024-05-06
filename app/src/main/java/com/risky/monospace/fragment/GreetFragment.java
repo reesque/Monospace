@@ -1,6 +1,5 @@
 package com.risky.monospace.fragment;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,10 +25,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.risky.monospace.R;
-import com.risky.monospace.dialog.GeoDialog;
+import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.WeatherCondition;
+import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
@@ -44,12 +44,9 @@ public class GreetFragment extends Fragment
     private TextView temperature;
     private TextView track;
     private ImageView weatherIcon;
+    private ImageView mediaIcon;
     private ImageView notifIcon;
     private LinearLayout notificationPanel;
-
-    // TEMPORARY
-    private float LAT = 52.52f;
-    private float LONG = 13.41f;
 
     public GreetFragment(Context context) {
         this.context = context;
@@ -63,24 +60,26 @@ public class GreetFragment extends Fragment
         notificationPanel = view.findViewById(R.id.notification_container);
         temperature = view.findViewById(R.id.weather_temp);
         weatherIcon = view.findViewById(R.id.weather_icon);
+        mediaIcon = view.findViewById(R.id.media_icon);
         track = view.findViewById(R.id.media_track);
         notifIcon = view.findViewById(R.id.notification_icon);
 
-        NotificationService.subscribe(this);
-        WeatherService.subscribe(this);
-        MediaService.subscribe(this);
+        NotificationService.getInstance().subscribe(this);
+        WeatherService.getInstance().subscribe(this);
+        MediaService.getInstance().subscribe(this);
 
         weatherIcon.setOnLongClickListener(v -> {
-            new GeoDialog(context).show();
+            DialogService.getInstance().show(context, DialogType.GEO);
             return true;
         });
 
-        weatherIcon.setOnClickListener(v -> {
-            WeatherService.update();
-        });
+        weatherIcon.setOnClickListener(v -> WeatherService.getInstance().update());
+
+        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(context, DialogType.MEDIA));
 
         notifIcon.setOnLongClickListener(v -> {
-            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            Intent intent =
+                    new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
             return true;
         });
@@ -94,7 +93,9 @@ public class GreetFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NotificationService.subscribe(null);
+        NotificationService.getInstance().unsubscribe(this);
+        WeatherService.getInstance().unsubscribe(this);
+        MediaService.getInstance().unsubscribe(this);
     }
 
     @Override
@@ -158,6 +159,15 @@ public class GreetFragment extends Fragment
         if (media == null) {
             track.setText("None");
             return;
+        }
+
+        if (media.packageName != null) {
+            mediaIcon.setOnLongClickListener(v -> {
+                Intent launchIntent =
+                        context.getPackageManager().getLaunchIntentForPackage(media.packageName);
+                startActivity(launchIntent);
+                return true;
+            });
         }
 
         if (media.artist == null) {

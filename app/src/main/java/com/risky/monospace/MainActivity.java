@@ -3,20 +3,14 @@ package com.risky.monospace;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,6 +30,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
+import com.risky.monospace.gesture.GestureListener;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.LocationStatus;
@@ -45,7 +40,10 @@ import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
-import com.risky.monospace.service.ConnectivityService;
+import com.risky.monospace.service.BluetoothService;
+import com.risky.monospace.service.LocationService;
+import com.risky.monospace.service.NetworkService;
+import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.WeatherService;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
@@ -57,7 +55,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber, View.OnClickListener {
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
     private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
@@ -94,10 +92,6 @@ public class MainActivity extends AppCompatActivity
     private static Runnable clockRunner;
 
     private boolean isHome = true;
-
-    // For swipe detection
-    private float y1, y2;
-    static final int MIN_DISTANCE = 200;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -181,10 +175,8 @@ public class MainActivity extends AppCompatActivity
         };
         clockHandler.post(clockRunner);
 
-        dom.setOnClickListener(this);
-        month.setOnClickListener(this);
-        time.setOnClickListener(this);
-        mer.setOnClickListener(this);
+        time.setOnClickListener(v -> startTimeApplication());
+        mer.setOnClickListener(v -> startTimeApplication());
 
         // ### Greeter ###
         getSupportFragmentManager()
@@ -193,47 +185,34 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
         // ### Content fragment ###
-        contentFragment.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    y1 = event.getY();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    y2 = event.getY();
-                    float delta = y2 - y1;
-
-                    if (delta < -MIN_DISTANCE) {
-                        isHome = false;
-                        setBackgroundColor(true);
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_anim, R.anim.fade_out_anim)
-                                .replace(R.id.fragment_container, new DrawerFragment(this))
-                                .commit();
-                    }
-
-                    break;
-            }
-
-            return true;
+        GestureListener gestureListener = new GestureListener(() -> {
+            isHome = false;
+            setBackgroundColor(true);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in_anim, R.anim.fade_out_anim)
+                    .replace(R.id.fragment_container, new DrawerFragment(this))
+                    .commit();
         });
+        GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
+        contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
         // ### Read network ###
         networkMonitor = new NetworkStateMonitor(this);
         networkMonitor.register();
-        ConnectivityService.subscribe((NetworkSubscriber) MainActivity.this);
+        NetworkService.getInstance().subscribe(MainActivity.this);
 
         // ### Read bluetooth ###
         IntentFilter bluetoothFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, bluetoothFilter);
-        ConnectivityService.subscribe((BluetoothSubscriber) MainActivity.this);
+        BluetoothService.getInstance().subscribe(MainActivity.this);
 
         // ### Read location ###
         IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         locationReceiver = new LocationReceiver(this);
         registerReceiver(locationReceiver, locationFilter);
-        ConnectivityService.subscribe((LocationSubscriber) MainActivity.this);
+        LocationService.getInstance().subscribe(MainActivity.this);
 
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -241,10 +220,9 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(batteryReceiver, batteryFilter);
 
         // ### Start weather service ###
-        WeatherService.set(new GeoPosition(
+        WeatherService.getInstance().set(new GeoPosition(
                 Double.parseDouble(sharedPref.getString("weatherLat", "0.0")),
                 Double.parseDouble(sharedPref.getString("weatherLong", "0.0"))));
-        WeatherService.initialize();
 
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
@@ -276,6 +254,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         getOnBackPressedDispatcher().onBackPressed();
+        DialogService.getInstance().dismissAll();
 
         super.onPause();
     }
@@ -296,7 +275,7 @@ public class MainActivity extends AppCompatActivity
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        WeatherService.notifySubscriber();
+        WeatherService.getInstance().notifySubscriber();
     }
 
     @Override
@@ -310,7 +289,10 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(locationReceiver);
 
         clockHandler.removeCallbacks(clockRunner);
-        WeatherService.destroy();
+
+        NetworkService.getInstance().unsubscribe(this);
+        BluetoothService.getInstance().unsubscribe(this);
+        LocationService.getInstance().unsubscribe(this);
     }
 
     private void setBackgroundColor(boolean reversed) {
@@ -323,10 +305,16 @@ public class MainActivity extends AppCompatActivity
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.setDuration(400); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
+    }
+
+    private void startTimeApplication() {
+        Intent launchIntent =  getPackageManager()
+                .getLaunchIntentForPackage("com.android.deskclock");
+        startActivity(launchIntent);
     }
 
     @SuppressLint("DefaultLocale")
@@ -372,16 +360,6 @@ public class MainActivity extends AppCompatActivity
             case ON:
                 location.setImageResource(R.drawable.location);
                 break;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.month_main || v.getId() == R.id.dom_main ||
-                v.getId() == R.id.time_main || v.getId() == R.id.mer_main) {
-            Intent launchIntent =  getPackageManager()
-                    .getLaunchIntentForPackage("com.android.deskclock");
-            startActivity(launchIntent);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,14 +17,15 @@ import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
 import com.risky.monospace.model.GeoPosition;
+import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.WeatherService;
 
 public class GeoDialog extends Dialog {
     private final Context context;
     private EditText latitude;
     private EditText longitude;
-    private TextView okBtn;
-    private TextView cancelBtn;
+    private Button okBtn;
+    private Button cancelBtn;
 
     public GeoDialog(@NonNull Context context) {
         super(context);
@@ -56,11 +58,18 @@ public class GeoDialog extends Dialog {
                 editor.putString("weatherLong", String.valueOf(lon));
                 editor.apply();
 
-                WeatherService.set(new GeoPosition(lat, lon));
+                WeatherService.getInstance().set(new GeoPosition(lat, lon));
             } catch (NumberFormatException e) {
                 // Ignore, since it's not valid input
             }
             dismiss();
         });
+    }
+
+    @Override
+    public void dismiss() {
+        DialogService.getInstance().cancel(DialogType.GEO);
+
+        super.dismiss();
     }
 }

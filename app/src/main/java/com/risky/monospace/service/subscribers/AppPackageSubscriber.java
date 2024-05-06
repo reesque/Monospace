@@ -4,6 +4,6 @@ import com.risky.monospace.model.AppPackage;
 
 import java.util.List;
 
-public interface PacManSubscriber {
+public interface AppPackageSubscriber extends MonoSubscriber {
     void update(List<AppPackage> packages);
 }

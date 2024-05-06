@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
-    android:layout_height="230dp"
-    android:background="@drawable/dialog_bg"
+    android:layout_height="251dp"
+    android:background="@drawable/dialog_bg_white"
     android:orientation="vertical"
     android:padding="20dp"
     android:gravity="center">
@@ -10,21 +10,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/geoposition"
             android:layout_marginEnd="5dp"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="GPS Location"
-            android:textSize="22sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GPS Location"
+                android:textSize="19sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set the location for weather"
+                android:textSize="13sp"
+                android:textColor="@color/gray"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </LinearLayout>
 
     <EditText
@@ -34,12 +51,11 @@
         android:background="@drawable/text_box"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:fontFamily="monospace"
         android:padding="10dp"
         android:hint="Latitude"
         android:textColorHint="@color/gray"
         android:inputType="numberDecimal|numberSigned"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="18dp"/>
 
     <EditText
         android:id="@+id/long_input"
@@ -48,7 +64,6 @@
         android:background="@drawable/text_box"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:fontFamily="monospace"
         android:padding="10dp"
         android:hint="Longitude"
         android:textColorHint="@color/gray"
@@ -59,10 +74,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="20dp">
+        android:gravity="end|center_vertical"
+        android:layout_marginTop="15dp">
 
-        <TextView
+        <Button
             android:id="@+id/geo_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,10 +85,10 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:layout_marginEnd="20dp"
-            android:padding="5dp"/>
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"/>
 
-        <TextView
+        <Button
             android:id="@+id/geo_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +96,7 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:padding="5dp"
-            android:layout_marginEnd="5dp"/>
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 </LinearLayout>

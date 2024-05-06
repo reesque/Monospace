@@ -1,8 +1,16 @@
 package com.risky.monospace.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.Shader;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.CornerFamily;
 import com.risky.monospace.R;
-import com.risky.monospace.service.AppPackageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +50,13 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
         TextView name = convertView.findViewById(R.id.app_name);
         name.setText(item.name);
 
-        ImageView icon = convertView.findViewById(R.id.app_icon);
+        ImageView favIcon = convertView.findViewById(R.id.app_fav);
+        favIcon.setVisibility(item.isFav() ? View.VISIBLE : View.INVISIBLE);
+
+        ShapeableImageView icon = convertView.findViewById(R.id.app_icon);
         icon.setImageDrawable(item.icon);
+        icon.setShapeAppearanceModel(icon.getShapeAppearanceModel()
+                .toBuilder().setAllCorners(CornerFamily.ROUNDED, 50f).build());
 
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);  //0 means grayscale

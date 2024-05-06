@@ -15,27 +15,17 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class WeatherService {
-    private static int UPDATE_INTERVAL = 3600000;
-    private static GeoPosition position = new GeoPosition(0.0, 0.0);
-    private static Double temperature;
-    private static WeatherCondition condition;
-    private static WeatherSubscriber subscriber;
-    private static Handler weatherHandler;
-    private static HandlerThread weatherThread;
-    private static Runnable weatherRunner;
+public class WeatherService extends MonoService<WeatherSubscriber> {
+    private static final int UPDATE_INTERVAL = 3600000;
+    private static WeatherService instance;
+    private GeoPosition position = new GeoPosition(0.0, 0.0);
+    private Double temperature;
+    private WeatherCondition condition;
+    private Handler weatherHandler;
+    private HandlerThread weatherThread;
+    private Runnable weatherRunner;
 
-    public static void set(GeoPosition pos) {
-        position = pos;
-
-        update();
-    }
-
-    public static void initialize() {
-        if (weatherHandler != null) {
-            return;
-        }
-
+    private WeatherService() {
         weatherThread = new HandlerThread("WeatherThread");
         weatherThread.start();
         weatherHandler = new Handler(weatherThread.getLooper());
@@ -56,7 +46,8 @@ public class WeatherService {
                     condition = null;
                 }
 
-                new Handler(Looper.getMainLooper()).post(WeatherService::notifySubscriber);
+                new Handler(Looper.getMainLooper()).post(
+                        () -> WeatherService.getInstance().notifySubscriber());
                 weatherHandler.postDelayed(this, UPDATE_INTERVAL);
             }
         };
@@ -64,26 +55,37 @@ public class WeatherService {
         weatherHandler.post(weatherRunner);
     }
 
-    public static void update() {
-        if (weatherHandler != null) {
-            weatherHandler.removeCallbacks(weatherRunner);
-            weatherHandler.post(weatherRunner);
+    public static WeatherService getInstance() {
+        if (instance == null) {
+            instance = new WeatherService();
         }
+
+        return instance;
     }
 
-    public static void destroy() {
+    public void set(GeoPosition pos) {
+        position = pos;
+
+        update();
+    }
+
+    public void update() {
         weatherHandler.removeCallbacks(weatherRunner);
-        weatherThread.quit();
+        weatherHandler.post(weatherRunner);
     }
 
-    public static void subscribe(WeatherSubscriber sub) {
-        subscriber = sub;
-        notifySubscriber();
-    }
+    @Override
+    public void unsubscribe(WeatherSubscriber subscriber) {
+        super.unsubscribe(subscriber);
 
-    public static void notifySubscriber() {
-        if (subscriber != null) {
-            subscriber.update(temperature, condition);
+        if (noSubscriber()) {
+            weatherHandler.removeCallbacks(weatherRunner);
+            weatherThread.quit();
         }
+    }
+
+    @Override
+    protected void updateSubscriber(WeatherSubscriber subscriber) {
+        subscriber.update(temperature, condition);
     }
 }

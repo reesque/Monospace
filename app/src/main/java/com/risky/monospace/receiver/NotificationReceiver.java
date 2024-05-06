@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -28,7 +29,7 @@ public class NotificationReceiver extends NotificationListenerService {
             if (sbn.getNotification().category != null
                     && (sbn.getNotification().flags
                     & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
-                NotificationService.add(new Notification(sbn.getId(),
+                NotificationService.getInstance().add(new Notification(sbn.getId(),
                         sbn.getNotification().getSmallIcon().getResId(),
                         sbn.getPackageName()));
             }
@@ -42,7 +43,7 @@ public class NotificationReceiver extends NotificationListenerService {
         if (sbn.getNotification().category != null
                 && (sbn.getNotification().flags
                 & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
-            NotificationService.add(new Notification(sbn.getId(),
+            NotificationService.getInstance().add(new Notification(sbn.getId(),
                     sbn.getNotification().getSmallIcon().getResId(),
                     sbn.getPackageName()));
         }
@@ -52,7 +53,7 @@ public class NotificationReceiver extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         mediaUpdate();
 
-        NotificationService.remove(new Notification(sbn.getId(),
+        NotificationService.getInstance().remove(new Notification(sbn.getId(),
                 sbn.getNotification().getSmallIcon().getResId(),
                 sbn.getPackageName()));
     }
@@ -64,13 +65,12 @@ public class NotificationReceiver extends NotificationListenerService {
         if (!sessions.isEmpty()) {
             MediaController controller = sessions.get(0);
             if (controller != null && controller.getMetadata() != null) {
-                MediaService.set(new Media(
-                        controller.getMetadata().getString(MediaMetadata.METADATA_KEY_ARTIST),
-                        controller.getMetadata().getString(MediaMetadata.METADATA_KEY_TITLE)));
+
+                MediaService.getInstance().set(new Media(controller));
                 return;
             }
         }
 
-        MediaService.set(null);
+        MediaService.getInstance().set(null);
     }
 }

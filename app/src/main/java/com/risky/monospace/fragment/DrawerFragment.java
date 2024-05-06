@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,11 +25,11 @@ import com.risky.monospace.R;
 import com.risky.monospace.model.AppListAdapter;
 import com.risky.monospace.model.AppPackage;
 import com.risky.monospace.service.AppPackageService;
-import com.risky.monospace.service.subscribers.PacManSubscriber;
+import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 
 import java.util.List;
 
-public class DrawerFragment extends Fragment implements PacManSubscriber {
+public class DrawerFragment extends Fragment implements AppPackageSubscriber {
     private View view;
     private Context context;
     private InputMethodManager imm;
@@ -54,7 +53,7 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
         searchBar = view.findViewById(R.id.drawer_search_bar);
 
         // ### App list ###
-        AppPackageService.subscribe(this);
+        AppPackageService.getInstance().subscribe(this);
 
         // ### Search app ###
         PackageManager pm = context.getPackageManager();
@@ -62,6 +61,12 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
             String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
             Intent launchIntent = pm.getLaunchIntentForPackage(pname);
             startActivity(launchIntent);
+        });
+
+        appList.setOnItemLongClickListener((parent, view, position, id) -> {
+            String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
+            AppPackageService.getInstance().toggleFav(context, pname);
+            return true;
         });
 
         appSearch.addTextChangedListener(new TextWatcher() {
@@ -97,6 +102,12 @@ public class DrawerFragment extends Fragment implements PacManSubscriber {
         appSearch.requestFocus();
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppPackageService.getInstance().unsubscribe(this);
     }
 
     @Override

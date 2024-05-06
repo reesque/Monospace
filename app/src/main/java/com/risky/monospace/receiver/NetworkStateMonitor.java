@@ -1,17 +1,15 @@
 package com.risky.monospace.receiver;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.model.NetworkStatus;
-import com.risky.monospace.service.ConnectivityService;
+import com.risky.monospace.service.NetworkService;
 
 public class NetworkStateMonitor extends ConnectivityManager.NetworkCallback {
     private Context context;
@@ -54,15 +52,15 @@ public class NetworkStateMonitor extends ConnectivityManager.NetworkCallback {
             NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
             if (capabilities != null) {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    ConnectivityService.set(NetworkStatus.WIFI);
+                    NetworkService.getInstance().set(NetworkStatus.WIFI);
                     return;
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    ConnectivityService.set(NetworkStatus.MOBILE_DATA);
+                    NetworkService.getInstance().set(NetworkStatus.MOBILE_DATA);
                     return;
                 }
             }
         }
 
-        ConnectivityService.set(NetworkStatus.UNAVAILABLE);
+        NetworkService.getInstance().set(NetworkStatus.UNAVAILABLE);
     }
 }
