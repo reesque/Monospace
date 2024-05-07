@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,25 +29,34 @@ import com.risky.monospace.R;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
+import com.risky.monospace.model.Pod;
+import com.risky.monospace.model.RegularPod;
+import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.model.WeatherCondition;
+import com.risky.monospace.service.AirpodService;
+import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.AirpodSubcriber;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 
 public class GreetFragment extends Fragment
-        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber {
+        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubcriber {
     private View view;
     private Context context;
     private TextView temperature;
     private TextView track;
     private ImageView weatherIcon;
     private ImageView mediaIcon;
+    private ImageView airpodIcon;
     private ImageView notifIcon;
     private LinearLayout notificationPanel;
+    private LinearLayout airpodPanel;
+    private LinearLayout mediaPanel;
 
     public GreetFragment(Context context) {
         this.context = context;
@@ -60,22 +70,26 @@ public class GreetFragment extends Fragment
         notificationPanel = view.findViewById(R.id.notification_container);
         temperature = view.findViewById(R.id.weather_temp);
         weatherIcon = view.findViewById(R.id.weather_icon);
+        airpodIcon = view.findViewById(R.id.airpod_icon);
         mediaIcon = view.findViewById(R.id.media_icon);
         track = view.findViewById(R.id.media_track);
         notifIcon = view.findViewById(R.id.notification_icon);
+        airpodPanel = view.findViewById(R.id.airpod_container);
+        mediaPanel = view.findViewById(R.id.media_container);
 
         NotificationService.getInstance().subscribe(this);
         WeatherService.getInstance().subscribe(this);
         MediaService.getInstance().subscribe(this);
+        AirpodService.getInstance().subscribe(this);
 
         weatherIcon.setOnLongClickListener(v -> {
             DialogService.getInstance().show(context, DialogType.GEO);
             return true;
         });
 
-        weatherIcon.setOnClickListener(v -> WeatherService.getInstance().update());
+        airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(context, DialogType.AIRPOD));
 
-        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(context, DialogType.MEDIA));
+        weatherIcon.setOnClickListener(v -> WeatherService.getInstance().update());
 
         notifIcon.setOnLongClickListener(v -> {
             Intent intent =
@@ -96,6 +110,7 @@ public class GreetFragment extends Fragment
         NotificationService.getInstance().unsubscribe(this);
         WeatherService.getInstance().unsubscribe(this);
         MediaService.getInstance().unsubscribe(this);
+        AirpodService.getInstance().unsubscribe(this);
     }
 
     @Override
@@ -157,16 +172,19 @@ public class GreetFragment extends Fragment
     @Override
     public void update(Media media) {
         if (media == null) {
+            mediaPanel.setVisibility(View.GONE);
             track.setText("None");
+            mediaIcon.setOnClickListener(null);
             return;
         }
 
+        mediaPanel.setVisibility(View.VISIBLE);
+
         if (media.packageName != null) {
-            mediaIcon.setOnLongClickListener(v -> {
+            mediaIcon.setOnClickListener(v -> {
                 Intent launchIntent =
                         context.getPackageManager().getLaunchIntentForPackage(media.packageName);
                 startActivity(launchIntent);
-                return true;
             });
         }
 
@@ -176,5 +194,23 @@ public class GreetFragment extends Fragment
         }
 
         track.setText(String.format("%s - %s", media.track, media.artist));
+    }
+
+    @Override
+    public void update(SinglePod pod) {
+        updateAirpodUI(pod);
+    }
+
+    @Override
+    public void update(RegularPod pod) {
+        updateAirpodUI(pod);
+    }
+
+    private void updateAirpodUI(Pod pod) {
+        if (pod == null || pod.isDisconnected) {
+            airpodPanel.setVisibility(View.GONE);
+        } else {
+            airpodPanel.setVisibility(View.VISIBLE);
+        }
     }
 }

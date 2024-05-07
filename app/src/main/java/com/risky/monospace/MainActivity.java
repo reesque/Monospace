@@ -35,6 +35,7 @@ import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
+import com.risky.monospace.receiver.AirpodReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
@@ -49,6 +50,7 @@ import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
+import com.risky.monospace.util.AirpodBroadcastParam;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     private NetworkStateMonitor networkMonitor;
     private BluetoothReceiver bluetoothReceiver;
     private LocationReceiver locationReceiver;
+    private AirpodReceiver airpodReceiver;
 
     private static Handler clockHandler;
     private static Runnable clockRunner;
@@ -224,6 +227,11 @@ public class MainActivity extends AppCompatActivity
                 Double.parseDouble(sharedPref.getString("weatherLat", "0.0")),
                 Double.parseDouble(sharedPref.getString("weatherLong", "0.0"))));
 
+        // ### Read airpod ###
+        IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
+        airpodReceiver = new AirpodReceiver();
+        registerReceiver(airpodReceiver, airpodFilter);
+
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
         appPackageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -287,6 +295,7 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(appPackageReceiver);
         unregisterReceiver(bluetoothReceiver);
         unregisterReceiver(locationReceiver);
+        unregisterReceiver(airpodReceiver);
 
         clockHandler.removeCallbacks(clockRunner);
 
