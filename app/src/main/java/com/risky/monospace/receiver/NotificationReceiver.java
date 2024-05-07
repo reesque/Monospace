@@ -65,8 +65,14 @@ public class NotificationReceiver extends NotificationListenerService {
         if (!sessions.isEmpty()) {
             MediaController controller = sessions.get(0);
             if (controller != null && controller.getMetadata() != null) {
+                String artist = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_ARTIST);
+                String track = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_TITLE);
+                if (artist == null && track == null) {
+                    MediaService.getInstance().set(null);
+                    return;
+                }
 
-                MediaService.getInstance().set(new Media(controller));
+                MediaService.getInstance().set(new Media(artist, track,controller.getPackageName()));
                 return;
             }
         }

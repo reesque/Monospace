@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="240dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialog_bg_white"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/pod_model"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="Airpod Pro 2"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:orientation="horizontal"
+        android:weightSum="1.0">
+
+        <LinearLayout
+            android:id="@+id/left_pod_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/left_pod_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/left_pod"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp">
+
+                <ImageView
+                    android:id="@+id/left_pod_battery_charge"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/bolt"/>
+
+                <ImageView
+                    android:id="@+id/left_pod_battery"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/battery4"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/left_pod_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/center_pod_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/center_pod_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/pod_case"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp">
+
+                <ImageView
+                    android:id="@+id/center_pod_battery_charge"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/bolt"/>
+
+                <ImageView
+                    android:id="@+id/center_pod_battery"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/battery4"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/center_pod_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/right_pod_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/right_pod_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/right_pod"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp">
+
+                <ImageView
+                    android:id="@+id/right_pod_battery_charge"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/bolt"/>
+
+                <ImageView
+                    android:id="@+id/right_pod_battery"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/battery4"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/right_pod_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

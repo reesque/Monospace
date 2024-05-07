@@ -66,5 +66,11 @@
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.AirpodReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.dosse.airpods.status"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
