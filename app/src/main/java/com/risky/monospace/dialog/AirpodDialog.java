@@ -105,6 +105,11 @@ public class AirpodDialog extends Dialog implements AirpodSubcriber {
             centerBatteryCharge.setVisibility(pod.isCharging ? View.VISIBLE : View.GONE);
 
             centerPercentage.setText(pod.status.isEmpty() ? "Unknown" : pod.status);
+
+            centerPercentage.setTextColor(pod.status.isEmpty()
+                    ? ContextCompat.getColor(getContext(), R.color.gray) :
+                    ContextCompat.getColor(getContext(), R.color.black));
+
             return;
         }
 
@@ -152,6 +157,16 @@ public class AirpodDialog extends Dialog implements AirpodSubcriber {
             leftPercentage.setText(pod.leftStatus.isEmpty() ? "Unknown" : pod.leftStatus);
             centerPercentage.setText(pod.caseStatus.isEmpty() ? "Unknown" : pod.caseStatus);
             rightPercentage.setText(pod.rightStatus.isEmpty() ? "Unknown" : pod.rightStatus);
+
+            leftPercentage.setTextColor(pod.leftStatus.isEmpty()
+                    ? ContextCompat.getColor(getContext(), R.color.gray) :
+                    ContextCompat.getColor(getContext(), R.color.black));
+            centerPercentage.setTextColor(pod.caseStatus.isEmpty()
+                    ? ContextCompat.getColor(getContext(), R.color.gray) :
+                    ContextCompat.getColor(getContext(), R.color.black));
+            rightPercentage.setTextColor(pod.rightStatus.isEmpty()
+                    ? ContextCompat.getColor(getContext(), R.color.gray) :
+                    ContextCompat.getColor(getContext(), R.color.black));
 
             return;
         }
