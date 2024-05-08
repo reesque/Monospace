@@ -20,8 +20,8 @@ public class MediaService extends MonoService<MediaSubscriber> {
         return instance;
     }
 
-    public void set(Media m) {
-        media = m;
+    public void set(Media media) {
+        this.media = media;
         notifySubscriber();
     }
 

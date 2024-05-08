@@ -2,10 +2,12 @@ package com.risky.monospace.receiver;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -19,9 +21,17 @@ import com.risky.monospace.service.NotificationService;
 import java.util.List;
 
 public class NotificationReceiver extends NotificationListenerService {
+    private static boolean isPermissionGranted = false;
+
+    public static boolean checkPermission() {
+        return isPermissionGranted;
+    }
+
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
+
+        isPermissionGranted = true;
 
         mediaUpdate();
 
@@ -34,6 +44,13 @@ public class NotificationReceiver extends NotificationListenerService {
                         sbn.getPackageName()));
             }
         }
+    }
+
+    @Override
+    public void onListenerDisconnected() {
+        super.onListenerDisconnected();
+
+        isPermissionGranted = false;
     }
 
     @Override
@@ -67,6 +84,7 @@ public class NotificationReceiver extends NotificationListenerService {
             if (controller != null && controller.getMetadata() != null) {
                 String artist = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_ARTIST);
                 String track = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_TITLE);
+
                 if (artist == null && track == null) {
                     MediaService.getInstance().set(null);
                     return;

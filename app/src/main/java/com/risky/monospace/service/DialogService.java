@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.DialogType;
-import com.risky.monospace.dialog.GeoDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +25,6 @@ public class DialogService {
 
     public void show(Context context, DialogType type) {
         switch (type) {
-            case GEO:
-                active.put(type, new GeoDialog(context));
-                active.get(type).show();
-                break;
             case AIRPOD:
                 active.put(type, new AirpodDialog(context));
                 active.get(type).show();

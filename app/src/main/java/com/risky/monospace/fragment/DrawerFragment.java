@@ -31,16 +31,17 @@ import java.util.List;
 
 public class DrawerFragment extends Fragment implements AppPackageSubscriber {
     private View view;
-    private Context context;
-    private InputMethodManager imm;
     private AppListAdapter adapter;
     private GridView appList;
     private EditText appSearch;
     private LinearLayout searchBar;
 
-    public DrawerFragment(Context context) {
-        this.context = context;
-        imm = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+    public DrawerFragment() {
+        // Empty
+    }
+
+    public static DrawerFragment newInstance() {
+        return new DrawerFragment();
     }
 
     @Nullable
@@ -56,7 +57,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         AppPackageService.getInstance().subscribe(this);
 
         // ### Search app ###
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = getContext().getPackageManager();
         appList.setOnItemClickListener((parent, view, position, id) -> {
             String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
             Intent launchIntent = pm.getLaunchIntentForPackage(pname);
@@ -65,7 +66,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
 
         appList.setOnItemLongClickListener((parent, view, position, id) -> {
             String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
-            AppPackageService.getInstance().toggleFav(context, pname);
+            AppPackageService.getInstance().toggleFav(getContext(), pname);
             return true;
         });
 
@@ -82,20 +83,10 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
             public void afterTextChanged(Editable s) {}
         });
 
-        appSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE){
-                appSearch.clearFocus();
-                imm.hideSoftInputFromWindow(appSearch.getWindowToken(), 0);
-
-                return true;
-            }
-            return false;
-        });
-
         // Make sure keyboard can popup more reliably
         searchBar.setOnClickListener(v -> {
             InputMethodManager inputMethodManager =
-                    (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+                    (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(appSearch.findFocus(), 0);
         });
 
@@ -112,7 +103,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
 
     @Override
     public void update(List<AppPackage> packages) {
-        adapter = new AppListAdapter(context, packages);
+        adapter = new AppListAdapter(getContext(), packages);
         appList.setAdapter(adapter);
     }
 }

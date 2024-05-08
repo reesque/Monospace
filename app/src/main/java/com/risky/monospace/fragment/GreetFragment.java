@@ -1,6 +1,5 @@
 package com.risky.monospace.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -34,7 +33,6 @@ import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.service.AirpodService;
-import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
@@ -43,11 +41,11 @@ import com.risky.monospace.service.subscribers.AirpodSubcriber;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
+import com.risky.monospace.util.PermissionHelper;
 
 public class GreetFragment extends Fragment
         implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubcriber {
     private View view;
-    private Context context;
     private TextView temperature;
     private TextView track;
     private ImageView weatherIcon;
@@ -58,8 +56,12 @@ public class GreetFragment extends Fragment
     private LinearLayout airpodPanel;
     private LinearLayout mediaPanel;
 
-    public GreetFragment(Context context) {
-        this.context = context;
+    public GreetFragment() {
+        // Empty
+    }
+
+    public static GreetFragment newInstance() {
+        return new GreetFragment();
     }
 
     @Nullable
@@ -78,24 +80,22 @@ public class GreetFragment extends Fragment
         mediaPanel = view.findViewById(R.id.media_container);
 
         NotificationService.getInstance().subscribe(this);
-        WeatherService.getInstance().subscribe(this);
+        WeatherService.getInstance(getContext()).subscribe(this);
         MediaService.getInstance().subscribe(this);
         AirpodService.getInstance().subscribe(this);
 
-        weatherIcon.setOnLongClickListener(v -> {
-            DialogService.getInstance().show(context, DialogType.GEO);
-            return true;
+        weatherIcon.setOnClickListener(v -> {
+            PermissionHelper.requestFineLocation(getContext());
+            WeatherService.getInstance(getContext()).update();
         });
 
-        airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(context, DialogType.AIRPOD));
+        airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
 
-        weatherIcon.setOnClickListener(v -> WeatherService.getInstance().update());
-
-        notifIcon.setOnLongClickListener(v -> {
-            Intent intent =
-                    new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-            startActivity(intent);
-            return true;
+        notifIcon.setOnClickListener(v -> {
+            if (!PermissionHelper.checkNotification()) {
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                startActivity(intent);
+            }
         });
 
         // Funny scrolling title
@@ -108,7 +108,7 @@ public class GreetFragment extends Fragment
     public void onDestroy() {
         super.onDestroy();
         NotificationService.getInstance().unsubscribe(this);
-        WeatherService.getInstance().unsubscribe(this);
+        WeatherService.getInstance(getContext()).unsubscribe(this);
         MediaService.getInstance().unsubscribe(this);
         AirpodService.getInstance().unsubscribe(this);
     }
@@ -123,11 +123,11 @@ public class GreetFragment extends Fragment
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
 
             if (notificationCount == notifications.size() - 5) {
-                TextView moreIcon = new TextView(context);
+                TextView moreIcon = new TextView(getContext());
                 moreIcon.setText("+" + notificationCount);
                 params.setMargins(8, 0, 0, 0);
                 moreIcon.setLayoutParams(params);
-                moreIcon.setTextColor(ContextCompat.getColor(context, R.color.white));
+                moreIcon.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 moreIcon.setTextSize(10);
                 moreIcon.setGravity(Gravity.CENTER);
                 moreIcon.setTypeface(moreIcon.getTypeface(), Typeface.BOLD);
@@ -139,18 +139,18 @@ public class GreetFragment extends Fragment
 
             Drawable icon = null;
             try {
-                Resources res = context.getPackageManager()
+                Resources res = getContext().getPackageManager()
                         .getResourcesForApplication(n.packageName);
                 icon = ResourcesCompat.getDrawable(res, n.icon, null);
             } catch (PackageManager.NameNotFoundException e) {
                 continue;
             }
 
-            ImageView notifIcon = new ImageView(context);
+            ImageView notifIcon = new ImageView(getContext());
             params.setMargins(0, 0, 10, 0);
             notifIcon.setLayoutParams(params);
             notifIcon.setImageDrawable(icon);
-            notifIcon.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            notifIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
 
             notificationPanel.addView(notifIcon);
             notificationCount--;
@@ -183,7 +183,7 @@ public class GreetFragment extends Fragment
         if (media.packageName != null) {
             mediaIcon.setOnClickListener(v -> {
                 Intent launchIntent =
-                        context.getPackageManager().getLaunchIntentForPackage(media.packageName);
+                        getContext().getPackageManager().getLaunchIntentForPackage(media.packageName);
                 startActivity(launchIntent);
             });
         }

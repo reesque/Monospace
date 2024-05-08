@@ -6,7 +6,7 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -32,7 +33,6 @@ import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
 import com.risky.monospace.gesture.GestureListener;
 import com.risky.monospace.model.BluetoothStatus;
-import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
 import com.risky.monospace.receiver.AirpodReceiver;
@@ -51,6 +51,7 @@ import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
+import com.risky.monospace.util.PermissionHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -135,9 +136,6 @@ public class MainActivity extends AppCompatActivity
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
 
-        // ### Settings data ###
-        SharedPreferences sharedPref = getSharedPreferences("settings", MODE_PRIVATE);
-
         // ###  Clock control ###
         clockHandler = new Handler();
         clockRunner = new Runnable() {
@@ -184,7 +182,7 @@ public class MainActivity extends AppCompatActivity
         // ### Greeter ###
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new GreetFragment(this))
+                .replace(R.id.fragment_container, GreetFragment.newInstance())
                 .commit();
 
         // ### Content fragment ###
@@ -193,8 +191,8 @@ public class MainActivity extends AppCompatActivity
             setBackgroundColor(true);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.fade_in_anim, R.anim.fade_out_anim)
-                    .replace(R.id.fragment_container, new DrawerFragment(this))
+                    .setCustomAnimations(R.anim.slide_in_anim, R.anim.fade_out_anim)
+                    .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .commit();
         });
         GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
@@ -222,11 +220,6 @@ public class MainActivity extends AppCompatActivity
         batteryReceiver = new BatteryReceiver(this);
         registerReceiver(batteryReceiver, batteryFilter);
 
-        // ### Start weather service ###
-        WeatherService.getInstance().set(new GeoPosition(
-                Double.parseDouble(sharedPref.getString("weatherLat", "0.0")),
-                Double.parseDouble(sharedPref.getString("weatherLong", "0.0"))));
-
         // ### Read airpod ###
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
         airpodReceiver = new AirpodReceiver();
@@ -249,8 +242,8 @@ public class MainActivity extends AppCompatActivity
                     setBackgroundColor(false);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .setCustomAnimations(R.anim.fade_in_anim, R.anim.fade_out_anim)
-                            .replace(R.id.fragment_container, new GreetFragment(MainActivity.this))
+                            .setCustomAnimations(R.anim.fade_in_anim, R.anim.slide_out_anim)
+                            .replace(R.id.fragment_container, GreetFragment.newInstance())
                             .commit();
                 }
             }
@@ -283,7 +276,7 @@ public class MainActivity extends AppCompatActivity
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        WeatherService.getInstance().notifySubscriber();
+        WeatherService.getInstance(this).notifySubscriber();
     }
 
     @Override
@@ -302,6 +295,15 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PermissionHelper.FINE_LOCATION_REQUEST_CODE) {
+            PermissionHelper.requestBackgroundLocation(this);
+        }
     }
 
     private void setBackgroundColor(boolean reversed) {
