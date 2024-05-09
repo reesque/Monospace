@@ -175,18 +175,25 @@ public class GreetFragment extends Fragment
             mediaPanel.setVisibility(View.GONE);
             track.setText("None");
             mediaIcon.setOnClickListener(null);
+            DialogService.getInstance().dismiss(DialogType.MEDIA);
             return;
         }
 
         mediaPanel.setVisibility(View.VISIBLE);
 
         if (media.packageName != null) {
-            mediaIcon.setOnClickListener(v -> {
+            mediaIcon.setOnLongClickListener(v -> {
                 Intent launchIntent =
                         getContext().getPackageManager().getLaunchIntentForPackage(media.packageName);
                 startActivity(launchIntent);
+
+                return true;
             });
         }
+
+        mediaIcon.setOnClickListener(v -> {
+            DialogService.getInstance().show(getContext(), DialogType.MEDIA);
+        });
 
         if (media.artist == null) {
             track.setText(media.track);

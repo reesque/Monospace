@@ -3,6 +3,7 @@ package com.risky.monospace.receiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
@@ -84,13 +85,20 @@ public class NotificationReceiver extends NotificationListenerService {
             if (controller != null && controller.getMetadata() != null) {
                 String artist = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_ARTIST);
                 String track = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_TITLE);
+                String album = controller.getMetadata().getString(MediaMetadata.METADATA_KEY_ALBUM);
+                Bitmap coverArt = controller.getMetadata().getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+                boolean isPlaying = false;
+                if (controller.getPlaybackState() != null) {
+                    isPlaying = controller.getPlaybackState().getState() == PlaybackState.STATE_PLAYING;
+                }
+                MediaController.TransportControls control = controller.getTransportControls();
 
                 if (artist == null && track == null) {
                     MediaService.getInstance().set(null);
                     return;
                 }
 
-                MediaService.getInstance().set(new Media(artist, track,controller.getPackageName()));
+                MediaService.getInstance().set(new Media(artist, track, album, controller.getPackageName(), coverArt, isPlaying, control));
                 return;
             }
         }

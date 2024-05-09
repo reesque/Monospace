@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.DialogType;
+import com.risky.monospace.dialog.MediaDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,10 @@ public class DialogService {
         switch (type) {
             case AIRPOD:
                 active.put(type, new AirpodDialog(context));
+                active.get(type).show();
+                break;
+            case MEDIA:
+                active.put(type, new MediaDialog(context));
                 active.get(type).show();
                 break;
         }
