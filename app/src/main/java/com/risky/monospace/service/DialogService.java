@@ -6,6 +6,7 @@ import android.content.Context;
 import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.dialog.MediaDialog;
+import com.risky.monospace.dialog.WeatherDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,10 @@ public class DialogService {
                 break;
             case MEDIA:
                 active.put(type, new MediaDialog(context));
+                active.get(type).show();
+                break;
+            case WEATHER:
+                active.put(type, new WeatherDialog(context));
                 active.get(type).show();
                 break;
         }

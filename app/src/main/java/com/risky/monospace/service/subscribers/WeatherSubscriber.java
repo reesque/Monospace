@@ -1,7 +1,9 @@
 package com.risky.monospace.service.subscribers;
 
-import com.risky.monospace.model.WeatherCondition;
+import com.risky.monospace.model.WeatherForecast;
+import com.risky.monospace.model.WeatherState;
 
 public interface WeatherSubscriber extends MonoSubscriber {
-    void update(Double temperature, WeatherCondition condition);
+    void update(WeatherState state);
+    void update(WeatherForecast forecast);
 }

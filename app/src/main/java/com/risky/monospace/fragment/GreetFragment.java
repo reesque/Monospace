@@ -32,6 +32,8 @@ import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.model.WeatherCondition;
+import com.risky.monospace.model.WeatherForecast;
+import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
@@ -85,8 +87,16 @@ public class GreetFragment extends Fragment
         AirpodService.getInstance().subscribe(this);
 
         weatherIcon.setOnClickListener(v -> {
-            PermissionHelper.requestFineLocation(getContext());
+            if (!PermissionHelper.checkLocation(getContext())) {
+                PermissionHelper.requestFineLocation(getContext());
+            }
+
+            DialogService.getInstance().show(getContext(), DialogType.WEATHER);
+        });
+
+        weatherIcon.setOnLongClickListener(v -> {
             WeatherService.getInstance(getContext()).update();
+            return true;
         });
 
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
@@ -158,15 +168,21 @@ public class GreetFragment extends Fragment
     }
 
     @Override
-    public void update(Double temperature, WeatherCondition condition) {
-        if (condition != null) {
-            this.temperature.setText(temperature + "°C");
+    public void update(WeatherState state) {
+        if (state != null) {
+            this.temperature.setText(state.temperature);
             this.weatherIcon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? condition.getIconDay() : condition.getIconNight());
-        } else {
-            this.temperature.setText("None");
-            this.weatherIcon.setImageResource(R.drawable.no_service);
+                    ? state.condition.getIconDay() : state.condition.getIconNight());
+            return;
         }
+
+        this.temperature.setText("None");
+        this.weatherIcon.setImageResource(R.drawable.no_service);
+    }
+
+    @Override
+    public void update(WeatherForecast forecast) {
+        // We don't need to handle
     }
 
     @Override
