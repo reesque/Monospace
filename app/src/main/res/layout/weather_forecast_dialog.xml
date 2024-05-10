@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
-    android:layout_height="205dp"
+    android:layout_height="210dp"
     android:background="@drawable/dialog_bg_white"
     android:orientation="vertical"
     android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="10dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingTop="5dp">
 
         <ImageView
             android:id="@+id/weather_today_icon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/no_service"/>
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:padding="10dp"
+            android:src="@drawable/no_service"
+            android:background="@drawable/icon_thick_stroke_black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -33,7 +37,7 @@
                 android:textColor="@color/black"
                 android:layout_marginEnd="6dp"
                 android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/weather_today_condition"
@@ -41,7 +45,10 @@
                 android:layout_height="wrap_content"
                 android:text="None"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="0dp" />
 
             <TextView
                 android:id="@+id/weather_today_temp"
@@ -58,7 +65,9 @@
         android:layout_height="110dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:paddingBottom="5dp">
+        android:paddingBottom="2dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
         <LinearLayout
             android:layout_width="50dp"

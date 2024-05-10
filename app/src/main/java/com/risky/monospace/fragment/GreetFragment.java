@@ -1,11 +1,21 @@
 package com.risky.monospace.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+import static android.os.Looper.getMainLooper;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,7 +41,6 @@ import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
-import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.model.WeatherForecast;
 import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.AirpodService;
@@ -66,6 +75,7 @@ public class GreetFragment extends Fragment
         return new GreetFragment();
     }
 
+    @SuppressLint("MissingPermission")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,15 +97,19 @@ public class GreetFragment extends Fragment
         AirpodService.getInstance().subscribe(this);
 
         weatherIcon.setOnClickListener(v -> {
-            if (!PermissionHelper.checkLocation(getContext())) {
-                PermissionHelper.requestFineLocation(getContext());
-            }
-
             DialogService.getInstance().show(getContext(), DialogType.WEATHER);
         });
 
         weatherIcon.setOnLongClickListener(v -> {
-            WeatherService.getInstance(getContext()).update();
+            if (!PermissionHelper.checkLocation(getContext())) {
+                // Has to run on main thread
+                new Handler(getMainLooper()).post(() -> PermissionHelper.requestFineLocation(getContext()));
+                return true;
+            }
+
+            temperature.setText("Updating...");
+            WeatherService.getInstance(getContext()).locationUpdate();
+
             return true;
         });
 
@@ -103,8 +117,9 @@ public class GreetFragment extends Fragment
 
         notifIcon.setOnClickListener(v -> {
             if (!PermissionHelper.checkNotification()) {
+                // Has to run on main thread
                 Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                startActivity(intent);
+                new Handler(getMainLooper()).post(() -> startActivity(intent));
             }
         });
 

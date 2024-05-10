@@ -41,6 +41,7 @@ import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
+import com.risky.monospace.receiver.TimeReceiver;
 import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.LocationService;
 import com.risky.monospace.service.NetworkService;
@@ -91,8 +92,7 @@ public class MainActivity extends AppCompatActivity
     private BluetoothReceiver bluetoothReceiver;
     private LocationReceiver locationReceiver;
     private AirpodReceiver airpodReceiver;
-
-    private static Handler clockHandler;
+    private TimeReceiver timeReceiver;
     private static Runnable clockRunner;
 
     private boolean isHome = true;
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity
         contentFragment = findViewById(R.id.fragment_container);
 
         // ###  Clock control ###
-        clockHandler = new Handler();
         clockRunner = new Runnable() {
             @Override
             public void run() {
@@ -170,11 +169,17 @@ public class MainActivity extends AppCompatActivity
                 sun.setBackgroundResource(dow == 1 ? R.drawable.round_white : 0);
                 sun.setTextColor(dow == 1 ? ContextCompat.getColor(MainActivity.this, R.color.black)
                         : ContextCompat.getColor(MainActivity.this, R.color.white));
-
-                clockHandler.postDelayed(this, 60000);
             }
         };
-        clockHandler.post(clockRunner);
+
+        clockRunner.run();
+
+        IntentFilter timeFilter = new IntentFilter();
+        timeFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        timeFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        timeFilter.addAction(Intent.ACTION_TIME_TICK);
+        timeReceiver = new TimeReceiver(clockRunner);
+        registerReceiver(timeReceiver, timeFilter);
 
         time.setOnClickListener(v -> startTimeApplication());
         mer.setOnClickListener(v -> startTimeApplication());
@@ -289,21 +294,11 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(bluetoothReceiver);
         unregisterReceiver(locationReceiver);
         unregisterReceiver(airpodReceiver);
-
-        clockHandler.removeCallbacks(clockRunner);
+        unregisterReceiver(timeReceiver);
 
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PermissionHelper.FINE_LOCATION_REQUEST_CODE) {
-            PermissionHelper.requestBackgroundLocation(this);
-        }
     }
 
     private void setBackgroundColor(boolean reversed) {

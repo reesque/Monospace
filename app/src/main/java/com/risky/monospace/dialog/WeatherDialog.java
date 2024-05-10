@@ -117,33 +117,27 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
 
             this.day1Temp.setText(forecast.getForecast(1).temperature);
             this.day1Dow.setText(forecast.getForecast(1).dayOfWeek);
-            this.day1Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(1).condition.getIconDay() : forecast.getForecast(1).condition.getIconNight());
+            this.day1Icon.setImageResource(forecast.getForecast(1).condition.getIconDay());
 
             this.day2Temp.setText(forecast.getForecast(2).temperature);
             this.day2Dow.setText(forecast.getForecast(2).dayOfWeek);
-            this.day2Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(2).condition.getIconDay() : forecast.getForecast(2).condition.getIconNight());
+            this.day2Icon.setImageResource(forecast.getForecast(2).condition.getIconDay());
 
             this.day3Temp.setText(forecast.getForecast(3).temperature);
             this.day3Dow.setText(forecast.getForecast(3).dayOfWeek);
-            this.day3Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(3).condition.getIconDay() : forecast.getForecast(3).condition.getIconNight());
+            this.day3Icon.setImageResource(forecast.getForecast(3).condition.getIconDay());
 
             this.day4Temp.setText(forecast.getForecast(4).temperature);
             this.day4Dow.setText(forecast.getForecast(4).dayOfWeek);
-            this.day4Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(4).condition.getIconDay() : forecast.getForecast(4).condition.getIconNight());
+            this.day4Icon.setImageResource(forecast.getForecast(4).condition.getIconDay());
 
             this.day5Temp.setText(forecast.getForecast(5).temperature);
             this.day5Dow.setText(forecast.getForecast(5).dayOfWeek);
-            this.day5Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(5).condition.getIconDay() : forecast.getForecast(5).condition.getIconNight());
+            this.day5Icon.setImageResource(forecast.getForecast(5).condition.getIconDay());
 
             this.day6Temp.setText(forecast.getForecast(6).temperature);
             this.day6Dow.setText(forecast.getForecast(6).dayOfWeek);
-            this.day6Icon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
-                    ? forecast.getForecast(6).condition.getIconDay() : forecast.getForecast(6).condition.getIconNight());
+            this.day6Icon.setImageResource(forecast.getForecast(6).condition.getIconDay());
 
             return;
         }

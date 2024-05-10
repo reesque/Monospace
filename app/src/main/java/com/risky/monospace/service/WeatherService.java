@@ -1,7 +1,10 @@
 package com.risky.monospace.service;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,8 +42,11 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
     private Handler weatherHandler;
     private HandlerThread weatherThread;
     private Runnable weatherRunner;
-    private LocationListener locationListener;
+    private Runnable locationRunner;
+    private GeoPosition position;
+    private boolean isLocationUpdating = false;
 
+    @SuppressLint("MissingPermission")
     private WeatherService(Context context) {
         weatherThread = new HandlerThread("WeatherThread");
         weatherThread.start();
@@ -49,25 +55,9 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
             @SuppressLint("MissingPermission")
             @Override
             public void run() {
-                if (!PermissionHelper.checkLocation(context)) {
+                if (!PermissionHelper.checkLocation(context) || position == null) {
                     return;
                 }
-
-                LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-
-                weatherHandler.postDelayed(this, UPDATE_INTERVAL);
-            }
-        };
-
-        weatherHandler.post(weatherRunner);
-    }
-
-    public static WeatherService getInstance(Context context) {
-        if (instance == null) {
-            instance = new WeatherService(context);
-            instance.locationListener = location -> {
-                GeoPosition position = new GeoPosition(location.getLatitude(), location.getLongitude());
 
                 try {
                     JSONObject response = NetworkUtil.getJSONObjectFromURL(
@@ -79,7 +69,7 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
 
                     instance.currentWeather = new WeatherState(
                             LocalDate.parse(response.getJSONObject("daily").getJSONArray("time").getString(0))
-                            .getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                                    .getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                             (int) Math.round(response.getJSONObject("current").getDouble("temperature_2m"))  + "°C",
                             WeatherCondition.getCondition(response.getJSONObject("current").getInt("weather_code")));
 
@@ -105,10 +95,55 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
 
                 new Handler(Looper.getMainLooper()).post(
                         () -> WeatherService.getInstance(context).notifySubscriber());
-            };
+
+                weatherHandler.postDelayed(this, UPDATE_INTERVAL);
+            }
+        };
+
+        weatherHandler.post(weatherRunner);
+
+        locationRunner = () -> {
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, location -> {
+                WeatherService.getInstance(context).set(new GeoPosition(location.getLatitude(), location.getLongitude()));
+
+                context.getSharedPreferences("settings", MODE_PRIVATE)
+                        .edit().putString("currentLat", String.valueOf(location.getLatitude()))
+                        .putString("currentLong", String.valueOf(location.getLongitude())).apply();
+            });
+            isLocationUpdating = false;
+        };
+    }
+
+    public static WeatherService getInstance(Context context) {
+        if (instance == null) {
+            instance = new WeatherService(context);
+
+            SharedPreferences sharedPref = context.getSharedPreferences("settings", MODE_PRIVATE);
+
+            String sLat = sharedPref.getString("currentLat", null);
+            String sLong = sharedPref.getString("currentLong", null);
+
+            if (sLat != null && sLong != null) {
+                instance.set(new GeoPosition(Double.parseDouble(sLat), Double.parseDouble(sLong)));
+            }
         }
 
         return instance;
+    }
+
+    public void set(GeoPosition position) {
+        this.position = position;
+        update();
+    }
+
+    public void locationUpdate() {
+        if (isLocationUpdating) {
+            return;
+        }
+
+        isLocationUpdating = true;
+        locationRunner.run();
     }
 
     public void update() {
