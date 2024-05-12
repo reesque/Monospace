@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="210dp"
     android:background="@drawable/dialog_bg_white"
     android:orientation="vertical"
@@ -67,14 +67,15 @@
         android:gravity="center"
         android:paddingBottom="2dp"
         android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:paddingEnd="10dp"
+        android:weightSum="1.0">
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day1_dow"
@@ -108,11 +109,11 @@
 
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day2_dow"
@@ -145,11 +146,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day3_dow"
@@ -182,11 +183,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day4_dow"
@@ -219,11 +220,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day5_dow"
@@ -256,10 +257,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="0.16">
 
             <TextView
                 android:id="@+id/weather_day6_dow"

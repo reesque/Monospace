@@ -1,7 +1,5 @@
 package com.risky.monospace.service;
 
-import android.util.Log;
-
 import com.risky.monospace.service.subscribers.MonoSubscriber;
 
 import java.util.ArrayList;

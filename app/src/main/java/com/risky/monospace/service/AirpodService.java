@@ -1,5 +1,8 @@
 package com.risky.monospace.service;
 
+import android.content.Context;
+
+import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
@@ -19,14 +22,26 @@ public class AirpodService extends MonoService<AirpodSubcriber> {
         return instance;
     }
 
-    public void set(SinglePod pod) {
+    public void set(Context context, SinglePod pod) {
+        Pod lastUpdated = this.pod;
+
         this.pod = pod;
         notifySubscriber();
+
+        if ((lastUpdated == null || lastUpdated.isDisconnected) && pod != null && !pod.isDisconnected) {
+            DialogService.getInstance().show(context, DialogType.AIRPOD);
+        }
     }
 
-    public void set(RegularPod pod) {
+    public void set(Context context, RegularPod pod) {
+        Pod lastUpdated = this.pod;
+
         this.pod = pod;
         notifySubscriber();
+
+        if ((lastUpdated == null || lastUpdated.isDisconnected) && pod != null && !pod.isDisconnected) {
+            DialogService.getInstance().show(context, DialogType.AIRPOD);
+        }
     }
 
     @Override

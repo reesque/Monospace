@@ -11,21 +11,27 @@ import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.util.AirpodBroadcastParam;
 
 public class AirpodReceiver extends BroadcastReceiver {
+    private Context context;
+
+    public AirpodReceiver(Context context) {
+        this.context = context;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(AirpodBroadcastParam.ACTION_STATUS)) {
             if (intent.getExtras().getBoolean(AirpodBroadcastParam.EXTRA_IS_ALL_DISCONNECTED)) {
-                AirpodService.getInstance().set((SinglePod) null);
+                AirpodService.getInstance().set(context, (SinglePod) null);
             }
 
             if (intent.getExtras().getBoolean(AirpodBroadcastParam.EXTRA_IS_SINGLE)) {
-                AirpodService.getInstance().set(new SinglePod(
+                AirpodService.getInstance().set(context, new SinglePod(
                         intent.getExtras().getString(AirpodBroadcastParam.EXTRA_MODEL),
                         intent.getExtras().getBoolean(AirpodBroadcastParam.EXTRA_IS_ALL_DISCONNECTED),
                         intent.getExtras().getString(AirpodBroadcastParam.EXTRA_SINGLE_POD_STATUS),
                         intent.getExtras().getBoolean(AirpodBroadcastParam.EXTRA_SINGLE_POD_CHARGING)));
             } else {
-                AirpodService.getInstance().set(new RegularPod(
+                AirpodService.getInstance().set(context, new RegularPod(
                         intent.getExtras().getString(AirpodBroadcastParam.EXTRA_MODEL),
                         intent.getExtras().getBoolean(AirpodBroadcastParam.EXTRA_IS_ALL_DISCONNECTED),
                         intent.getExtras().getString(AirpodBroadcastParam.EXTRA_LEFT_POD_STATUS),

@@ -2,12 +2,14 @@ package com.risky.monospace.fragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.TELECOM_SERVICE;
+import static android.os.Looper.getMainLooper;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.telecom.TelecomManager;
@@ -66,7 +68,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         appList.setOnItemClickListener((parent, view, position, id) -> {
             String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
             Intent launchIntent = pm.getLaunchIntentForPackage(pname);
-            startActivity(launchIntent);
+            new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
         });
 
         appList.setOnItemLongClickListener((parent, view, position, id) -> {

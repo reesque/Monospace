@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class AirpodDialog extends Dialog implements AirpodSubcriber {
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         setContentView(R.layout.airpod_dialog);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         model = findViewById(R.id.pod_model);
         leftBattery = findViewById(R.id.left_pod_battery);
@@ -188,7 +190,7 @@ public class AirpodDialog extends Dialog implements AirpodSubcriber {
         } else if (intPercent >= 25) {
             return R.drawable.battery2;
         } else {
-            return R.drawable.battery2;
+            return R.drawable.battery1;
         }
     }
 }

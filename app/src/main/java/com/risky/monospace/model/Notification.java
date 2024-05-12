@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 
 import androidx.annotation.Nullable;
 
+import com.risky.monospace.service.NotificationService;
+
 public class Notification {
     public final int id;
     public final int icon;
@@ -53,5 +55,7 @@ public class Notification {
         } catch (PendingIntent.CanceledException e) {
             // This indicates when the notification was already cleared, no need to handle
         }
+
+        NotificationService.getInstance().remove(this);
     }
 }

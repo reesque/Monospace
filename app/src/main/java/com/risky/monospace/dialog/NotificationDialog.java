@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         setContentView(R.layout.notification_dialog);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         notificationList = findViewById(R.id.notification_list);
         notificationList.setEmptyView(findViewById(R.id.empty_view_list));

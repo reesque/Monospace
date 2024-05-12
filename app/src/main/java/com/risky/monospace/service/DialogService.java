@@ -2,6 +2,10 @@ package com.risky.monospace.service;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.DialogType;
@@ -27,24 +31,27 @@ public class DialogService {
     }
 
     public void show(Context context, DialogType type) {
+        Dialog dialog = null;
         switch (type) {
             case AIRPOD:
-                active.put(type, new AirpodDialog(context));
-                active.get(type).show();
+                dialog = new AirpodDialog(context);
                 break;
             case MEDIA:
-                active.put(type, new MediaDialog(context));
-                active.get(type).show();
+                dialog = new MediaDialog(context);
                 break;
             case WEATHER:
-                active.put(type, new WeatherDialog(context));
-                active.get(type).show();
+                dialog = new WeatherDialog(context);
                 break;
             case NOTIFICATION:
-                active.put(type, new NotificationDialog(context));
-                active.get(type).show();
+                dialog = new NotificationDialog(context);
                 break;
         }
+
+        Window window = dialog.getWindow();
+        window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        window.setGravity(Gravity.BOTTOM);
+        active.put(type, dialog);
+        dialog.show();
     }
 
     public void dismiss(DialogType type) {

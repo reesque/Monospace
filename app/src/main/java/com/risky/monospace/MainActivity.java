@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -226,8 +228,13 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(batteryReceiver, batteryFilter);
 
         // ### Read airpod ###
+        /*
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:com.risky.monospace"));
+            startActivity(intent);
+        }*/
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
-        airpodReceiver = new AirpodReceiver();
+        airpodReceiver = new AirpodReceiver(this);
         registerReceiver(airpodReceiver, airpodFilter);
 
         // ### Read installed apps ###
