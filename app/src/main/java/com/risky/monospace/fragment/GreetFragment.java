@@ -120,7 +120,10 @@ public class GreetFragment extends Fragment
                 // Has to run on main thread
                 Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 new Handler(getMainLooper()).post(() -> startActivity(intent));
+                return;
             }
+
+            DialogService.getInstance().show(getContext(), DialogType.NOTIFICATION);
         });
 
         // Funny scrolling title

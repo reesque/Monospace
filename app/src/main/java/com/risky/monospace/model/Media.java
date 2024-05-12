@@ -16,7 +16,8 @@ public class Media {
     private boolean isPlaying;
     private final MediaController.TransportControls control;
 
-    public Media(String artist, String track, String album, String packageName, Bitmap coverArt, boolean isPlaying, MediaController.TransportControls control) {
+    public Media(String artist, String track, String album, String packageName, Bitmap coverArt,
+                 boolean isPlaying, MediaController.TransportControls control) {
         this.packageName = packageName;
         this.artist = artist;
         this.track = track;

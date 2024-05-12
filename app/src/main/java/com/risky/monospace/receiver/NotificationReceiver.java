@@ -8,6 +8,7 @@ import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -37,12 +38,10 @@ public class NotificationReceiver extends NotificationListenerService {
         mediaUpdate();
 
         for (StatusBarNotification sbn : getActiveNotifications()) {
-            if (sbn.getNotification().category != null
+            if (sbn.getNotification().category != null && !sbn.isOngoing() && sbn.isClearable()
                     && (sbn.getNotification().flags
                     & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
-                NotificationService.getInstance().add(new Notification(sbn.getId(),
-                        sbn.getNotification().getSmallIcon().getResId(),
-                        sbn.getPackageName()));
+                NotificationService.getInstance().add(notificationBuilder(sbn));
             }
         }
     }
@@ -58,12 +57,10 @@ public class NotificationReceiver extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         mediaUpdate();
 
-        if (sbn.getNotification().category != null
+        if (sbn.getNotification().category != null && !sbn.isOngoing() && sbn.isClearable()
                 && (sbn.getNotification().flags
                 & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
-            NotificationService.getInstance().add(new Notification(sbn.getId(),
-                    sbn.getNotification().getSmallIcon().getResId(),
-                    sbn.getPackageName()));
+            NotificationService.getInstance().add(notificationBuilder(sbn));
         }
     }
 
@@ -71,9 +68,7 @@ public class NotificationReceiver extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         mediaUpdate();
 
-        NotificationService.getInstance().remove(new Notification(sbn.getId(),
-                sbn.getNotification().getSmallIcon().getResId(),
-                sbn.getPackageName()));
+        NotificationService.getInstance().remove(notificationBuilder(sbn));
     }
 
     private void mediaUpdate() {
@@ -104,5 +99,16 @@ public class NotificationReceiver extends NotificationListenerService {
         }
 
         MediaService.getInstance().set(null);
+    }
+
+    private Notification notificationBuilder(StatusBarNotification sbn) {
+        String title = sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TITLE) == null ? "" :
+                sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TITLE).toString();
+        String desc = sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TEXT) == null ? "" :
+                sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TEXT).toString();
+
+        return new Notification(sbn.getId(),
+                sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
+                sbn.getNotification().contentIntent, sbn.getNotification().deleteIntent);
     }
 }

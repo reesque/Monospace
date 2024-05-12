@@ -112,7 +112,8 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
         if (forecast != null) {
             this.todayTemp.setText(forecast.getForecast(0).temperature);
             this.todayCondition.setText(forecast.getForecast(0).condition.getDisplayName());
-            this.todayIcon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
+            this.todayIcon.setImageResource(
+                    Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18 && Calendar.getInstance().get(Calendar.HOUR_OF_DAY)  >= 5
                     ? forecast.getForecast(0).condition.getIconDay() : forecast.getForecast(0).condition.getIconNight());
 
             this.day1Temp.setText(forecast.getForecast(1).temperature);
