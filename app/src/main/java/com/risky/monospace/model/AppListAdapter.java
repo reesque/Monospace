@@ -58,11 +58,6 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
         icon.setShapeAppearanceModel(icon.getShapeAppearanceModel()
                 .toBuilder().setAllCorners(CornerFamily.ROUNDED, 50f).build());
 
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);  //0 means grayscale
-        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
-        icon.setColorFilter(cf);
-
         return convertView;
     }
 

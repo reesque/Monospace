@@ -44,10 +44,11 @@
         android:id="@+id/app_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:divider="@null"
         android:numColumns="auto_fit"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:columnWidth="95dp"
+        android:horizontalSpacing="5dp" />
 </LinearLayout>

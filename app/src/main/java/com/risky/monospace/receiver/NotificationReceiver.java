@@ -104,8 +104,8 @@ public class NotificationReceiver extends NotificationListenerService {
     private Notification notificationBuilder(StatusBarNotification sbn) {
         String title = sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TITLE) == null ? "" :
                 sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TITLE).toString();
-        String desc = sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TEXT) == null ? "" :
-                sbn.getNotification().extras.getString(android.app.Notification.EXTRA_TEXT).toString();
+        String desc = sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT) == null ? "" :
+                sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT).toString();
 
         return new Notification(sbn.getId(),
                 sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
