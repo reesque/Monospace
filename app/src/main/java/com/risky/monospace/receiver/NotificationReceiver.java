@@ -1,19 +1,19 @@
 package com.risky.monospace.receiver;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
-import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
@@ -23,15 +23,46 @@ import com.risky.monospace.service.NotificationService;
 import java.util.List;
 
 public class NotificationReceiver extends NotificationListenerService {
+    public static final String NOTIFICATION_DISMISS_ACTION = "com.risky.dismiss_notification";
+    public static final String NOTIFICATION_DISMISS_ALL_ACTION = "com.risky.dismiss_all_notification";
+    public static final String EXTRA_NOTIFICATION_KEY = "notification_key";
     private static boolean isPermissionGranted = false;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case NOTIFICATION_DISMISS_ACTION:
+                        String notificationKey = intent.getStringExtra(EXTRA_NOTIFICATION_KEY);
+                        cancelNotification(notificationKey);
+                        break;
+                    case NOTIFICATION_DISMISS_ALL_ACTION:
+                        cancelAllNotifications();
+                        break;
+                }
+            }
+        }
+    };
 
     public static boolean checkPermission() {
         return isPermissionGranted;
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
+
+        // Register the broadcast receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NOTIFICATION_DISMISS_ACTION);
+        filter.addAction(NOTIFICATION_DISMISS_ALL_ACTION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mBroadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(mBroadcastReceiver, filter);
+        }
 
         isPermissionGranted = true;
 
@@ -49,6 +80,7 @@ public class NotificationReceiver extends NotificationListenerService {
     @Override
     public void onListenerDisconnected() {
         super.onListenerDisconnected();
+        unregisterReceiver(mBroadcastReceiver);
 
         isPermissionGranted = false;
     }
@@ -109,6 +141,6 @@ public class NotificationReceiver extends NotificationListenerService {
 
         return new Notification(sbn.getId(),
                 sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
-                sbn.getNotification().contentIntent, sbn.getNotification().deleteIntent);
+                sbn.getNotification().contentIntent, sbn.getKey());
     }
 }

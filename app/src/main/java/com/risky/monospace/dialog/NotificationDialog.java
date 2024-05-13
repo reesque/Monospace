@@ -3,17 +3,22 @@ package com.risky.monospace.dialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
 import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.NotificationListAdapter;
+import com.risky.monospace.receiver.NotificationReceiver;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
@@ -22,6 +27,7 @@ import java.util.List;
 
 public class NotificationDialog extends Dialog implements NotificationSubscriber {
     private ListView notificationList;
+    private TextView dismissAllButton;
     private NotificationListAdapter adapter;
 
     public NotificationDialog(@NonNull Context context, int themeResId) {
@@ -39,9 +45,20 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
 
         notificationList = findViewById(R.id.notification_list);
         notificationList.setEmptyView(findViewById(R.id.empty_view_list));
+        dismissAllButton = findViewById(R.id.notification_dismiss_button);
 
         notificationList.setOnItemClickListener((parent, view, position, id) -> {
-            ((Notification) parent.getItemAtPosition(position)).onClick();
+            ((Notification) parent.getItemAtPosition(position)).expand(getContext());
+        });
+
+        notificationList.setOnItemLongClickListener((parent, view, position, id) -> {
+            ((Notification) parent.getItemAtPosition(position)).clear(getContext());
+            return true;
+        });
+
+        dismissAllButton.setOnClickListener(v -> {
+            Intent intent = new Intent(NotificationReceiver.NOTIFICATION_DISMISS_ALL_ACTION);
+            getContext().sendBroadcast(intent);
         });
 
         NotificationService.getInstance().subscribe(this);
