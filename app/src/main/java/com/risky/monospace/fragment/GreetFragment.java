@@ -1,22 +1,15 @@
 package com.risky.monospace.fragment;
 
-import static android.content.Context.MODE_PRIVATE;
 import static android.os.Looper.getMainLooper;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,6 +106,10 @@ public class GreetFragment extends Fragment
             return true;
         });
 
+        mediaIcon.setOnClickListener(v -> {
+            DialogService.getInstance().show(getContext(), DialogType.MEDIA);
+        });
+
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
 
         notifIcon.setOnClickListener(v -> {
@@ -195,7 +192,7 @@ public class GreetFragment extends Fragment
         }
 
         this.temperature.setText("None");
-        this.weatherIcon.setImageResource(R.drawable.no_service);
+        this.weatherIcon.setImageResource(R.drawable.no_connection_black);
     }
 
     @Override
@@ -206,10 +203,7 @@ public class GreetFragment extends Fragment
     @Override
     public void update(Media media) {
         if (media == null) {
-            mediaPanel.setVisibility(View.GONE);
             track.setText("None");
-            mediaIcon.setOnClickListener(null);
-            DialogService.getInstance().dismiss(DialogType.MEDIA);
             return;
         }
 
@@ -224,10 +218,6 @@ public class GreetFragment extends Fragment
                 return true;
             });
         }
-
-        mediaIcon.setOnClickListener(v -> {
-            DialogService.getInstance().show(getContext(), DialogType.MEDIA);
-        });
 
         if (media.artist == null) {
             track.setText(media.track);

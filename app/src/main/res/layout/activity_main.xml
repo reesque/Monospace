@@ -196,7 +196,7 @@
             android:layout_height="25dp"
             android:padding="5dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/no_connection"/>
+            android:src="@drawable/no_connection_gray"/>
 
         <View
             android:layout_width="2dp"
@@ -210,7 +210,7 @@
             android:layout_height="25dp"
             android:padding="5dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/bluetooth_disable"/>
+            android:src="@drawable/bluetooth_disable_gray"/>
 
         <View
             android:layout_width="2dp"
@@ -224,7 +224,7 @@
             android:layout_height="25dp"
             android:padding="5dp"
             android:layout_marginEnd="4dp"
-            android:src="@drawable/location_disable"/>
+            android:src="@drawable/location_disable_gray"/>
 
     </LinearLayout>
 

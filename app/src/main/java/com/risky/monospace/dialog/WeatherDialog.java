@@ -4,21 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
-import com.risky.monospace.model.Media;
 import com.risky.monospace.model.WeatherForecast;
 import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.DialogService;
-import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.WeatherService;
-import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 
 import java.util.Calendar;
@@ -55,6 +52,7 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.weather_forecast_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -146,30 +144,30 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
 
         this.todayTemp.setText("None");
         this.todayCondition.setText("None");
-        this.todayIcon.setImageResource(R.drawable.no_service);
+        this.todayIcon.setImageResource(R.drawable.no_connection_black);
 
         this.day1Temp.setText("None");
         this.day1Dow.setText("None");
-        this.day1Icon.setImageResource(R.drawable.no_service);
+        this.day1Icon.setImageResource(R.drawable.no_connection_black);
 
         this.day2Temp.setText("None");
         this.day2Dow.setText("None");
-        this.day2Icon.setImageResource(R.drawable.no_service);
+        this.day2Icon.setImageResource(R.drawable.no_connection_black);
 
         this.day3Temp.setText("None");
         this.day3Dow.setText("None");
-        this.day3Icon.setImageResource(R.drawable.no_service);
+        this.day3Icon.setImageResource(R.drawable.no_connection_black);
 
         this.day4Temp.setText("None");
         this.day4Dow.setText("None");
-        this.day4Icon.setImageResource(R.drawable.no_service);
+        this.day4Icon.setImageResource(R.drawable.no_connection_black);
 
         this.day5Temp.setText("None");
         this.day5Dow.setText("None");
-        this.day5Icon.setImageResource(R.drawable.no_service);
+        this.day5Icon.setImageResource(R.drawable.no_connection_black);
 
         this.day6Temp.setText("None");
         this.day6Dow.setText("None");
-        this.day6Icon.setImageResource(R.drawable.no_service);
+        this.day6Icon.setImageResource(R.drawable.no_connection_black);
     }
 }

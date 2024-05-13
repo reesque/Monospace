@@ -6,11 +6,8 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.view.GestureDetector;
 import android.view.View;
@@ -22,7 +19,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -54,7 +50,6 @@ import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
-import com.risky.monospace.util.PermissionHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -216,11 +211,14 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(bluetoothReceiver, bluetoothFilter);
         BluetoothService.getInstance().subscribe(MainActivity.this);
 
+        bluetooth.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS)));
+
         // ### Read location ###
         IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         locationReceiver = new LocationReceiver(this);
         registerReceiver(locationReceiver, locationFilter);
         LocationService.getInstance().subscribe(MainActivity.this);
+        location.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
 
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -234,7 +232,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }*/
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
-        airpodReceiver = new AirpodReceiver(this);
+        airpodReceiver = new AirpodReceiver();
         registerReceiver(airpodReceiver, airpodFilter);
 
         // ### Read installed apps ###
@@ -318,7 +316,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(350); // milliseconds
+        colorAnimation.setDuration(200); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
@@ -341,13 +339,16 @@ public class MainActivity extends AppCompatActivity
     public void update(NetworkStatus status) {
         switch (status) {
             case UNAVAILABLE:
-                network.setImageResource(R.drawable.no_connection);
+                network.setImageResource(R.drawable.no_connection_gray);
+                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_SETTINGS)));
                 break;
             case WIFI:
-                network.setImageResource(R.drawable.wifi);
+                network.setImageResource(R.drawable.wifi_black);
+                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
                 break;
             case MOBILE_DATA:
-                network.setImageResource(R.drawable.mobile_data);
+                network.setImageResource(R.drawable.mobile_data_black);
+                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)));
                 break;
         }
     }
@@ -356,10 +357,10 @@ public class MainActivity extends AppCompatActivity
     public void update(BluetoothStatus status) {
         switch (status) {
             case UNAVAILABLE:
-                bluetooth.setImageResource(R.drawable.bluetooth_disable);
+                bluetooth.setImageResource(R.drawable.bluetooth_disable_gray);
                 break;
             case ON:
-                bluetooth.setImageResource(R.drawable.bluetooth);
+                bluetooth.setImageResource(R.drawable.bluetooth_black);
                 break;
         }
     }
@@ -368,10 +369,10 @@ public class MainActivity extends AppCompatActivity
     public void update(LocationStatus status) {
         switch (status) {
             case UNAVAILABLE:
-                location.setImageResource(R.drawable.location_disable);
+                location.setImageResource(R.drawable.location_disable_gray);
                 break;
             case ON:
-                location.setImageResource(R.drawable.location);
+                location.setImageResource(R.drawable.location_black);
                 break;
         }
     }

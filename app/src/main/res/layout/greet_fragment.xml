@@ -50,55 +50,6 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/media_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/media_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/icon_bg_white"
-            android:padding="5dp"
-            android:src="@drawable/media" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Now Playing"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/media_track"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="None"
-                android:singleLine="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:scrollHorizontally="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit ="marquee_forever"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/weather_container"
         android:layout_width="wrap_content"
@@ -113,7 +64,7 @@
             android:layout_height="50dp"
             android:background="@drawable/icon_bg_white"
             android:padding="5dp"
-            android:src="@drawable/no_service" />
+            android:src="@drawable/no_connection_black" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -176,6 +127,53 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:orientation="horizontal" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/media_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/media_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/icon_bg_white"
+            android:padding="5dp"
+            android:src="@drawable/media" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Now Playing"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/media_track"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="None"
+                android:singleLine="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit ="marquee_forever"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

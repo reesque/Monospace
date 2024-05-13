@@ -11,12 +11,6 @@ import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.util.AirpodBroadcastParam;
 
 public class AirpodReceiver extends BroadcastReceiver {
-    private Context context;
-
-    public AirpodReceiver(Context context) {
-        this.context = context;
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(AirpodBroadcastParam.ACTION_STATUS)) {
