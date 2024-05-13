@@ -55,7 +55,8 @@
         android:layout_marginTop="10dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="3sp"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:listSelector="@drawable/notification_list_selector"/>
 
     <TextView
         android:id="@+id/empty_view_list"
