@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(400); // milliseconds
+        colorAnimation.setDuration(350); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();

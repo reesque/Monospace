@@ -28,9 +28,8 @@ public class MediaDialog extends Dialog implements MediaSubscriber {
     private ImageView play;
     private ImageView next;
 
-
-    public MediaDialog(@NonNull Context context) {
-        super(context);
+    public MediaDialog(@NonNull Context context, int themeResId) {
+        super(context, themeResId);
     }
 
     @Override

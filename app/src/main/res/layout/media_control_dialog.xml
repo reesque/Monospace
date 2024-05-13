@@ -11,9 +11,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.72"
+        android:layout_weight="0.65"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingTop="15dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="140dp"
@@ -82,16 +84,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.01"
-        android:background="@color/black"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.275"
+        android:layout_weight="0.35"
         android:orientation="horizontal"
         android:gravity="center">
 

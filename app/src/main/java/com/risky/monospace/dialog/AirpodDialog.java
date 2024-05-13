@@ -38,9 +38,8 @@ public class AirpodDialog extends Dialog implements AirpodSubcriber {
     private LinearLayout leftPanel;
     private LinearLayout rightPanel;
 
-
-    public AirpodDialog(@NonNull Context context) {
-        super(context);
+    public AirpodDialog(@NonNull Context context, int themeResId) {
+        super(context, themeResId);
     }
 
     @Override

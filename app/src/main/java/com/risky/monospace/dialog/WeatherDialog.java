@@ -46,9 +46,8 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
     private TextView day6Dow;
     private TextView day6Temp;
 
-
-    public WeatherDialog(@NonNull Context context) {
-        super(context);
+    public WeatherDialog(@NonNull Context context, int themeResId) {
+        super(context, themeResId);
     }
 
     @Override

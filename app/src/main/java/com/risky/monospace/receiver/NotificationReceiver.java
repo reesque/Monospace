@@ -38,7 +38,7 @@ public class NotificationReceiver extends NotificationListenerService {
         mediaUpdate();
 
         for (StatusBarNotification sbn : getActiveNotifications()) {
-            if (sbn.getNotification().category != null && !sbn.isOngoing() && sbn.isClearable()
+            if (!sbn.isOngoing() && sbn.isClearable()
                     && (sbn.getNotification().flags
                     & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
                 NotificationService.getInstance().add(notificationBuilder(sbn));
@@ -57,7 +57,7 @@ public class NotificationReceiver extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         mediaUpdate();
 
-        if (sbn.getNotification().category != null && !sbn.isOngoing() && sbn.isClearable()
+        if (!sbn.isOngoing() && sbn.isClearable()
                 && (sbn.getNotification().flags
                 & android.app.Notification.FLAG_GROUP_SUMMARY) == 0) {
             NotificationService.getInstance().add(notificationBuilder(sbn));

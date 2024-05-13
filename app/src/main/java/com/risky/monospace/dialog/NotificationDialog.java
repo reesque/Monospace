@@ -23,8 +23,8 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
     private ListView notificationList;
     private NotificationListAdapter adapter;
 
-    public NotificationDialog(@NonNull Context context) {
-        super(context);
+    public NotificationDialog(@NonNull Context context, int themeResId) {
+        super(context, themeResId);
     }
 
     @Override
