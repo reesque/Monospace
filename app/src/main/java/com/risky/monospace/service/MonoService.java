@@ -3,6 +3,7 @@ package com.risky.monospace.service;
 import com.risky.monospace.service.subscribers.MonoSubscriber;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class MonoService<T extends MonoSubscriber> {
@@ -19,8 +20,11 @@ public abstract class MonoService<T extends MonoSubscriber> {
 
     public void notifySubscriber() {
         if (!subscribers.isEmpty()) {
-            for (T subscriber : subscribers) {
-                updateSubscriber(subscriber);
+            // Using Iterator to avoid concurrent modification, aka a subscriber is removed
+            // mid loop, causes the program to crash
+            Iterator<T> subIterator = subscribers.iterator();
+            while (subIterator.hasNext()) {
+                updateSubscriber(subIterator.next());
             }
         }
     }

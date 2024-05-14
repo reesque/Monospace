@@ -16,7 +16,7 @@
   - Notification: Allows viewing and clearing notification without pulling down the status bar
   - Media: Allows play/pause and skip tracks of any current media player
   - Weather: Allows the track today's + next 7 days weather condition and temperature. This requires users' location for one time only, after that, the app will fetched from that saved location
-  - Airpod: Allows to track airpod's (case + individual pods) battery. This requires my fork of [OpenPods](https://github.com/adolfintel/OpenPods/) to be installed, available [here](https://github.com/reesque/OpenPods)
+  - Airpod (Optional): Allows to track airpod's (case + individual pods) battery. This requires my fork of OpenPods to be installed, available [here](https://github.com/reesque/OpenPods)
  
 ## Special thanks to
 - Thank you [OpenMeteo](https://open-meteo.com/) for providing us with the free API

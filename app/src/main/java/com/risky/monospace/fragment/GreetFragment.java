@@ -104,8 +104,6 @@ public class GreetFragment extends Fragment
             return true;
         });
 
-        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA));
-
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
 
         notifIcon.setOnClickListener(v -> {
@@ -201,10 +199,14 @@ public class GreetFragment extends Fragment
     public void update(Media media) {
         if (media == null) {
             track.setText(getString(R.string.widget_none_desc));
+            mediaIcon.setOnClickListener(null);
+            DialogService.getInstance().dismiss(DialogType.MEDIA);
             return;
         }
 
         mediaPanel.setVisibility(View.VISIBLE);
+
+        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA));
 
         if (media.packageName != null) {
             mediaIcon.setOnLongClickListener(v -> {
