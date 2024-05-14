@@ -112,8 +112,8 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
             this.todayTemp.setText(forecast.getForecast(0).temperature);
             this.todayCondition.setText(forecast.getForecast(0).condition.getDisplayName());
             this.todayIcon.setImageResource(
-                    Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18 && Calendar.getInstance().get(Calendar.HOUR_OF_DAY)  >= 5
-                    ? forecast.getForecast(0).condition.getIconDay() : forecast.getForecast(0).condition.getIconNight());
+                    Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18 && Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 5
+                            ? forecast.getForecast(0).condition.getIconDay() : forecast.getForecast(0).condition.getIconNight());
 
             this.day1Temp.setText(forecast.getForecast(1).temperature);
             this.day1Dow.setText(forecast.getForecast(1).dayOfWeek);
@@ -142,32 +142,32 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
             return;
         }
 
-        this.todayTemp.setText("None");
-        this.todayCondition.setText("None");
+        this.todayTemp.setText(getContext().getString(R.string.widget_none_desc));
+        this.todayCondition.setText(getContext().getString(R.string.widget_none_desc));
         this.todayIcon.setImageResource(R.drawable.no_connection_black);
 
-        this.day1Temp.setText("None");
-        this.day1Dow.setText("None");
+        this.day1Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day1Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day1Icon.setImageResource(R.drawable.no_connection_black);
 
-        this.day2Temp.setText("None");
-        this.day2Dow.setText("None");
+        this.day2Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day2Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day2Icon.setImageResource(R.drawable.no_connection_black);
 
-        this.day3Temp.setText("None");
-        this.day3Dow.setText("None");
+        this.day3Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day3Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day3Icon.setImageResource(R.drawable.no_connection_black);
 
-        this.day4Temp.setText("None");
-        this.day4Dow.setText("None");
+        this.day4Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day4Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day4Icon.setImageResource(R.drawable.no_connection_black);
 
-        this.day5Temp.setText("None");
-        this.day5Dow.setText("None");
+        this.day5Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day5Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day5Icon.setImageResource(R.drawable.no_connection_black);
 
-        this.day6Temp.setText("None");
-        this.day6Dow.setText("None");
+        this.day6Temp.setText(getContext().getString(R.string.widget_none_desc));
+        this.day6Dow.setText(getContext().getString(R.string.widget_none_desc));
         this.day6Icon.setImageResource(R.drawable.no_connection_black);
     }
 }

@@ -5,7 +5,6 @@ import static androidx.core.content.ContextCompat.checkSelfPermission;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 import com.risky.monospace.MainActivity;
 import com.risky.monospace.receiver.NotificationReceiver;

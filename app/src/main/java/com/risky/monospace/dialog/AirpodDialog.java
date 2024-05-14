@@ -15,14 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.risky.monospace.R;
-import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.service.DialogService;
-import com.risky.monospace.service.subscribers.AirpodSubcriber;
+import com.risky.monospace.service.subscribers.AirpodSubscriber;
 
-public class AirpodDialog extends Dialog implements AirpodSubcriber {
+public class AirpodDialog extends Dialog implements AirpodSubscriber {
     private TextView model;
     private ImageView leftBattery;
     private ImageView leftBatteryCharge;

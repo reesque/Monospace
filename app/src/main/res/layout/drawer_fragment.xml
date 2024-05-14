@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,33 +9,34 @@
         android:id="@+id/drawer_search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/white"
+        android:orientation="horizontal"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/drawer_prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search:"
-            android:textColor="@color/black"
-            android:textSize="20sp"
             android:layout_marginStart="5dp"
-            android:fontFamily="monospace" />
+            android:fontFamily="monospace"
+            android:text="@string/app_list_search_prompt"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/app_search_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:autofillHints="name"
             android:background="@android:color/transparent"
             android:fontFamily="monospace"
+            android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textCursorDrawable="@drawable/cursor_black"
-            android:textSize="20sp"
-            android:imeOptions="actionDone"
-            android:singleLine="true" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -46,9 +46,9 @@
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:divider="@null"
-        android:numColumns="auto_fit"
-        android:scrollbars="none"
         android:columnWidth="95dp"
-        android:horizontalSpacing="5dp" />
+        android:divider="@null"
+        android:horizontalSpacing="5dp"
+        android:numColumns="auto_fit"
+        android:scrollbars="none" />
 </LinearLayout>

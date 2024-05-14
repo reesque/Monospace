@@ -1,7 +1,5 @@
 package com.risky.monospace.util;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,13 +12,13 @@ import java.net.URL;
 public class NetworkUtil {
     public static JSONObject getJSONObjectFromURL(String urlString)
             throws IOException, JSONException {
-        HttpURLConnection urlConnection = null;
+        HttpURLConnection urlConnection;
         URL url = new URL(urlString);
 
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
-        urlConnection.setReadTimeout(10000 /* milliseconds */ );
-        urlConnection.setConnectTimeout(15000 /* milliseconds */ );
+        urlConnection.setReadTimeout(10000 /* milliseconds */);
+        urlConnection.setConnectTimeout(15000 /* milliseconds */);
         urlConnection.setDoOutput(true);
         urlConnection.connect();
 

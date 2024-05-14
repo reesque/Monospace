@@ -57,12 +57,16 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
+    private static Runnable clockRunner;
+    private final SimpleDateFormat domFormat = new SimpleDateFormat("dd");
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    private final SimpleDateFormat merFormat = new SimpleDateFormat("a");
+    private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMM");
     private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
     private TextView time;
     private TextView mer;
-
     private TextView sun;
     private TextView mon;
     private TextView tue;
@@ -70,19 +74,12 @@ public class MainActivity extends AppCompatActivity
     private TextView thu;
     private TextView fri;
     private TextView sat;
-
     private TextView battPerc;
     private ProgressBar battery;
     private ImageView network;
     private ImageView bluetooth;
     private ImageView location;
     private LinearLayout contentFragment;
-
-    private final SimpleDateFormat domFormat = new SimpleDateFormat("dd");
-    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
-    private final SimpleDateFormat merFormat = new SimpleDateFormat("a");
-    private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMM");
-
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
     private NetworkStateMonitor networkMonitor;
@@ -90,8 +87,6 @@ public class MainActivity extends AppCompatActivity
     private LocationReceiver locationReceiver;
     private AirpodReceiver airpodReceiver;
     private TimeReceiver timeReceiver;
-    private static Runnable clockRunner;
-
     private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -134,39 +129,36 @@ public class MainActivity extends AppCompatActivity
         contentFragment = findViewById(R.id.fragment_container);
 
         // ###  Clock control ###
-        clockRunner = new Runnable() {
-            @Override
-            public void run() {
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        clockRunner = () -> {
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
-                dom.setText(domFormat.format(calendar.getTime()));
-                time.setText(timeFormat.format(calendar.getTime()));
-                mer.setText(merFormat.format(calendar.getTime()));
-                month.setText(monthFormat.format(calendar.getTime()));
+            dom.setText(domFormat.format(calendar.getTime()));
+            time.setText(timeFormat.format(calendar.getTime()));
+            mer.setText(merFormat.format(calendar.getTime()));
+            month.setText(monthFormat.format(calendar.getTime()));
 
-                int dow = calendar.get(Calendar.DAY_OF_WEEK);
-                mon.setBackgroundResource(dow == 2 ? R.drawable.round_white : 0);
-                mon.setTextColor(dow == 2 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                tue.setBackgroundResource(dow == 3 ? R.drawable.round_white : 0);
-                tue.setTextColor(dow == 3 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                wed.setBackgroundResource(dow == 4 ? R.drawable.round_white : 0);
-                wed.setTextColor(dow == 4 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                thu.setBackgroundResource(dow == 5 ? R.drawable.round_white : 0);
-                thu.setTextColor(dow == 5 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                fri.setBackgroundResource(dow == 6 ? R.drawable.round_white : 0);
-                fri.setTextColor(dow == 6 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                sat.setBackgroundResource(dow == 7 ? R.drawable.round_white : 0);
-                sat.setTextColor(dow == 7 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-                sun.setBackgroundResource(dow == 1 ? R.drawable.round_white : 0);
-                sun.setTextColor(dow == 1 ? ContextCompat.getColor(MainActivity.this, R.color.black)
-                        : ContextCompat.getColor(MainActivity.this, R.color.white));
-            }
+            int dow = calendar.get(Calendar.DAY_OF_WEEK);
+            mon.setBackgroundResource(dow == 2 ? R.drawable.round_white : 0);
+            mon.setTextColor(dow == 2 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            tue.setBackgroundResource(dow == 3 ? R.drawable.round_white : 0);
+            tue.setTextColor(dow == 3 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            wed.setBackgroundResource(dow == 4 ? R.drawable.round_white : 0);
+            wed.setTextColor(dow == 4 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            thu.setBackgroundResource(dow == 5 ? R.drawable.round_white : 0);
+            thu.setTextColor(dow == 5 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            fri.setBackgroundResource(dow == 6 ? R.drawable.round_white : 0);
+            fri.setTextColor(dow == 6 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            sat.setBackgroundResource(dow == 7 ? R.drawable.round_white : 0);
+            sat.setTextColor(dow == 7 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
+            sun.setBackgroundResource(dow == 1 ? R.drawable.round_white : 0);
+            sun.setTextColor(dow == 1 ? ContextCompat.getColor(MainActivity.this, R.color.black)
+                    : ContextCompat.getColor(MainActivity.this, R.color.white));
         };
 
         clockRunner.run();
@@ -193,7 +185,7 @@ public class MainActivity extends AppCompatActivity
             setBackgroundColor(true);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_anim, R.anim.fade_out_anim)
+                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_anim)
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .commit();
         });
@@ -252,7 +244,7 @@ public class MainActivity extends AppCompatActivity
                     setBackgroundColor(false);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .setCustomAnimations(R.anim.fade_in_anim, R.anim.slide_out_anim)
+                            .setCustomAnimations(R.anim.fade_in_anim, R.anim.slide_out_slow_anim)
                             .replace(R.id.fragment_container, GreetFragment.newInstance())
                             .commit();
                 }
@@ -310,20 +302,20 @@ public class MainActivity extends AppCompatActivity
         int colorMain = ContextCompat.getColor(MainActivity.this, R.color.bg_black_blur);
         int colorSub = ContextCompat.getColor(MainActivity.this, R.color.bg_dark_black_blur);
 
-        ValueAnimator colorAnimation = null;
+        ValueAnimator colorAnimation;
         if (reversed) {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorMain, colorSub);
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(200); // milliseconds
+        colorAnimation.setDuration(350); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
     }
 
     private void startTimeApplication() {
-        Intent launchIntent =  getPackageManager()
+        Intent launchIntent = getPackageManager()
                 .getLaunchIntentForPackage("com.android.deskclock");
         startActivity(launchIntent);
     }

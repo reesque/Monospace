@@ -5,106 +5,105 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    android:background="@color/bg_black_blur"
     android:fitsSystemWindows="false"
-    android:background="@color/bg_black_blur">
+    tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/dow_sun"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="S"
+        android:layout_marginStart="-2dp"
+        android:gravity="center"
+        android:text="@string/dow_sun"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        android:layout_marginStart="-2dp"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/left_padding" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/left_padding"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_mon"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="M"
+        android:gravity="center"
+        android:text="@string/dow_mon"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_sun" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_sun"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_tue"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="T"
+        android:gravity="center"
+        android:text="@string/dow_tue"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_mon" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_mon"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_wed"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="W"
+        android:gravity="center"
+        android:text="@string/dow_wed"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_tue" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_tue"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_thu"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="T"
+        android:gravity="center"
+        android:text="@string/dow_thu"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_wed" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_wed"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_fri"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="F"
+        android:gravity="center"
+        android:text="@string/dow_fri"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_thu" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_thu"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/dow_sat"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:textStyle="bold"
-        android:text="S"
+        android:gravity="center"
+        android:text="@string/dow_sat"
         android:textColor="@color/white"
         android:textSize="15sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/header_top"
-        app:layout_constraintStart_toEndOf="@id/dow_fri" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/dow_fri"
+        app:layout_constraintTop_toBottomOf="@id/header_top" />
 
     <TextView
         android:id="@+id/month_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
-        android:text="###"
         android:textColor="@color/white"
         android:textSize="100sp"
         android:textStyle="bold"
-        android:layout_marginTop="-5dp"
         app:layout_constraintStart_toEndOf="@id/left_padding"
         app:layout_constraintTop_toBottomOf="@id/dow_sun" />
 
@@ -112,13 +111,12 @@
         android:id="@+id/dom_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:fontFamily="monospace"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
-        android:text="##"
         android:textColor="@color/white"
         android:textSize="100sp"
-        android:fontFamily="monospace"
-        android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@id/month_main"
         app:layout_constraintTop_toTopOf="@id/month_main" />
 
@@ -126,13 +124,12 @@
         android:id="@+id/time_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:fontFamily="monospace"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
-        android:text="##:##"
         android:textColor="@color/white"
         android:textSize="30sp"
-        android:layout_marginTop="5dp"
         app:layout_constraintStart_toEndOf="@id/left_padding"
         app:layout_constraintTop_toBottomOf="@id/month_main" />
 
@@ -141,26 +138,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:textStyle="bold"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
-        android:text="##"
         android:textColor="@color/white"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/time_main"
         app:layout_constraintStart_toEndOf="@id/time_main" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="15dp"
         android:background="@drawable/status_bar"
-        android:padding="3dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="3dp"
         app:layout_constraintBottom_toBottomOf="@id/time_main"
-        app:layout_constraintTop_toTopOf="@id/time_main"
-        app:layout_constraintStart_toEndOf="@id/mer_main">
+        app:layout_constraintStart_toEndOf="@id/mer_main"
+        app:layout_constraintTop_toTopOf="@id/time_main">
 
         <RelativeLayout
             android:layout_width="25dp"
@@ -169,62 +165,61 @@
 
             <ProgressBar
                 android:id="@+id/battery_main"
+                style="?android:progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                style="?android:progressBarStyleHorizontal"
-                android:max="100"
                 android:indeterminate="false"
-                android:rotation="-90"
+                android:max="100"
                 android:progress="100"
-                android:secondaryProgress="70"
-                android:progressDrawable="@drawable/battery_bar"/>
+                android:progressDrawable="@drawable/battery_bar"
+                android:rotation="-90"
+                android:secondaryProgress="70" />
 
             <TextView
                 android:id="@+id/battery_perc_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="9sp"
+                android:gravity="center"
                 android:textColor="@color/mp_green"
-                android:textStyle="bold"
-                android:text="###"
-                android:gravity="center"/>
+                android:textSize="9sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <ImageView
             android:id="@+id/network_main"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:padding="5dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/no_connection_gray"/>
+            android:padding="5dp"
+            android:src="@drawable/no_connection_gray" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="20dp"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/separator"/>
+            android:background="@drawable/separator" />
 
         <ImageView
             android:id="@+id/bluetooth_main"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:padding="5dp"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/bluetooth_disable_gray"/>
+            android:padding="5dp"
+            android:src="@drawable/bluetooth_disable_gray" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="20dp"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/separator"/>
+            android:background="@drawable/separator" />
 
         <ImageView
             android:id="@+id/location_main"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:padding="5dp"
             android:layout_marginEnd="4dp"
-            android:src="@drawable/location_disable_gray"/>
+            android:padding="5dp"
+            android:src="@drawable/location_disable_gray" />
 
     </LinearLayout>
 
@@ -232,11 +227,11 @@
         android:id="@+id/fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/content_top"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_top" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_padding"

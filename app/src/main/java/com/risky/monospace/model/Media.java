@@ -1,11 +1,7 @@
 package com.risky.monospace.model;
 
 import android.graphics.Bitmap;
-import android.media.MediaMetadata;
 import android.media.session.MediaController;
-import android.media.session.PlaybackState;
-import android.util.Log;
-import android.view.KeyEvent;
 
 public class Media {
     public final String packageName;
@@ -13,8 +9,8 @@ public class Media {
     public final String track;
     public final String album;
     public final Bitmap coverArt;
-    private boolean isPlaying;
     private final MediaController.TransportControls control;
+    private boolean isPlaying;
 
     public Media(String artist, String track, String album, String packageName, Bitmap coverArt,
                  boolean isPlaying, MediaController.TransportControls control) {

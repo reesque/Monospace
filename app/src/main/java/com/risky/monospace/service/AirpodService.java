@@ -6,13 +6,14 @@ import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
-import com.risky.monospace.service.subscribers.AirpodSubcriber;
+import com.risky.monospace.service.subscribers.AirpodSubscriber;
 
-public class AirpodService extends MonoService<AirpodSubcriber> {
+public class AirpodService extends MonoService<AirpodSubscriber> {
     private static AirpodService instance;
     private Pod pod;
 
-    private AirpodService() {}
+    private AirpodService() {
+    }
 
     public static AirpodService getInstance() {
         if (instance == null) {
@@ -45,12 +46,12 @@ public class AirpodService extends MonoService<AirpodSubcriber> {
     }
 
     @Override
-    protected void updateSubscriber(AirpodSubcriber subscriber) {
+    protected void updateSubscriber(AirpodSubscriber subscriber) {
         if (pod == null) {
             subscriber.update((SinglePod) null);
             return;
         }
-        
+
         if (pod.isSingle) {
             subscriber.update((SinglePod) pod);
         } else {

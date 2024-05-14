@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="240dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/dialog_bg_white"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:weightSum="1.0">
 
     <LinearLayout
@@ -14,73 +14,70 @@
         android:layout_weight="0.65"
         android:orientation="horizontal"
         android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:paddingEnd="15dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="140dp"
             android:layout_height="140dp"
-            app:cardCornerRadius="15dp"
             android:outlineAmbientShadowColor="@android:color/transparent"
-            android:outlineSpotShadowColor="@android:color/transparent">
+            android:outlineSpotShadowColor="@android:color/transparent"
+            app:cardCornerRadius="15dp">
 
             <ImageView
                 android:id="@+id/media_art"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:background="@color/black"/>
+                android:background="@color/black"
+                android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/media_album"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Album"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit ="marquee_forever"/>
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/media_track"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Song title"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit ="marquee_forever"/>
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/media_artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Artist"
-                android:textSize="22sp"
-                android:textColor="@color/black"
-                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit ="marquee_forever"/>
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -88,28 +85,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.35"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/media_prev"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/skip_prev"/>
+            android:src="@drawable/skip_prev" />
 
         <ImageView
             android:id="@+id/media_play"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/play"
             android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"/>
+            android:layout_marginEnd="50dp"
+            android:src="@drawable/play" />
 
         <ImageView
             android:id="@+id/media_next"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/skip_next"/>
+            android:src="@drawable/skip_next" />
 
     </LinearLayout>
 </LinearLayout>

@@ -7,7 +7,8 @@ public class BluetoothService extends MonoService<BluetoothSubscriber> {
     private static BluetoothService instance;
     private BluetoothStatus connectionStatus = BluetoothStatus.UNAVAILABLE;
 
-    private BluetoothService() {}
+    private BluetoothService() {
+    }
 
     public static BluetoothService getInstance() {
         if (instance == null) {

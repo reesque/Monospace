@@ -20,7 +20,8 @@ public class DialogService {
     private static DialogService instance;
     private final Map<DialogType, Dialog> active = new HashMap<>();
 
-    private DialogService() {}
+    private DialogService() {
+    }
 
     public static DialogService getInstance() {
         if (instance == null) {

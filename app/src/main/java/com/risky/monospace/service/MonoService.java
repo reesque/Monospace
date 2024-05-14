@@ -5,7 +5,7 @@ import com.risky.monospace.service.subscribers.MonoSubscriber;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MonoService<T extends MonoSubscriber>{
+public abstract class MonoService<T extends MonoSubscriber> {
     private final List<T> subscribers = new ArrayList<>();
 
     public void subscribe(T subscriber) {

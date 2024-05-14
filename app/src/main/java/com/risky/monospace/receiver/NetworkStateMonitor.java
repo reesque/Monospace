@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NetworkStateMonitor extends ConnectivityManager.NetworkCallback {
-    private Context context;
+    private final Context context;
     private final NetworkRequest networkRequest;
     private final Map<Network, Integer> networkMap;
 

@@ -1,3 +1,4 @@
 package com.risky.monospace.service.subscribers;
 
-public interface MonoSubscriber {}
+public interface MonoSubscriber {
+}

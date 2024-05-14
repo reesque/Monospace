@@ -27,7 +27,7 @@ public class NotificationReceiver extends NotificationListenerService {
     public static final String NOTIFICATION_DISMISS_ALL_ACTION = "com.risky.dismiss_all_notification";
     public static final String EXTRA_NOTIFICATION_KEY = "notification_key";
     private static boolean isPermissionGranted = false;
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver internalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -59,9 +59,9 @@ public class NotificationReceiver extends NotificationListenerService {
         filter.addAction(NOTIFICATION_DISMISS_ACTION);
         filter.addAction(NOTIFICATION_DISMISS_ALL_ACTION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(mBroadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            registerReceiver(internalReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
-            registerReceiver(mBroadcastReceiver, filter);
+            registerReceiver(internalReceiver, filter);
         }
 
         isPermissionGranted = true;
@@ -80,7 +80,7 @@ public class NotificationReceiver extends NotificationListenerService {
     @Override
     public void onListenerDisconnected() {
         super.onListenerDisconnected();
-        unregisterReceiver(mBroadcastReceiver);
+        unregisterReceiver(internalReceiver);
 
         isPermissionGranted = false;
     }

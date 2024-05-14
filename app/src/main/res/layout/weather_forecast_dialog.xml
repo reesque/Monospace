@@ -3,25 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="210dp"
     android:background="@drawable/dialog_bg_white"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp">
 
         <ImageView
             android:id="@+id/weather_today_icon"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:background="@drawable/icon_thick_stroke_black"
             android:padding="10dp"
-            android:src="@drawable/no_connection_black"
-            android:background="@drawable/icon_thick_stroke_black"/>
+            android:src="@drawable/no_connection_black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,28 +33,28 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Today"
-                android:textColor="@color/black"
                 android:layout_marginEnd="6dp"
-                android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:text="@string/widget_weather_today"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/weather_today_condition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="24sp"
                 android:includeFontPadding="false"
-                android:lineSpacingExtra="0dp" />
+                android:lineSpacingExtra="0dp"
+                android:text="@string/widget_none_desc"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/weather_today_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -63,234 +63,235 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:orientation="horizontal"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:paddingBottom="2dp"
+        android:orientation="horizontal"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:paddingBottom="2dp"
         android:weightSum="1.0">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day1_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day1_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day1_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day2_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day2_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day2_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day3_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day3_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day3_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day4_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day4_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day4_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day5_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day5_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day5_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_weight="0.16"
             android:gravity="center"
-            android:layout_weight="0.16">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weather_day6_dow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/weather_day6_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="5dp"
-                android:background="@drawable/icon_stroke_black"
-                android:src="@drawable/no_connection_black"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/icon_stroke_black"
+                android:padding="5dp"
+                android:src="@drawable/no_connection_black" />
 
             <TextView
                 android:id="@+id/weather_day6_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="None"
+                android:gravity="center"
+                android:text="@string/widget_none_desc"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:gravity="center"/>
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

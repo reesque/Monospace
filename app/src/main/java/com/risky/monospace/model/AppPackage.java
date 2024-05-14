@@ -30,7 +30,7 @@ public class AppPackage {
         public int compare(AppPackage o1, AppPackage o2) {
             if (o1.isFav && !o2.isFav) {
                 return -1;
-            } else if (!o1.isFav && o2.isFav){
+            } else if (!o1.isFav && o2.isFav) {
                 return 1;
             }
 

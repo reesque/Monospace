@@ -1,15 +1,12 @@
 package com.risky.monospace.dialog;
 
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,9 +44,8 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
         notificationList.setEmptyView(findViewById(R.id.empty_view_list));
         dismissAllButton = findViewById(R.id.notification_dismiss_button);
 
-        notificationList.setOnItemClickListener((parent, view, position, id) -> {
-            ((Notification) parent.getItemAtPosition(position)).expand(getContext());
-        });
+        notificationList.setOnItemClickListener((parent, view, position, id)
+                -> ((Notification) parent.getItemAtPosition(position)).expand(getContext()));
 
         notificationList.setOnItemLongClickListener((parent, view, position, id) -> {
             ((Notification) parent.getItemAtPosition(position)).clear(getContext());

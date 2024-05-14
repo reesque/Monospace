@@ -41,14 +41,14 @@ import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
-import com.risky.monospace.service.subscribers.AirpodSubcriber;
+import com.risky.monospace.service.subscribers.AirpodSubscriber;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 import com.risky.monospace.util.PermissionHelper;
 
 public class GreetFragment extends Fragment
-        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubcriber {
+        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubscriber {
     private View view;
     private TextView temperature;
     private TextView track;
@@ -89,9 +89,7 @@ public class GreetFragment extends Fragment
         MediaService.getInstance().subscribe(this);
         AirpodService.getInstance().subscribe(this);
 
-        weatherIcon.setOnClickListener(v -> {
-            DialogService.getInstance().show(getContext(), DialogType.WEATHER);
-        });
+        weatherIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.WEATHER));
 
         weatherIcon.setOnLongClickListener(v -> {
             if (!PermissionHelper.checkLocation(getContext())) {
@@ -100,15 +98,13 @@ public class GreetFragment extends Fragment
                 return true;
             }
 
-            temperature.setText("Updating...");
+            temperature.setText(getString(R.string.widget_weather_updating));
             WeatherService.getInstance(getContext()).locationUpdate();
 
             return true;
         });
 
-        mediaIcon.setOnClickListener(v -> {
-            DialogService.getInstance().show(getContext(), DialogType.MEDIA);
-        });
+        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA));
 
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
 
@@ -138,6 +134,7 @@ public class GreetFragment extends Fragment
         AirpodService.getInstance().unsubscribe(this);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void update(List<Notification> notifications) {
         // Clear child elements
@@ -162,7 +159,7 @@ public class GreetFragment extends Fragment
                 break;
             }
 
-            Drawable icon = null;
+            Drawable icon;
             try {
                 Resources res = getContext().getPackageManager()
                         .getResourcesForApplication(n.packageName);
@@ -191,7 +188,7 @@ public class GreetFragment extends Fragment
             return;
         }
 
-        this.temperature.setText("None");
+        this.temperature.setText(getString(R.string.widget_none_desc));
         this.weatherIcon.setImageResource(R.drawable.no_connection_black);
     }
 
@@ -203,7 +200,7 @@ public class GreetFragment extends Fragment
     @Override
     public void update(Media media) {
         if (media == null) {
-            track.setText("None");
+            track.setText(getString(R.string.widget_none_desc));
             return;
         }
 

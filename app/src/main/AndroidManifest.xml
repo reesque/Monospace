@@ -4,13 +4,14 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.NOTIFICATION_MANAGER" />
 
     <application
@@ -26,54 +27,60 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
-            android:taskAffinity=""
+            android:enabled="true"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:enabled="true">
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:taskAffinity="">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name=".MainActivity" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER_APP" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receiver.AppPackageReceiver"
-            android:label="Monospace Package Manager"
+        <receiver
+            android:name=".receiver.AppPackageReceiver"
             android:exported="true">
-            <intent-filter >
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <data android:scheme="package"/>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <service android:name=".receiver.NotificationReceiver"
-            android:label="Monospace Notification Manager"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="true">
+        <service
+            android:name=".receiver.NotificationReceiver"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <receiver android:name=".receiver.BatteryReceiver"
-            android:label="Monospace Battery Manager"
-            android:exported="false"/>
-        <receiver android:name=".receiver.BluetoothReceiver"
-            android:label="Monospace Bluetooth Manager"
-            android:exported="true">
+
+        <receiver
+            android:name=".receiver.BatteryReceiver"
+            android:exported="false"
+            android:label="Monospace Battery Manager" />
+        <receiver
+            android:name=".receiver.BluetoothReceiver"
+            android:exported="true"
+            android:label="Monospace Bluetooth Manager">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.AirpodReceiver"
+        <receiver
+            android:name=".receiver.AirpodReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.dosse.airpods.status"/>
+                <action android:name="com.dosse.airpods.status" />
             </intent-filter>
         </receiver>
     </application>

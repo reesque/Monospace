@@ -22,7 +22,8 @@ public class AppPackageService extends MonoService<AppPackageSubscriber> {
     private final List<AppPackage> appList = new ArrayList<>();
     private final Set<String> favList = new HashSet<>();
 
-    private AppPackageService() {}
+    private AppPackageService() {
+    }
 
     public static AppPackageService getInstance() {
         if (instance == null) {
@@ -48,7 +49,7 @@ public class AppPackageService extends MonoService<AppPackageSubscriber> {
 
         appList.clear();
         for (int i = 0; i < installedApps.size(); i++) {
-            if (pm.getLaunchIntentForPackage(installedApps.get(i).packageName) != null){
+            if (pm.getLaunchIntentForPackage(installedApps.get(i).packageName) != null) {
                 try {
                     Drawable icon = pm.getApplicationIcon(installedApps.get(i).packageName);
                     String name = installedApps.get(i).packageName;

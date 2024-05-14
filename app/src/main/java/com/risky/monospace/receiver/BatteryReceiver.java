@@ -8,7 +8,7 @@ import android.os.BatteryManager;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 
 public class BatteryReceiver extends BroadcastReceiver {
-    private BatterySubscriber subscriber;
+    private final BatterySubscriber subscriber;
 
     public BatteryReceiver(BatterySubscriber subscriber) {
         this.subscriber = subscriber;

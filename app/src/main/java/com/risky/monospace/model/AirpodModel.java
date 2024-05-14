@@ -14,7 +14,7 @@ public enum AirpodModel {
     MODEL_POWERBEATS_3("powerbeats3", "Power Beats 3"),
     MODEL_POWERBEATS_PRO("powerbeatspro", "Power Beats Pro"),
     MODEL_UNKNOWN("unknown", "Unknown");
-    
+
     public final String name;
     public final String displayName;
 

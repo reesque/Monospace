@@ -11,7 +11,8 @@ public class NotificationService extends MonoService<NotificationSubscriber> {
     private static NotificationService instance;
     private final List<Notification> notificationList = new ArrayList<>();
 
-    private NotificationService() {}
+    private NotificationService() {
+    }
 
     public static NotificationService getInstance() {
         if (instance == null) {

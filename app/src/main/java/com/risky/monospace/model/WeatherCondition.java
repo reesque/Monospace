@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum WeatherCondition {
-    CLEAR("Clear", R.drawable.clear_day, R.drawable.clear_night,0, 1),
+    CLEAR("Clear", R.drawable.clear_day, R.drawable.clear_night, 0, 1),
     OVERCAST("Overcast", R.drawable.partly_cloudy_day, R.drawable.partly_cloudy_night, 2, 3),
     FOGGY("Foggy", R.drawable.foggy, R.drawable.foggy, 45, 48),
     DRIZZLE("Drizzle", R.drawable.drizzle, R.drawable.drizzle, 51, 53, 55),
@@ -26,13 +26,23 @@ public enum WeatherCondition {
     private final int iconNight;
     private List<Integer> wmoCode;
 
-    WeatherCondition(String displayName, int iconDay, int iconNight, int ... wmo) {
+    WeatherCondition(String displayName, int iconDay, int iconNight, int... wmo) {
         this.displayName = displayName;
         this.iconDay = iconDay;
         this.iconNight = iconNight;
-        this.wmoCode = Arrays.stream(wmo) .boxed()
+        this.wmoCode = Arrays.stream(wmo).boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
         this.wmoCode = Collections.unmodifiableList(this.wmoCode);
+    }
+
+    public static WeatherCondition getCondition(int wmo) {
+        for (WeatherCondition condition : values()) {
+            if (condition.wmoCode.contains(wmo)) {
+                return condition;
+            }
+        }
+
+        return null;
     }
 
     public String getDisplayName() {
@@ -45,15 +55,5 @@ public enum WeatherCondition {
 
     public int getIconNight() {
         return iconNight;
-    }
-
-    public static WeatherCondition getCondition(int wmo) {
-        for (WeatherCondition condition : values()) {
-            if (condition.wmoCode.contains(wmo)) {
-                return condition;
-            }
-        }
-
-        return null;
     }
 }

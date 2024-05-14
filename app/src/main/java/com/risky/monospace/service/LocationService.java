@@ -7,7 +7,8 @@ public class LocationService extends MonoService<LocationSubscriber> {
     private static LocationService instance;
     private LocationStatus locationStatus = LocationStatus.UNAVAILABLE;
 
-    private LocationService() {}
+    private LocationService() {
+    }
 
     public static LocationService getInstance() {
         if (instance == null) {

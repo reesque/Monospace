@@ -6,9 +6,9 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
-    private GestureCallback doubleTapCallback;
+    private final GestureCallback doubleTapCallback;
 
-    public GestureListener (GestureCallback doubleTapCallback) {
+    public GestureListener(GestureCallback doubleTapCallback) {
         this.doubleTapCallback = doubleTapCallback;
     }
 

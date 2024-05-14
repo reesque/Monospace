@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="MonospaceTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Set the background to the system wallpaper -->
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
     <style name="MonoDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/MonoDialogAnimation</item>
     </style>
 
     <style name="MonoDialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_anim</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_anim</item>
+        <item name="android:windowEnterAnimation">@anim/slide_in_fast_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_fast_anim</item>
     </style>
 </resources>

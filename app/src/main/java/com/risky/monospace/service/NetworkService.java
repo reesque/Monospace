@@ -7,7 +7,8 @@ public class NetworkService extends MonoService<NetworkSubscriber> {
     private static NetworkService instance;
     private NetworkStatus networkStatus = NetworkStatus.UNAVAILABLE;
 
-    private NetworkService() {}
+    private NetworkService() {
+    }
 
     public static NetworkService getInstance() {
         if (instance == null) {

@@ -1,16 +1,6 @@
 package com.risky.monospace.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
-import android.graphics.Shader;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
@@ -65,7 +53,6 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
     @Override
     public Filter getFilter() {
         return new Filter() {
-            @SuppressWarnings("unchecked")
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
@@ -92,7 +79,8 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {clear();
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                clear();
                 clear();
                 if (results.count != 0) {
                     addAll((List<AppPackage>) results.values);

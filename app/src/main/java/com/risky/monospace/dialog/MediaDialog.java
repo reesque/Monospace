@@ -3,13 +3,9 @@ package com.risky.monospace.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,34 +67,30 @@ public class MediaDialog extends Dialog implements MediaSubscriber {
             if (media.album != null) {
                 album.setText(media.album);
             } else {
-                album.setText("Unknown");
+                album.setText(getContext().getString(R.string.widget_media_unknown));
             }
 
             if (media.track != null) {
                 track.setText(media.track);
             } else {
-                track.setText("Unknown");
+                track.setText(getContext().getString(R.string.widget_media_unknown));
             }
 
             if (media.artist != null) {
                 artist.setText(media.artist);
             } else {
-                artist.setText("Unknown");
+                artist.setText(getContext().getString(R.string.widget_media_unknown));
             }
 
-            if(media.isPlaying()) {
+            if (media.isPlaying()) {
                 play.setImageResource(R.drawable.pause);
             } else {
                 play.setImageResource(R.drawable.play);
             }
 
-            prev.setOnClickListener(v -> {
-                media.previous();
-            });
+            prev.setOnClickListener(v -> media.previous());
 
             play.setOnClickListener(v -> {
-                KeyEvent downEvent;
-
                 if (media.isPlaying()) {
                     media.pause();
                 } else {
@@ -106,17 +98,15 @@ public class MediaDialog extends Dialog implements MediaSubscriber {
                 }
             });
 
-            next.setOnClickListener(v -> {
-                media.next();
-            });
+            next.setOnClickListener(v -> media.next());
 
             return;
         }
 
         mediaArt.setImageBitmap(null);
-        album.setText("Unknown");
-        track.setText("Unknown");
-        artist.setText("Unknown");
+        album.setText(getContext().getString(R.string.widget_media_unknown));
+        track.setText(getContext().getString(R.string.widget_media_unknown));
+        artist.setText(getContext().getString(R.string.widget_media_unknown));
 
         prev.setOnClickListener(null);
         play.setOnClickListener(null);

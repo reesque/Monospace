@@ -1,4 +1,29 @@
 <resources>
+    <!-- App properties -->
     <string name="app_name">Monospace</string>
-    <string name="notif_service">Monospace Notification Service</string>
+
+    <!-- Date time -->
+    <string name="dow_sun">S</string>
+    <string name="dow_mon">M</string>
+    <string name="dow_tue">T</string>
+    <string name="dow_wed">W</string>
+    <string name="dow_thu">T</string>
+    <string name="dow_fri">F</string>
+    <string name="dow_sat">S</string>
+
+    <!-- App list -->
+    <string name="app_list_search_prompt">Search:</string>
+
+    <!-- Widgets -->
+    <string name="widget_airpod_header">Airpod</string>
+    <string name="widget_weather_header">Weather</string>
+    <string name="widget_notif_header">Notifications</string>
+    <string name="widget_media_header">Now Playing</string>
+    <string name="widget_none_desc">None</string>
+    <string name="widget_airpod_desc">Connected</string>
+    <string name="widget_notif_clear">Clear</string>
+    <string name="widget_notif_no_new">No new notification</string>
+    <string name="widget_weather_today">Today</string>
+    <string name="widget_weather_updating">Updating...</string>
+    <string name="widget_media_unknown">Unknown</string>
 </resources>

@@ -5,15 +5,10 @@ import static android.content.Context.MODE_PRIVATE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.WeatherCondition;
@@ -31,18 +26,20 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class WeatherService extends MonoService<WeatherSubscriber> {
     private static final int UPDATE_INTERVAL = 3600000;
     private static WeatherService instance;
+    private final Handler weatherHandler;
+    private final HandlerThread weatherThread;
+    private final Runnable weatherRunner;
+    private final Runnable locationRunner;
     private WeatherState currentWeather;
     private WeatherForecast weatherForecast;
-    private Handler weatherHandler;
-    private HandlerThread weatherThread;
-    private Runnable weatherRunner;
-    private Runnable locationRunner;
     private GeoPosition position;
     private boolean isLocationUpdating = false;
 
@@ -60,17 +57,23 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
                 }
 
                 try {
+                    Calendar currentTime = Calendar.getInstance();
+                    TimeZone timeZone = currentTime.getTimeZone();
+                    String timeZoneString = timeZone.getDisplayName(
+                            timeZone.inDaylightTime(currentTime.getTime()), TimeZone.SHORT);
+
                     JSONObject response = NetworkUtil.getJSONObjectFromURL(
                             "https://api.open-meteo.com/v1/forecast?&latitude="
                                     + position.latitude + "&longitude="
                                     + position.longitude + "&current=temperature_2m,weather_code"
                                     + "&forecast_days=7&daily=temperature_2m_min,"
-                                    + "temperature_2m_max,weather_code&time_zone=GMT");
+                                    + "temperature_2m_max,weather_code&time_zone="
+                                    + timeZoneString);
 
                     instance.currentWeather = new WeatherState(
                             LocalDate.parse(response.getJSONObject("daily").getJSONArray("time").getString(0))
                                     .getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                            (int) Math.round(response.getJSONObject("current").getDouble("temperature_2m"))  + "°C",
+                            (int) Math.round(response.getJSONObject("current").getDouble("temperature_2m")) + "°C",
                             WeatherCondition.getCondition(response.getJSONObject("current").getInt("weather_code")));
 
                     List<WeatherState> forecasts = new ArrayList<>();
