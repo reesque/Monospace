@@ -11,7 +11,9 @@ import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.dialog.MediaDialog;
 import com.risky.monospace.dialog.NotificationDialog;
+import com.risky.monospace.dialog.SearchDialog;
 import com.risky.monospace.dialog.WeatherDialog;
+import com.risky.monospace.dialog.WebDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class DialogService {
         return instance;
     }
 
-    public void show(Context context, DialogType type) {
+    public void show(Context context, DialogType type, String arg) {
         if (active.get(type) != null) {
             return;
         }
@@ -49,6 +51,12 @@ public class DialogService {
                 break;
             case NOTIFICATION:
                 dialog = new NotificationDialog(context, R.style.MonoDialog);
+                break;
+            case SEARCH:
+                dialog = new SearchDialog(context, R.style.MonoDialog);
+                break;
+            case WEB:
+                dialog = new WebDialog(context, R.style.MonoDialog, arg);
                 break;
         }
 

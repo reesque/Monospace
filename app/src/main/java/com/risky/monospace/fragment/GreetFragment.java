@@ -89,7 +89,7 @@ public class GreetFragment extends Fragment
         MediaService.getInstance().subscribe(this);
         AirpodService.getInstance().subscribe(this);
 
-        weatherIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.WEATHER));
+        weatherIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.WEATHER, null));
 
         weatherIcon.setOnLongClickListener(v -> {
             if (!PermissionHelper.checkLocation(getContext())) {
@@ -104,7 +104,7 @@ public class GreetFragment extends Fragment
             return true;
         });
 
-        airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD));
+        airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD, null));
 
         notifIcon.setOnClickListener(v -> {
             if (!PermissionHelper.checkNotification()) {
@@ -114,7 +114,7 @@ public class GreetFragment extends Fragment
                 return;
             }
 
-            DialogService.getInstance().show(getContext(), DialogType.NOTIFICATION);
+            DialogService.getInstance().show(getContext(), DialogType.NOTIFICATION, null);
         });
 
         // Funny scrolling title
@@ -206,7 +206,7 @@ public class GreetFragment extends Fragment
 
         mediaPanel.setVisibility(View.VISIBLE);
 
-        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA));
+        mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA, null));
 
         if (media.packageName != null) {
             mediaIcon.setOnLongClickListener(v -> {

@@ -27,9 +27,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
-import com.risky.monospace.gesture.GestureListener;
+import com.risky.monospace.gesture.HomeGestureListener;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
         // ### Content fragment ###
-        GestureListener gestureListener = new GestureListener(() -> {
+        HomeGestureListener homeGestureListener = new HomeGestureListener(() -> {
             isHome = false;
             setBackgroundColor(true);
             getSupportFragmentManager()
@@ -188,8 +189,10 @@ public class MainActivity extends AppCompatActivity
                     .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_anim)
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .commit();
+        }, () -> {
+            DialogService.getInstance().show(this, DialogType.SEARCH, null);
         });
-        GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
+        GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
         // ### Read network ###
@@ -308,7 +311,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(350); // milliseconds
+        colorAnimation.setDuration(400); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();

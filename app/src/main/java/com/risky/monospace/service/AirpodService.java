@@ -30,7 +30,7 @@ public class AirpodService extends MonoService<AirpodSubscriber> {
         notifySubscriber();
 
         if ((lastUpdated == null || lastUpdated.isDisconnected) && pod != null && !pod.isDisconnected) {
-            DialogService.getInstance().show(context, DialogType.AIRPOD);
+            DialogService.getInstance().show(context, DialogType.AIRPOD, null);
         }
     }
 
@@ -41,7 +41,7 @@ public class AirpodService extends MonoService<AirpodSubscriber> {
         notifySubscriber();
 
         if ((lastUpdated == null || lastUpdated.isDisconnected) && pod != null && !pod.isDisconnected) {
-            DialogService.getInstance().show(context, DialogType.AIRPOD);
+            DialogService.getInstance().show(context, DialogType.AIRPOD, null);
         }
     }
 
