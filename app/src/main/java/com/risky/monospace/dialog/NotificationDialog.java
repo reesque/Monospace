@@ -1,6 +1,5 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -22,7 +21,7 @@ import com.risky.monospace.service.subscribers.NotificationSubscriber;
 
 import java.util.List;
 
-public class NotificationDialog extends Dialog implements NotificationSubscriber {
+public class NotificationDialog extends MonoDialog implements NotificationSubscriber {
     private ListView notificationList;
     private TextView dismissAllButton;
     private NotificationListAdapter adapter;
@@ -62,6 +61,10 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
 
     @Override
     public void update(List<Notification> notifications) {
+        if (isDestroyed) {
+            return;
+        }
+
         adapter = new NotificationListAdapter(getContext(), notifications);
         notificationList.setAdapter(adapter);
     }
@@ -78,5 +81,11 @@ public class NotificationDialog extends Dialog implements NotificationSubscriber
         super.onStop();
 
         NotificationService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        notificationList.setAdapter(null);
+        adapter = null;
+        notificationList = null;
+        dismissAllButton = null;
     }
 }

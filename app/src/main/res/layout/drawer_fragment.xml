@@ -35,9 +35,9 @@
             android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:textColor="@color/black"
+            android:textColorHighlight="@color/bg_black_blur"
             android:textCursorDrawable="@drawable/cursor_black"
-            android:textSize="20sp"
-            android:textColorHighlight="@color/bg_black_blur" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 

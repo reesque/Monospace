@@ -1,6 +1,5 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 
-public class MediaDialog extends Dialog implements MediaSubscriber {
+public class MediaDialog extends MonoDialog implements MediaSubscriber {
     private ImageView mediaArt;
     private TextView album;
     private TextView track;
@@ -57,6 +56,10 @@ public class MediaDialog extends Dialog implements MediaSubscriber {
 
     @Override
     public void update(Media media) {
+        if (isDestroyed) {
+            return;
+        }
+
         if (media != null) {
             if (media.coverArt != null) {
                 mediaArt.setImageBitmap(media.coverArt);
@@ -127,5 +130,14 @@ public class MediaDialog extends Dialog implements MediaSubscriber {
         super.onStop();
 
         MediaService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        mediaArt = null;
+        album = null;
+        track = null;
+        artist = null;
+        prev = null;
+        play = null;
+        next = null;
     }
 }

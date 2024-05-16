@@ -1,6 +1,5 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.subscribers.AirpodSubscriber;
 
-public class AirpodDialog extends Dialog implements AirpodSubscriber {
+public class AirpodDialog extends MonoDialog implements AirpodSubscriber {
     private TextView model;
     private ImageView leftBattery;
     private ImageView leftBatteryCharge;
@@ -82,10 +81,31 @@ public class AirpodDialog extends Dialog implements AirpodSubscriber {
         super.onStop();
 
         AirpodService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        model = null;
+        leftBattery = null;
+        centerBattery = null;
+        rightBattery = null;
+        leftBatteryCharge = null;
+        centerBatteryCharge = null;
+        rightBatteryCharge = null;
+        leftPercentage = null;
+        centerPercentage = null;
+        rightPercentage = null;
+        leftPanel = null;
+        rightPanel = null;
+        leftIcon = null;
+        centerIcon = null;
+        rightIcon = null;
     }
 
     @Override
     public void update(SinglePod pod) {
+        if (isDestroyed) {
+            return;
+        }
+
         if (pod != null) {
             model.setText(pod.model.displayName);
 
@@ -120,6 +140,10 @@ public class AirpodDialog extends Dialog implements AirpodSubscriber {
 
     @Override
     public void update(RegularPod pod) {
+        if (isDestroyed) {
+            return;
+        }
+
         if (pod != null) {
             model.setText(pod.model.displayName);
 

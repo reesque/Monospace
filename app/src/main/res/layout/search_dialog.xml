@@ -15,24 +15,24 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/earth"/>
+            android:src="@drawable/earth" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/widget_search_web"
-            android:textSize="18sp"
             android:layout_marginStart="5dp"
-            android:textStyle="bold"/>
+            android:text="@string/widget_search_web"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/edittext_bg_black"
         android:layout_marginTop="10dp"
+        android:background="@drawable/edittext_bg_black"
+        android:orientation="horizontal"
         android:padding="10dp"
         android:weightSum="1.0">
 
@@ -40,26 +40,26 @@
             android:id="@+id/search_box"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.9"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.9"
             android:autofillHints="name"
             android:background="@android:color/transparent"
+            android:hint="@string/widget_search_hint"
             android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:textColor="@color/white"
+            android:textColorHighlight="@color/bg_white_blur"
             android:textColorHint="@color/gray"
-            android:hint="@string/widget_search_hint"
-            android:textSize="20sp"
-            android:layout_marginEnd="5dp"
             android:textCursorDrawable="@drawable/cursor_white"
-            android:textColorHighlight="@color/bg_white_blur"/>
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/search_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.1"
-            android:src="@drawable/search"/>
+            android:src="@drawable/search" />
     </LinearLayout>
 </LinearLayout>

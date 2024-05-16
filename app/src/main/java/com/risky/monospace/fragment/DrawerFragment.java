@@ -1,27 +1,20 @@
 package com.risky.monospace.fragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static android.content.Context.TELECOM_SERVICE;
 import static android.os.Looper.getMainLooper;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.provider.Telephony;
-import android.telecom.TelecomManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -37,7 +30,6 @@ import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 import java.util.List;
 
 public class DrawerFragment extends Fragment implements AppPackageSubscriber {
-    private View view;
     private AppListAdapter adapter;
     private GridView appList;
     private EditText appSearch;
@@ -54,11 +46,11 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.drawer_fragment, container, false);
+        View view1 = inflater.inflate(R.layout.drawer_fragment, container, false);
 
-        appList = view.findViewById(R.id.app_list);
-        appSearch = view.findViewById(R.id.app_search_edit);
-        searchBar = view.findViewById(R.id.drawer_search_bar);
+        appList = view1.findViewById(R.id.app_list);
+        appSearch = view1.findViewById(R.id.app_search_edit);
+        searchBar = view1.findViewById(R.id.drawer_search_bar);
 
         // ### App list ###
         AppPackageService.getInstance().subscribe(this);
@@ -101,13 +93,20 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
 
         appSearch.requestFocus();
 
-        return view;
+        return view1;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         AppPackageService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        appList.setAdapter(null);
+        adapter = null;
+        appList = null;
+        appSearch = null;
+        searchBar = null;
     }
 
     @Override

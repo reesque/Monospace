@@ -24,9 +24,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
-import java.util.Calendar;
-import java.util.List;
-
 import com.risky.monospace.R;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Media;
@@ -47,9 +44,11 @@ import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 import com.risky.monospace.util.PermissionHelper;
 
+import java.util.Calendar;
+import java.util.List;
+
 public class GreetFragment extends Fragment
         implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubscriber {
-    private View view;
     private TextView temperature;
     private TextView track;
     private ImageView weatherIcon;
@@ -72,7 +71,7 @@ public class GreetFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.greet_fragment, container, false);
+        View view = inflater.inflate(R.layout.greet_fragment, container, false);
 
         notificationPanel = view.findViewById(R.id.notification_container);
         temperature = view.findViewById(R.id.weather_temp);
@@ -130,6 +129,17 @@ public class GreetFragment extends Fragment
         WeatherService.getInstance(getContext()).unsubscribe(this);
         MediaService.getInstance().unsubscribe(this);
         AirpodService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        temperature = null;
+        track = null;
+        weatherIcon = null;
+        mediaIcon = null;
+        airpodIcon = null;
+        notifIcon = null;
+        notificationPanel = null;
+        airpodPanel = null;
+        mediaPanel = null;
     }
 
     @SuppressLint("SetTextI18n")

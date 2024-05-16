@@ -1,16 +1,13 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -22,7 +19,7 @@ import java.net.URLEncoder;
 
 import kotlin.text.Charsets;
 
-public class SearchDialog extends Dialog {
+public class SearchDialog extends MonoDialog {
     private EditText searchBox;
     private ImageView searchButton;
 
@@ -43,7 +40,7 @@ public class SearchDialog extends Dialog {
         searchButton = findViewById(R.id.search_button);
 
         searchBox.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE){
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search();
                 return true;
             }
@@ -59,6 +56,10 @@ public class SearchDialog extends Dialog {
         DialogService.getInstance().cancel(DialogType.SEARCH);
 
         super.dismiss();
+
+        // Avoid mem leak
+        searchBox = null;
+        searchButton = null;
     }
 
     private void search() {

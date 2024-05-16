@@ -42,9 +42,9 @@ import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
 import com.risky.monospace.receiver.TimeReceiver;
 import com.risky.monospace.service.BluetoothService;
+import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.LocationService;
 import com.risky.monospace.service.NetworkService;
-import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.WeatherService;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
@@ -186,12 +186,12 @@ public class MainActivity extends AppCompatActivity
             setBackgroundColor(true);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_anim)
+                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_anim,
+                            R.anim.fade_in_anim, R.anim.slide_out_slow_anim)
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
+                    .addToBackStack(null)
                     .commit();
-        }, () -> {
-            DialogService.getInstance().show(this, DialogType.SEARCH, null);
-        });
+        }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
@@ -239,17 +239,21 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(appPackageReceiver, appPackageFilter);
 
         // ### Back ###
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            if (!isHome && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                isHome = true;
+                setBackgroundColor(false);
+                getSupportFragmentManager().popBackStack();
+            }
+        });
+
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (!isHome) {
                     isHome = true;
                     setBackgroundColor(false);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.fade_in_anim, R.anim.slide_out_slow_anim)
-                            .replace(R.id.fragment_container, GreetFragment.newInstance())
-                            .commit();
+                    getSupportFragmentManager().popBackStack();
                 }
             }
         };

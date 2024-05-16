@@ -1,6 +1,5 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import androidx.annotation.NonNull;
 import com.risky.monospace.R;
 import com.risky.monospace.service.DialogService;
 
-public class WebDialog extends Dialog {
+public class WebDialog extends MonoDialog {
     private final String baseUrl;
     private WebView webView;
     private ProgressBar loadBar;
@@ -64,6 +63,15 @@ public class WebDialog extends Dialog {
         DialogService.getInstance().cancel(DialogType.WEB);
 
         super.dismiss();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Avoid mem leak
+        webView = null;
+        loadBar = null;
     }
 
     @Override

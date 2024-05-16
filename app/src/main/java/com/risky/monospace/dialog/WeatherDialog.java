@@ -1,6 +1,5 @@
 package com.risky.monospace.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import com.risky.monospace.service.subscribers.WeatherSubscriber;
 
 import java.util.Calendar;
 
-public class WeatherDialog extends Dialog implements WeatherSubscriber {
+public class WeatherDialog extends MonoDialog implements WeatherSubscriber {
     private ImageView todayIcon;
     private TextView todayCondition;
     private TextView todayTemp;
@@ -99,6 +98,29 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
         super.onStop();
 
         WeatherService.getInstance(getContext()).unsubscribe(this);
+
+        // Avoid mem leak
+        todayIcon = null;
+        todayCondition = null;
+        todayTemp = null;
+        day1Icon = null;
+        day1Dow = null;
+        day1Temp = null;
+        day2Icon = null;
+        day2Dow = null;
+        day2Temp = null;
+        day3Icon = null;
+        day3Dow = null;
+        day3Temp = null;
+        day4Icon = null;
+        day4Dow = null;
+        day4Temp = null;
+        day5Icon = null;
+        day5Dow = null;
+        day5Temp = null;
+        day6Icon = null;
+        day6Dow = null;
+        day6Temp = null;
     }
 
     @Override
@@ -108,6 +130,10 @@ public class WeatherDialog extends Dialog implements WeatherSubscriber {
 
     @Override
     public void update(WeatherForecast forecast) {
+        if (isDestroyed) {
+            return;
+        }
+
         if (forecast != null) {
             this.todayTemp.setText(forecast.getForecast(0).temperature);
             this.todayCondition.setText(forecast.getForecast(0).condition.getDisplayName());

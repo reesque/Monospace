@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.risky.monospace.model.BluetoothStatus;
-import com.risky.monospace.model.SinglePod;
-import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.service.BluetoothService;
-import com.risky.monospace.service.NetworkService;
 
 public class BluetoothReceiver extends BroadcastReceiver {
     public BluetoothReceiver() {

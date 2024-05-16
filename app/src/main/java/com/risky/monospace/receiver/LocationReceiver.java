@@ -7,7 +7,6 @@ import android.location.LocationManager;
 
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.service.LocationService;
-import com.risky.monospace.service.NetworkService;
 
 public class LocationReceiver extends BroadcastReceiver {
     public LocationReceiver(Context context) {

@@ -3,7 +3,6 @@ package com.risky.monospace.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
