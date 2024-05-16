@@ -20,11 +20,9 @@ public abstract class MonoService<T extends MonoSubscriber> {
 
     public void notifySubscriber() {
         if (!subscribers.isEmpty()) {
-            // Using Iterator to avoid concurrent modification, aka a subscriber is removed
-            // mid loop, causes the program to crash
-            Iterator<T> subIterator = subscribers.iterator();
-            while (subIterator.hasNext()) {
-                updateSubscriber(subIterator.next());
+            // Passing copy of the list to avoid concurrent modification
+            for (T subscriber : new ArrayList<>(subscribers)) {
+                updateSubscriber(subscriber);
             }
         }
     }

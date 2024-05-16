@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
         }
-        colorAnimation.setDuration(400); // milliseconds
+        colorAnimation.setDuration(300); // milliseconds
         colorAnimation.addUpdateListener(animator ->
                 mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void update(int level, boolean isCharging, boolean isFull) {
         battPerc.setText(String.format("%d", level));
-        battery.setSecondaryProgress(level);
+        battery.setProgress(level);
     }
 
     @Override

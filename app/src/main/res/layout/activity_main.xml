@@ -170,10 +170,9 @@
                 android:layout_height="match_parent"
                 android:indeterminate="false"
                 android:max="100"
-                android:progress="100"
+                android:progress="70"
                 android:progressDrawable="@drawable/battery_bar"
-                android:rotation="-90"
-                android:secondaryProgress="70" />
+                android:rotation="-90" />
 
             <TextView
                 android:id="@+id/battery_perc_main"

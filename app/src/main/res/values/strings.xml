@@ -27,4 +27,5 @@
     <string name="widget_weather_updating">Updating…</string>
     <string name="widget_media_unknown">Unknown</string>
     <string name="widget_search_hint">Search…</string>
+    <string name="widget_search_web">Web Search</string>
 </resources>

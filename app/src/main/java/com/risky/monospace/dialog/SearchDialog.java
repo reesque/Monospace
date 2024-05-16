@@ -71,7 +71,7 @@ public class SearchDialog extends Dialog {
             }
 
             DialogService.getInstance().show(getContext(), DialogType.WEB,
-                    "https://www.google.com/search?q=" + query);
+                    "https://www.google.com/search?igu=1&q=" + query);
             dismiss();
         }
     }
