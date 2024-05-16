@@ -1,3 +1,4 @@
+<p align="center"><img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"></p> 
 <h1 align="center"><b>Monospace</b></h1>
 <h4 align="center">A simplistic launcher, integrates all you need  in one space</h4>
 
