@@ -37,7 +37,8 @@
         android:outlineAmbientShadowColor="@android:color/transparent"
         android:outlineSpotShadowColor="@android:color/transparent"
         app:cardCornerRadius="15dp"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:foreground="@drawable/foreground_frame">
 
         <WebView
             android:id="@+id/web_view"
