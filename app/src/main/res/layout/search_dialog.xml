@@ -51,7 +51,9 @@
             android:textColorHint="@color/gray"
             android:hint="@string/widget_search_hint"
             android:textSize="20sp"
-            android:layout_marginEnd="5dp"/>
+            android:layout_marginEnd="5dp"
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:textColorHighlight="@color/bg_white_blur"/>
 
         <ImageView
             android:id="@+id/search_button"
