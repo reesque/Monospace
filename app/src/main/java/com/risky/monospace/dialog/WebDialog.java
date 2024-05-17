@@ -38,6 +38,7 @@ public class WebDialog extends MonoDialog {
         loadBar = findViewById(R.id.web_progress);
         webView = findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setUserAgentString(getContext().getString(R.string.web_user_agent));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

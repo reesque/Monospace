@@ -34,6 +34,11 @@ public class NotificationService extends MonoService<NotificationSubscriber> {
         notifySubscriber();
     }
 
+    public void removeAll() {
+        notificationList.clear();
+        notifySubscriber();
+    }
+
     @Override
     protected void updateSubscriber(NotificationSubscriber subscriber) {
         subscriber.update(Collections.unmodifiableList(notificationList));

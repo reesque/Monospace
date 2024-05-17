@@ -54,6 +54,7 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
         dismissAllButton.setOnClickListener(v -> {
             Intent intent = new Intent(NotificationReceiver.NOTIFICATION_DISMISS_ALL_ACTION);
             getContext().sendBroadcast(intent);
+            NotificationService.getInstance().removeAll();
         });
 
         NotificationService.getInstance().subscribe(this);

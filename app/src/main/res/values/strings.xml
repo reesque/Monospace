@@ -28,4 +28,6 @@
     <string name="widget_media_unknown">Unknown</string>
     <string name="widget_search_hint">Search…</string>
     <string name="widget_search_web">Web Search</string>
+
+    <string name="web_user_agent">Mozilla/5.0 (Linux; Android 4.4.3; KFTHWI Build/KTU84M) AppleWebKit/537.36 (KHTML, like Gecko) Silk/47.1.79 like Chrome/47.0.2526.80 Safari/537.36</string>
 </resources>
