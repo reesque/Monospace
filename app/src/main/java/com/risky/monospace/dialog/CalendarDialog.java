@@ -8,18 +8,24 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
 import com.risky.monospace.receiver.TimeReceiver;
+import com.risky.monospace.service.AlarmService;
 import com.risky.monospace.service.DialogService;
+import com.risky.monospace.service.subscribers.AlarmSubscriber;
+import com.risky.monospace.util.DTFormattertUtil;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class CalendarDialog extends MonoDialog {
+public class CalendarDialog extends MonoDialog implements AlarmSubscriber {
     private CalendarView calendar;
+    private TextView alarmEta;
+    private Calendar checkpointDate;
     private BroadcastReceiver timeReceiver;
 
     public CalendarDialog(@NonNull Context context, int themeResId) {
@@ -38,6 +44,7 @@ public class CalendarDialog extends MonoDialog {
         super.onStop();
 
         getContext().unregisterReceiver(timeReceiver);
+        AlarmService.getInstance().unsubscribe(this);
 
         // Avoid mem leak
         calendar = null;
@@ -51,9 +58,18 @@ public class CalendarDialog extends MonoDialog {
     @Override
     protected void initialize() {
         calendar = findViewById(R.id.calendar_view);
+        alarmEta = findViewById(R.id.alarm_time);
+
+        AlarmService.getInstance().subscribe(this);
 
         Runnable clockRunner = () -> {
-            calendar.setDate(Calendar.getInstance().getTimeInMillis());
+            Calendar current = Calendar.getInstance();
+            if (checkpointDate == null || checkpointDate.get(Calendar.YEAR) != current.get(Calendar.YEAR)
+                    || checkpointDate.get(Calendar.MONTH) != current.get(Calendar.MONTH)
+                    || checkpointDate.get(Calendar.DAY_OF_MONTH) != current.get(Calendar.DAY_OF_MONTH)) {
+                checkpointDate = current;
+                calendar.setDate(current.getTimeInMillis());
+            }
         };
 
         clockRunner.run();
@@ -64,5 +80,15 @@ public class CalendarDialog extends MonoDialog {
         timeFilter.addAction(Intent.ACTION_TIME_TICK);
         timeReceiver = new TimeReceiver(clockRunner);
         getContext().registerReceiver(timeReceiver, timeFilter);
+    }
+
+    @Override
+    public void update(Calendar nextAlarm) {
+        if (nextAlarm == null) {
+            alarmEta.setText(getContext().getString(R.string.widget_none_desc));
+            return;
+        }
+
+        alarmEta.setText(DTFormattertUtil.alarmDisplayFull.format(nextAlarm.getTime()));
     }
 }

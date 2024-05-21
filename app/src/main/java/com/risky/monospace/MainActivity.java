@@ -170,8 +170,6 @@ public class MainActivity extends AppCompatActivity
         timeReceiver = new TimeReceiver(clockRunner);
         registerReceiver(timeReceiver, timeFilter);
 
-        time.setOnClickListener(v -> startTimeApplication());
-        mer.setOnClickListener(v -> startTimeApplication());
         month.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
         dom.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
         mon.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
@@ -218,14 +216,11 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(bluetoothReceiver, bluetoothFilter);
         BluetoothService.getInstance().subscribe(MainActivity.this);
 
-        bluetooth.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS)));
-
         // ### Read location ###
         IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         locationReceiver = new LocationReceiver(this);
         registerReceiver(locationReceiver, locationFilter);
         LocationService.getInstance().subscribe(MainActivity.this);
-        location.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
 
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -334,12 +329,6 @@ public class MainActivity extends AppCompatActivity
         colorAnimation.start();
     }
 
-    private void startTimeApplication() {
-        Intent launchIntent = getPackageManager()
-                .getLaunchIntentForPackage("com.android.deskclock");
-        startActivity(launchIntent);
-    }
-
     @SuppressLint("DefaultLocale")
     @Override
     public void update(int level, boolean isCharging, boolean isFull) {
@@ -352,15 +341,12 @@ public class MainActivity extends AppCompatActivity
         switch (status) {
             case UNAVAILABLE:
                 network.setImageResource(R.drawable.no_connection_gray);
-                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_SETTINGS)));
                 break;
             case WIFI:
                 network.setImageResource(R.drawable.wifi_black);
-                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
                 break;
             case MOBILE_DATA:
                 network.setImageResource(R.drawable.mobile_data_black);
-                network.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)));
                 break;
         }
     }

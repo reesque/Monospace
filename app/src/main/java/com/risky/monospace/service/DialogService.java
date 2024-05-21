@@ -14,7 +14,7 @@ import com.risky.monospace.dialog.MediaDialog;
 import com.risky.monospace.dialog.NotificationDialog;
 import com.risky.monospace.dialog.SearchDialog;
 import com.risky.monospace.dialog.WeatherDialog;
-import com.risky.monospace.dialog.WebDialog;
+import com.risky.monospace.util.PermissionHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,16 +56,15 @@ public class DialogService {
             case SEARCH:
                 dialog = new SearchDialog(context, R.style.MonoDialog);
                 break;
-            case WEB:
-                dialog = new WebDialog(context, R.style.MonoDialog, arg);
-                break;
             case CALENDAR:
                 dialog = new CalendarDialog(context, R.style.MonoDialog);
                 break;
         }
 
         Window window = dialog.getWindow();
-        window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        if (PermissionHelper.drawOverApps(context) && type.shouldDrawOver()) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
         window.setGravity(Gravity.BOTTOM);
         window.getAttributes().windowAnimations = R.style.MonoDialogAnimation;
         active.put(type, dialog);

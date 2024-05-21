@@ -23,8 +23,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/Theme.Monospace"
         tools:targetApi="31">
+        <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
         <activity
             android:name=".MainActivity"
             android:clearTaskOnLaunch="true"

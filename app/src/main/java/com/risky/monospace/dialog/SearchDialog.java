@@ -1,8 +1,13 @@
 package com.risky.monospace.dialog;
 
+import static android.os.Looper.getMainLooper;
+
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -69,8 +74,8 @@ public class SearchDialog extends MonoDialog {
                 return;
             }
 
-            DialogService.getInstance().show(getContext(), DialogType.WEB,
-                    "https://www.google.com/search?igu=1&q=" + query);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com/search?q=" + query));
+            new Handler(getMainLooper()).post(() -> getContext().startActivity(browserIntent));
             dismiss();
         }
     }

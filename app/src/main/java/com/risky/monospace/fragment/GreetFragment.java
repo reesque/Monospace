@@ -106,7 +106,7 @@ public class GreetFragment extends Fragment
                 return true;
             }
 
-            temperature.setText(getString(R.string.widget_weather_updating));
+            temperature.setText(getActivity().getString(R.string.widget_weather_updating));
             WeatherService.getInstance(getContext()).locationUpdate();
 
             return true;
@@ -129,9 +129,7 @@ public class GreetFragment extends Fragment
         track.setSelected(true);
 
         alarmIcon.setOnClickListener(v -> {
-            Intent launchIntent = getContext().getPackageManager()
-                    .getLaunchIntentForPackage("com.android.deskclock");
-            new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
+            DialogService.getInstance().show(getContext(), DialogType.CALENDAR, null);
         });
 
         return view;
@@ -214,7 +212,7 @@ public class GreetFragment extends Fragment
             return;
         }
 
-        this.temperature.setText(getString(R.string.widget_none_desc));
+        this.temperature.setText(getActivity().getString(R.string.widget_none_desc));
         this.weatherIcon.setImageResource(R.drawable.no_connection_black);
     }
 
@@ -226,7 +224,7 @@ public class GreetFragment extends Fragment
     @Override
     public void update(Media media) {
         if (media == null) {
-            track.setText(getString(R.string.widget_none_desc));
+            track.setText(getActivity().getString(R.string.widget_none_desc));
             mediaPanel.setVisibility(View.GONE);
             mediaIcon.setOnClickListener(null);
             DialogService.getInstance().dismiss(DialogType.MEDIA);
@@ -275,7 +273,7 @@ public class GreetFragment extends Fragment
     @Override
     public void update(Calendar nextAlarm) {
         if (nextAlarm == null) {
-            alarmEta.setText(getString(R.string.widget_none_desc));
+            alarmEta.setText(getActivity().getString(R.string.widget_none_desc));
             return;
         }
 
