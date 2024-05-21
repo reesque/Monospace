@@ -3,6 +3,7 @@ package com.risky.monospace;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -35,6 +36,7 @@ import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
 import com.risky.monospace.receiver.AirpodReceiver;
+import com.risky.monospace.receiver.AlarmReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
@@ -51,18 +53,14 @@ import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
+import com.risky.monospace.util.DTFormattertUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
     private static Runnable clockRunner;
-    private final SimpleDateFormat domFormat = new SimpleDateFormat("dd");
-    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
-    private final SimpleDateFormat merFormat = new SimpleDateFormat("a");
-    private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMM");
     private ConstraintLayout mainPanel;
     private TextView month;
     private TextView dom;
@@ -88,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     private LocationReceiver locationReceiver;
     private AirpodReceiver airpodReceiver;
     private TimeReceiver timeReceiver;
+    private AlarmReceiver alarmReceiver;
     private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -133,10 +132,10 @@ public class MainActivity extends AppCompatActivity
         clockRunner = () -> {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
-            dom.setText(domFormat.format(calendar.getTime()));
-            time.setText(timeFormat.format(calendar.getTime()));
-            mer.setText(merFormat.format(calendar.getTime()));
-            month.setText(monthFormat.format(calendar.getTime()));
+            dom.setText(DTFormattertUtil.dayOfMonth.format(calendar.getTime()));
+            time.setText(DTFormattertUtil.time.format(calendar.getTime()));
+            mer.setText(DTFormattertUtil.meridiem.format(calendar.getTime()));
+            month.setText(DTFormattertUtil.month.format(calendar.getTime()));
 
             int dow = calendar.get(Calendar.DAY_OF_WEEK);
             mon.setBackgroundResource(dow == 2 ? R.drawable.round_white : 0);
@@ -173,6 +172,19 @@ public class MainActivity extends AppCompatActivity
 
         time.setOnClickListener(v -> startTimeApplication());
         mer.setOnClickListener(v -> startTimeApplication());
+        month.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        dom.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        mon.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        tue.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        wed.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        thu.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        fri.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        sat.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        sun.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+
+        IntentFilter alarmFilter = new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
+        alarmReceiver = new AlarmReceiver(this);
+        registerReceiver(alarmReceiver, alarmFilter);
 
         // ### Greeter ###
         getSupportFragmentManager()
@@ -299,6 +311,7 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(locationReceiver);
         unregisterReceiver(airpodReceiver);
         unregisterReceiver(timeReceiver);
+        unregisterReceiver(alarmReceiver);
 
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);

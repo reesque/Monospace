@@ -34,27 +34,33 @@ import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.model.WeatherForecast;
 import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.AirpodService;
+import com.risky.monospace.service.AlarmService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
 import com.risky.monospace.service.subscribers.AirpodSubscriber;
+import com.risky.monospace.service.subscribers.AlarmSubscriber;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
+import com.risky.monospace.util.DTFormattertUtil;
 import com.risky.monospace.util.PermissionHelper;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class GreetFragment extends Fragment
-        implements NotificationSubscriber, WeatherSubscriber, MediaSubscriber, AirpodSubscriber {
+        implements NotificationSubscriber, WeatherSubscriber,
+        MediaSubscriber, AirpodSubscriber, AlarmSubscriber {
     private TextView temperature;
     private TextView track;
     private ImageView weatherIcon;
     private ImageView mediaIcon;
     private ImageView airpodIcon;
     private ImageView notifIcon;
+    private TextView alarmEta;
+    private ImageView alarmIcon;
     private LinearLayout notificationPanel;
     private LinearLayout airpodPanel;
     private LinearLayout mediaPanel;
@@ -80,6 +86,8 @@ public class GreetFragment extends Fragment
         mediaIcon = view.findViewById(R.id.media_icon);
         track = view.findViewById(R.id.media_track);
         notifIcon = view.findViewById(R.id.notification_icon);
+        alarmEta = view.findViewById(R.id.alarm_time);
+        alarmIcon = view.findViewById(R.id.alarm_icon);
         airpodPanel = view.findViewById(R.id.airpod_container);
         mediaPanel = view.findViewById(R.id.media_container);
 
@@ -87,6 +95,7 @@ public class GreetFragment extends Fragment
         WeatherService.getInstance(getContext()).subscribe(this);
         MediaService.getInstance().subscribe(this);
         AirpodService.getInstance().subscribe(this);
+        AlarmService.getInstance().subscribe(this);
 
         weatherIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.WEATHER, null));
 
@@ -119,6 +128,12 @@ public class GreetFragment extends Fragment
         // Funny scrolling title
         track.setSelected(true);
 
+        alarmIcon.setOnClickListener(v -> {
+            Intent launchIntent = getContext().getPackageManager()
+                    .getLaunchIntentForPackage("com.android.deskclock");
+            new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
+        });
+
         return view;
     }
 
@@ -129,6 +144,7 @@ public class GreetFragment extends Fragment
         WeatherService.getInstance(getContext()).unsubscribe(this);
         MediaService.getInstance().unsubscribe(this);
         AirpodService.getInstance().unsubscribe(this);
+        AlarmService.getInstance().unsubscribe(this);
 
         // Avoid mem leak
         temperature = null;
@@ -137,6 +153,8 @@ public class GreetFragment extends Fragment
         mediaIcon = null;
         airpodIcon = null;
         notifIcon = null;
+        alarmEta = null;
+        alarmIcon = null;
         notificationPanel = null;
         airpodPanel = null;
         mediaPanel = null;
@@ -209,13 +227,13 @@ public class GreetFragment extends Fragment
     public void update(Media media) {
         if (media == null) {
             track.setText(getString(R.string.widget_none_desc));
+            mediaPanel.setVisibility(View.GONE);
             mediaIcon.setOnClickListener(null);
             DialogService.getInstance().dismiss(DialogType.MEDIA);
             return;
         }
 
         mediaPanel.setVisibility(View.VISIBLE);
-
         mediaIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.MEDIA, null));
 
         if (media.packageName != null) {
@@ -252,5 +270,15 @@ public class GreetFragment extends Fragment
         } else {
             airpodPanel.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void update(Calendar nextAlarm) {
+        if (nextAlarm == null) {
+            alarmEta.setText(getString(R.string.widget_none_desc));
+            return;
+        }
+
+        alarmEta.setText(DTFormattertUtil.alarmDisplay.format(nextAlarm.getTime()));
     }
 }

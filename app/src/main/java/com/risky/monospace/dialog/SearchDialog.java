@@ -28,14 +28,12 @@ public class SearchDialog extends MonoDialog {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    protected int layout() {
+        return R.layout.search_dialog;
+    }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.search_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+    @Override
+    protected void initialize() {
         searchBox = findViewById(R.id.search_box);
         searchButton = findViewById(R.id.search_button);
 

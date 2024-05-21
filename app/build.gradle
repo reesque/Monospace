@@ -5,7 +5,6 @@ plugins {
 android {
     namespace 'com.risky.monospace'
     compileSdk 34
-
     defaultConfig {
         applicationId "com.risky.monospace"
         minSdk 28

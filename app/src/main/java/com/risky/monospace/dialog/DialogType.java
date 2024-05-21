@@ -1,5 +1,5 @@
 package com.risky.monospace.dialog;
 
 public enum DialogType {
-    MEDIA, AIRPOD, WEATHER, NOTIFICATION, SEARCH, WEB
+    MEDIA, AIRPOD, WEATHER, NOTIFICATION, SEARCH, WEB, CALENDAR
 }

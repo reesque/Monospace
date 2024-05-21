@@ -27,14 +27,28 @@ public class WebDialog extends MonoDialog {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    public void dismiss() {
+        DialogService.getInstance().cancel(DialogType.WEB);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.web_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        super.dismiss();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Avoid mem leak
+        webView = null;
+        loadBar = null;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.web_dialog;
+    }
+
+    @Override
+    protected void initialize() {
         loadBar = findViewById(R.id.web_progress);
         webView = findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -57,22 +71,6 @@ public class WebDialog extends MonoDialog {
             }
         });
         webView.loadUrl(baseUrl);
-    }
-
-    @Override
-    public void dismiss() {
-        DialogService.getInstance().cancel(DialogType.WEB);
-
-        super.dismiss();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // Avoid mem leak
-        webView = null;
-        loadBar = null;
     }
 
     @Override

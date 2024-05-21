@@ -83,5 +83,11 @@
                 <action android:name="com.dosse.airpods.status" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

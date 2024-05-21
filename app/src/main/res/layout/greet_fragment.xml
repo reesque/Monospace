@@ -52,6 +52,54 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/media_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/media_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/icon_bg_white"
+            android:padding="5dp"
+            android:src="@drawable/media" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/widget_media_header"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/media_track"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/widget_none_desc"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/weather_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,7 +180,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/media_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -140,12 +187,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/media_icon"
+            android:id="@+id/alarm_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/icon_bg_white"
             android:padding="5dp"
-            android:src="@drawable/media" />
+            android:src="@drawable/alarm_clock" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -157,21 +204,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/widget_media_header"
+                android:text="@string/widget_alarm_header"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/media_track"
-                android:layout_width="200dp"
+                android:id="@+id/alarm_time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
                 android:text="@string/widget_none_desc"
                 android:textColor="@color/white"
                 android:textSize="16sp" />

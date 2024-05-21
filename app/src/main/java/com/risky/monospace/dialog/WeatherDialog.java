@@ -47,46 +47,6 @@ public class WeatherDialog extends MonoDialog implements WeatherSubscriber {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.weather_forecast_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        todayIcon = findViewById(R.id.weather_today_icon);
-        todayCondition = findViewById(R.id.weather_today_condition);
-        todayTemp = findViewById(R.id.weather_today_temp);
-
-        day1Icon = findViewById(R.id.weather_day1_icon);
-        day1Dow = findViewById(R.id.weather_day1_dow);
-        day1Temp = findViewById(R.id.weather_day1_temp);
-
-        day2Icon = findViewById(R.id.weather_day2_icon);
-        day2Dow = findViewById(R.id.weather_day2_dow);
-        day2Temp = findViewById(R.id.weather_day2_temp);
-
-        day3Icon = findViewById(R.id.weather_day3_icon);
-        day3Dow = findViewById(R.id.weather_day3_dow);
-        day3Temp = findViewById(R.id.weather_day3_temp);
-
-        day4Icon = findViewById(R.id.weather_day4_icon);
-        day4Dow = findViewById(R.id.weather_day4_dow);
-        day4Temp = findViewById(R.id.weather_day4_temp);
-
-        day5Icon = findViewById(R.id.weather_day5_icon);
-        day5Dow = findViewById(R.id.weather_day5_dow);
-        day5Temp = findViewById(R.id.weather_day5_temp);
-
-        day6Icon = findViewById(R.id.weather_day6_icon);
-        day6Dow = findViewById(R.id.weather_day6_dow);
-        day6Temp = findViewById(R.id.weather_day6_temp);
-
-        WeatherService.getInstance(getContext()).subscribe(this);
-    }
-
-    @Override
     public void dismiss() {
         DialogService.getInstance().cancel(DialogType.WEATHER);
 
@@ -121,6 +81,44 @@ public class WeatherDialog extends MonoDialog implements WeatherSubscriber {
         day6Icon = null;
         day6Dow = null;
         day6Temp = null;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.weather_forecast_dialog;
+    }
+
+    @Override
+    protected void initialize() {
+        todayIcon = findViewById(R.id.weather_today_icon);
+        todayCondition = findViewById(R.id.weather_today_condition);
+        todayTemp = findViewById(R.id.weather_today_temp);
+
+        day1Icon = findViewById(R.id.weather_day1_icon);
+        day1Dow = findViewById(R.id.weather_day1_dow);
+        day1Temp = findViewById(R.id.weather_day1_temp);
+
+        day2Icon = findViewById(R.id.weather_day2_icon);
+        day2Dow = findViewById(R.id.weather_day2_dow);
+        day2Temp = findViewById(R.id.weather_day2_temp);
+
+        day3Icon = findViewById(R.id.weather_day3_icon);
+        day3Dow = findViewById(R.id.weather_day3_dow);
+        day3Temp = findViewById(R.id.weather_day3_temp);
+
+        day4Icon = findViewById(R.id.weather_day4_icon);
+        day4Dow = findViewById(R.id.weather_day4_dow);
+        day4Temp = findViewById(R.id.weather_day4_temp);
+
+        day5Icon = findViewById(R.id.weather_day5_icon);
+        day5Dow = findViewById(R.id.weather_day5_dow);
+        day5Temp = findViewById(R.id.weather_day5_temp);
+
+        day6Icon = findViewById(R.id.weather_day6_icon);
+        day6Dow = findViewById(R.id.weather_day6_dow);
+        day6Temp = findViewById(R.id.weather_day6_temp);
+
+        WeatherService.getInstance(getContext()).subscribe(this);
     }
 
     @Override

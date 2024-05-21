@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.risky.monospace.R;
 import com.risky.monospace.dialog.AirpodDialog;
+import com.risky.monospace.dialog.CalendarDialog;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.dialog.MediaDialog;
 import com.risky.monospace.dialog.NotificationDialog;
@@ -57,6 +58,9 @@ public class DialogService {
                 break;
             case WEB:
                 dialog = new WebDialog(context, R.style.MonoDialog, arg);
+                break;
+            case CALENDAR:
+                dialog = new CalendarDialog(context, R.style.MonoDialog);
                 break;
         }
 

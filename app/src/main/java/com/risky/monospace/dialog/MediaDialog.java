@@ -30,31 +30,6 @@ public class MediaDialog extends MonoDialog implements MediaSubscriber {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.media_control_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        mediaArt = findViewById(R.id.media_art);
-        album = findViewById(R.id.media_album);
-        track = findViewById(R.id.media_track);
-        artist = findViewById(R.id.media_artist);
-        prev = findViewById(R.id.media_prev);
-        play = findViewById(R.id.media_play);
-        next = findViewById(R.id.media_next);
-
-        MediaService.getInstance().subscribe(this);
-
-        // Funny scrolling title
-        album.setSelected(true);
-        track.setSelected(true);
-        artist.setSelected(true);
-    }
-
-    @Override
     public void update(Media media) {
         if (isDestroyed) {
             return;
@@ -139,5 +114,28 @@ public class MediaDialog extends MonoDialog implements MediaSubscriber {
         prev = null;
         play = null;
         next = null;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.media_control_dialog;
+    }
+
+    @Override
+    protected void initialize() {
+        mediaArt = findViewById(R.id.media_art);
+        album = findViewById(R.id.media_album);
+        track = findViewById(R.id.media_track);
+        artist = findViewById(R.id.media_artist);
+        prev = findViewById(R.id.media_prev);
+        play = findViewById(R.id.media_play);
+        next = findViewById(R.id.media_next);
+
+        MediaService.getInstance().subscribe(this);
+
+        // Funny scrolling title
+        album.setSelected(true);
+        track.setSelected(true);
+        artist.setSelected(true);
     }
 }

@@ -42,34 +42,6 @@ public class AirpodDialog extends MonoDialog implements AirpodSubscriber {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.airpod_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        model = findViewById(R.id.pod_model);
-        leftBattery = findViewById(R.id.left_pod_battery);
-        centerBattery = findViewById(R.id.center_pod_battery);
-        rightBattery = findViewById(R.id.right_pod_battery);
-        leftBatteryCharge = findViewById(R.id.left_pod_battery_charge);
-        centerBatteryCharge = findViewById(R.id.center_pod_battery_charge);
-        rightBatteryCharge = findViewById(R.id.right_pod_battery_charge);
-        leftPercentage = findViewById(R.id.left_pod_percentage);
-        centerPercentage = findViewById(R.id.center_pod_percentage);
-        rightPercentage = findViewById(R.id.right_pod_percentage);
-        leftPanel = findViewById(R.id.left_pod_container);
-        rightPanel = findViewById(R.id.right_pod_container);
-        leftIcon = findViewById(R.id.left_pod_icon);
-        centerIcon = findViewById(R.id.center_pod_icon);
-        rightIcon = findViewById(R.id.right_pod_icon);
-
-        AirpodService.getInstance().subscribe(this);
-    }
-
-    @Override
     public void dismiss() {
         DialogService.getInstance().cancel(DialogType.AIRPOD);
 
@@ -98,6 +70,32 @@ public class AirpodDialog extends MonoDialog implements AirpodSubscriber {
         leftIcon = null;
         centerIcon = null;
         rightIcon = null;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.airpod_dialog;
+    }
+
+    @Override
+    protected void initialize() {
+        model = findViewById(R.id.pod_model);
+        leftBattery = findViewById(R.id.left_pod_battery);
+        centerBattery = findViewById(R.id.center_pod_battery);
+        rightBattery = findViewById(R.id.right_pod_battery);
+        leftBatteryCharge = findViewById(R.id.left_pod_battery_charge);
+        centerBatteryCharge = findViewById(R.id.center_pod_battery_charge);
+        rightBatteryCharge = findViewById(R.id.right_pod_battery_charge);
+        leftPercentage = findViewById(R.id.left_pod_percentage);
+        centerPercentage = findViewById(R.id.center_pod_percentage);
+        rightPercentage = findViewById(R.id.right_pod_percentage);
+        leftPanel = findViewById(R.id.left_pod_container);
+        rightPanel = findViewById(R.id.right_pod_container);
+        leftIcon = findViewById(R.id.left_pod_icon);
+        centerIcon = findViewById(R.id.center_pod_icon);
+        rightIcon = findViewById(R.id.right_pod_icon);
+
+        AirpodService.getInstance().subscribe(this);
     }
 
     @Override

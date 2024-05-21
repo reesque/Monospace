@@ -31,36 +31,6 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.notification_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        notificationList = findViewById(R.id.notification_list);
-        notificationList.setEmptyView(findViewById(R.id.empty_view_list));
-        dismissAllButton = findViewById(R.id.notification_dismiss_button);
-
-        notificationList.setOnItemClickListener((parent, view, position, id)
-                -> ((Notification) parent.getItemAtPosition(position)).expand(getContext()));
-
-        notificationList.setOnItemLongClickListener((parent, view, position, id) -> {
-            ((Notification) parent.getItemAtPosition(position)).clear(getContext());
-            return true;
-        });
-
-        dismissAllButton.setOnClickListener(v -> {
-            Intent intent = new Intent(NotificationReceiver.NOTIFICATION_DISMISS_ALL_ACTION);
-            getContext().sendBroadcast(intent);
-            NotificationService.getInstance().removeAll();
-        });
-
-        NotificationService.getInstance().subscribe(this);
-    }
-
-    @Override
     public void update(List<Notification> notifications) {
         if (isDestroyed) {
             return;
@@ -88,5 +58,33 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
         adapter = null;
         notificationList = null;
         dismissAllButton = null;
+    }
+
+    @Override
+    protected int layout() {
+        return R.layout.notification_dialog;
+    }
+
+    @Override
+    protected void initialize() {
+        notificationList = findViewById(R.id.notification_list);
+        notificationList.setEmptyView(findViewById(R.id.empty_view_list));
+        dismissAllButton = findViewById(R.id.notification_dismiss_button);
+
+        notificationList.setOnItemClickListener((parent, view, position, id)
+                -> ((Notification) parent.getItemAtPosition(position)).expand(getContext()));
+
+        notificationList.setOnItemLongClickListener((parent, view, position, id) -> {
+            ((Notification) parent.getItemAtPosition(position)).clear(getContext());
+            return true;
+        });
+
+        dismissAllButton.setOnClickListener(v -> {
+            Intent intent = new Intent(NotificationReceiver.NOTIFICATION_DISMISS_ALL_ACTION);
+            getContext().sendBroadcast(intent);
+            NotificationService.getInstance().removeAll();
+        });
+
+        NotificationService.getInstance().subscribe(this);
     }
 }
