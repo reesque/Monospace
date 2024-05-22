@@ -32,8 +32,6 @@ import java.util.List;
 public class DrawerFragment extends Fragment implements AppPackageSubscriber {
     private AppListAdapter adapter;
     private GridView appList;
-    private EditText appSearch;
-    private LinearLayout searchBar;
 
     public DrawerFragment() {
         // Empty
@@ -49,49 +47,22 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         View view1 = inflater.inflate(R.layout.drawer_fragment, container, false);
 
         appList = view1.findViewById(R.id.app_list);
-        appSearch = view1.findViewById(R.id.app_search_edit);
-        searchBar = view1.findViewById(R.id.drawer_search_bar);
 
         // ### App list ###
         AppPackageService.getInstance().subscribe(this);
 
-        // ### Search app ###
         PackageManager pm = getContext().getPackageManager();
         appList.setOnItemClickListener((parent, view, position, id) -> {
-            String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
-            Intent launchIntent = pm.getLaunchIntentForPackage(pname);
+            Intent launchIntent = pm.getLaunchIntentForPackage(
+                    ((AppPackage) parent.getItemAtPosition(position)).packageName);
             new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
         });
 
         appList.setOnItemLongClickListener((parent, view, position, id) -> {
-            String pname = ((AppPackage) parent.getItemAtPosition(position)).packageName;
-            AppPackageService.getInstance().toggleFav(getContext(), pname);
+            AppPackageService.getInstance().toggleFav(getContext(),
+                    ((AppPackage) parent.getItemAtPosition(position)));
             return true;
         });
-
-        appSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        // Make sure keyboard can popup more reliably
-        searchBar.setOnClickListener(v -> {
-            InputMethodManager inputMethodManager =
-                    (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(appSearch.findFocus(), 0);
-        });
-
-        appSearch.requestFocus();
 
         return view1;
     }
@@ -105,13 +76,11 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         appList.setAdapter(null);
         adapter = null;
         appList = null;
-        appSearch = null;
-        searchBar = null;
     }
 
     @Override
     public void update(List<AppPackage> packages) {
-        adapter = new AppListAdapter(getContext(), packages);
+        adapter = new AppListAdapter(getContext(), packages, R.layout.app_list_item);
         appList.setAdapter(adapter);
     }
 }

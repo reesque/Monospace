@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.risky.monospace.R;
 import com.risky.monospace.dialog.DialogType;
+import com.risky.monospace.model.Alarm;
 import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.Pod;
@@ -64,6 +65,7 @@ public class GreetFragment extends Fragment
     private LinearLayout notificationPanel;
     private LinearLayout airpodPanel;
     private LinearLayout mediaPanel;
+    private LinearLayout alarmPanel;
 
     public GreetFragment() {
         // Empty
@@ -90,6 +92,7 @@ public class GreetFragment extends Fragment
         alarmIcon = view.findViewById(R.id.alarm_icon);
         airpodPanel = view.findViewById(R.id.airpod_container);
         mediaPanel = view.findViewById(R.id.media_container);
+        alarmPanel = view.findViewById(R.id.alarm_container);
 
         NotificationService.getInstance().subscribe(this);
         WeatherService.getInstance(getContext()).subscribe(this);
@@ -128,10 +131,6 @@ public class GreetFragment extends Fragment
         // Funny scrolling title
         track.setSelected(true);
 
-        alarmIcon.setOnClickListener(v -> {
-            DialogService.getInstance().show(getContext(), DialogType.CALENDAR, null);
-        });
-
         return view;
     }
 
@@ -156,6 +155,7 @@ public class GreetFragment extends Fragment
         notificationPanel = null;
         airpodPanel = null;
         mediaPanel = null;
+        alarmPanel = null;
     }
 
     @SuppressLint("SetTextI18n")
@@ -236,9 +236,9 @@ public class GreetFragment extends Fragment
 
         if (media.packageName != null) {
             mediaIcon.setOnLongClickListener(v -> {
-                Intent launchIntent =
-                        getContext().getPackageManager().getLaunchIntentForPackage(media.packageName);
-                startActivity(launchIntent);
+                Intent launchIntent = getContext().getPackageManager()
+                        .getLaunchIntentForPackage(media.packageName);
+                new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
 
                 return true;
             });
@@ -271,12 +271,21 @@ public class GreetFragment extends Fragment
     }
 
     @Override
-    public void update(Calendar nextAlarm) {
+    public void update(Alarm nextAlarm) {
         if (nextAlarm == null) {
             alarmEta.setText(getActivity().getString(R.string.widget_none_desc));
+            alarmPanel.setVisibility(View.GONE);
+            alarmIcon.setOnClickListener(null);
             return;
         }
 
-        alarmEta.setText(DTFormattertUtil.alarmDisplay.format(nextAlarm.getTime()));
+        alarmIcon.setOnClickListener(v -> {
+            Intent launchIntent = getContext().getPackageManager()
+                    .getLaunchIntentForPackage(nextAlarm.packageName);
+            new Handler(getMainLooper()).post(() -> startActivity(launchIntent));
+        });
+
+        alarmEta.setText(DTFormattertUtil.alarmDisplay.format(nextAlarm.triggerTime.getTime()));
+        alarmPanel.setVisibility(View.VISIBLE);
     }
 }

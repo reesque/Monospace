@@ -1,7 +1,7 @@
 package com.risky.monospace.service.subscribers;
 
-import java.util.Calendar;
+import com.risky.monospace.model.Alarm;
 
 public interface AlarmSubscriber extends MonoSubscriber {
-    void update(Calendar nextAlarm);
+    void update(Alarm nextAlarm);
 }

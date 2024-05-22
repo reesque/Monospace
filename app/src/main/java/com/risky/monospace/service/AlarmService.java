@@ -1,12 +1,13 @@
 package com.risky.monospace.service;
 
+import com.risky.monospace.model.Alarm;
 import com.risky.monospace.service.subscribers.AlarmSubscriber;
 
 import java.util.Calendar;
 
 public class AlarmService extends MonoService<AlarmSubscriber> {
     private static AlarmService instance;
-    private Calendar currentAlarm;
+    private Alarm currentAlarm;
 
     private AlarmService() {}
 
@@ -18,11 +19,11 @@ public class AlarmService extends MonoService<AlarmSubscriber> {
         return instance;
     }
 
-    public Calendar get() {
-        return (Calendar) currentAlarm.clone();
+    public Alarm get() {
+        return (Alarm) currentAlarm.clone();
     }
 
-    public void set(Calendar nextAlarm) {
+    public void set(Alarm nextAlarm) {
         currentAlarm = nextAlarm;
         notifySubscriber();
     }

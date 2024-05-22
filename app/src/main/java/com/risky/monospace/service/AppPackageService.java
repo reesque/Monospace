@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.widget.Toast;
 
+import com.risky.monospace.R;
 import com.risky.monospace.model.AppPackage;
 import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 
@@ -64,11 +66,17 @@ public class AppPackageService extends MonoService<AppPackageSubscriber> {
         notifySubscriber();
     }
 
-    public void toggleFav(Context context, String packageName) {
-        if (favList.contains(packageName)) {
-            favList.remove(packageName);
+    public void toggleFav(Context context, AppPackage appPackage) {
+        if (favList.contains(appPackage.packageName)) {
+            favList.remove(appPackage.packageName);
+            Toast.makeText(context, String.format("%s %s %s",
+                    context.getText(R.string.toast_remove), appPackage.name,
+                    context.getText(R.string.toast_from_fav)), Toast.LENGTH_SHORT).show();
         } else {
-            favList.add(packageName);
+            favList.add(appPackage.packageName);
+            Toast.makeText(context, String.format("%s %s %s",
+                    context.getText(R.string.toast_add), appPackage.name,
+                    context.getText(R.string.toast_to_fav)), Toast.LENGTH_SHORT).show();
         }
 
         context.getSharedPreferences("apps", MODE_PRIVATE)

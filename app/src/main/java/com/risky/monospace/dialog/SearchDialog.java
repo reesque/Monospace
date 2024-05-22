@@ -4,29 +4,36 @@ import static android.os.Looper.getMainLooper;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.EditorInfo;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
+import com.risky.monospace.model.AppListAdapter;
+import com.risky.monospace.model.AppPackage;
+import com.risky.monospace.service.AppPackageService;
 import com.risky.monospace.service.DialogService;
+import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import kotlin.text.Charsets;
 
-public class SearchDialog extends MonoDialog {
+public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
     private EditText searchBox;
-    private ImageView searchButton;
+    private AppListAdapter adapter;
+    private ListView appList;
+    private LinearLayout webSearchContainer;
 
     public SearchDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
@@ -40,33 +47,12 @@ public class SearchDialog extends MonoDialog {
     @Override
     protected void initialize() {
         searchBox = findViewById(R.id.search_box);
-        searchButton = findViewById(R.id.search_button);
+        webSearchContainer = findViewById(R.id.web_container);
+        appList = findViewById(R.id.app_list);
 
-        searchBox.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search();
-                return true;
-            }
+        AppPackageService.getInstance().subscribe(this);
 
-            return false;
-        });
-
-        searchButton.setOnClickListener(v -> search());
-    }
-
-    @Override
-    public void dismiss() {
-        DialogService.getInstance().cancel(DialogType.SEARCH);
-
-        super.dismiss();
-
-        // Avoid mem leak
-        searchBox = null;
-        searchButton = null;
-    }
-
-    private void search() {
-        if (!searchBox.getText().toString().isEmpty()) {
+        webSearchContainer.setOnClickListener(v -> {
             String query = "";
             try {
                 query = URLEncoder.encode(searchBox.getText().toString(), Charsets.UTF_8.name());
@@ -77,6 +63,63 @@ public class SearchDialog extends MonoDialog {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com/search?q=" + query));
             new Handler(getMainLooper()).post(() -> getContext().startActivity(browserIntent));
             dismiss();
-        }
+        });
+
+        PackageManager pm = getContext().getPackageManager();
+        appList.setOnItemClickListener((parent, view, position, id) -> {
+            Intent launchIntent = pm.getLaunchIntentForPackage(
+                    ((AppPackage) parent.getItemAtPosition(position)).packageName);
+            new Handler(getMainLooper()).post(() -> getContext().startActivity(launchIntent));
+        });
+
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().isEmpty()) {
+                    webSearchContainer.setVisibility(View.VISIBLE);
+                    appList.setVisibility(View.VISIBLE);
+                    adapter.getFilter().filter(s);
+                } else {
+                    webSearchContainer.setVisibility(View.GONE);
+                    appList.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        searchBox.requestFocus();
+    }
+
+    @Override
+    public void dismiss() {
+        DialogService.getInstance().cancel(DialogType.SEARCH);
+
+        super.dismiss();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppPackageService.getInstance().unsubscribe(this);
+
+        // Avoid mem leak
+        searchBox = null;
+        appList.setAdapter(null);
+        appList = null;
+        adapter = null;
+        webSearchContainer = null;
+    }
+
+    @Override
+    public void update(List<AppPackage> packages) {
+        adapter = new AppListAdapter(getContext(), packages, R.layout.search_list_item);
+        appList.setAdapter(adapter);
     }
 }

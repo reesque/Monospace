@@ -6,6 +6,6 @@
     <color name="mp_green">#367550</color>
     <color name="star_yellow">#FFEE58</color>
     <color name="bg_black_blur">#992A2A2A</color>
-    <color name="bg_white_blur">#99FFFFFF</color>
+    <color name="bg_white_blur">#EFFFFFFF</color>
     <color name="bg_dark_black_blur">#EE2A2A2A</color>
 </resources>

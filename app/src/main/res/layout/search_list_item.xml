@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="5dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/app_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/round_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/app_fav"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="-6dp"
+            android:layout_marginBottom="-4dp"
+            android:src="@drawable/star"
+            app:layout_constraintBottom_toBottomOf="@id/app_icon"
+            app:layout_constraintEnd_toEndOf="@id/app_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        android:lines="1"
+        android:text="Text"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+</LinearLayout>

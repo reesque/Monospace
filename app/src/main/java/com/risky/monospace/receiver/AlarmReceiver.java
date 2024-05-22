@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.risky.monospace.model.Alarm;
 import com.risky.monospace.service.AlarmService;
 
 import java.util.Calendar;
@@ -25,14 +26,15 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void checkForAvaialbleAlarm(Context context) {
-        Calendar nextAlarm = null;
+        Alarm result = null;
         AlarmManager.AlarmClockInfo alarmInfo = ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).getNextAlarmClock();
         if (alarmInfo != null) {
-            nextAlarm = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            Calendar nextAlarm = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             nextAlarm.setTimeInMillis(alarmInfo.getTriggerTime());
             nextAlarm.setTimeZone(TimeZone.getDefault());
+            result = new Alarm(nextAlarm, alarmInfo.getShowIntent().getCreatorPackage());
         }
 
-        AlarmService.getInstance().set(nextAlarm);
+        AlarmService.getInstance().set(result);
     }
 }

@@ -13,6 +13,10 @@
 
     <!-- App list -->
     <string name="app_list_search_prompt">Search:</string>
+    <string name="toast_remove">Removed</string>
+    <string name="toast_add">Added</string>
+    <string name="toast_from_fav">from favorite</string>
+    <string name="toast_to_fav">to favorite</string>
 
     <!-- Widgets -->
     <string name="widget_airpod_header">Airpod</string>
@@ -28,5 +32,5 @@
     <string name="widget_weather_updating">Updating…</string>
     <string name="widget_media_unknown">Unknown</string>
     <string name="widget_search_hint">Search…</string>
-    <string name="widget_search_web">Web Search</string>
+    <string name="widget_search_web">Search online</string>
 </resources>

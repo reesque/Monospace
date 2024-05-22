@@ -21,10 +21,12 @@ import java.util.List;
 
 public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterable {
     private final List<AppPackage> originalItems;
+    private final int itemLayout;
 
-    public AppListAdapter(Context context, List<AppPackage> packages) {
+    public AppListAdapter(Context context, List<AppPackage> packages, int itemLayout) {
         super(context, 0, new ArrayList<>(packages));
-        originalItems = new ArrayList<>(packages);
+        this.originalItems = new ArrayList<>(packages);
+        this.itemLayout = itemLayout;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
         AppPackage item = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.app_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(itemLayout, parent, false);
         }
 
         TextView name = convertView.findViewById(R.id.app_name);

@@ -5,42 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/drawer_search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/drawer_prompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:fontFamily="monospace"
-            android:text="@string/app_list_search_prompt"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/app_search_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:autofillHints="name"
-            android:background="@android:color/transparent"
-            android:fontFamily="monospace"
-            android:imeOptions="actionDone"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHighlight="@color/bg_black_blur"
-            android:textCursorDrawable="@drawable/cursor_black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
     <GridView
         android:id="@+id/app_list"
         android:layout_width="match_parent"
@@ -51,5 +15,6 @@
         android:divider="@null"
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
+        android:smoothScrollbar="true"
         android:scrollbars="none" />
 </LinearLayout>

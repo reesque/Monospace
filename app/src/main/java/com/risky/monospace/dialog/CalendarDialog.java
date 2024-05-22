@@ -22,9 +22,8 @@ import com.risky.monospace.util.DTFormattertUtil;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class CalendarDialog extends MonoDialog implements AlarmSubscriber {
+public class CalendarDialog extends MonoDialog {
     private CalendarView calendar;
-    private TextView alarmEta;
     private Calendar checkpointDate;
     private BroadcastReceiver timeReceiver;
 
@@ -44,7 +43,6 @@ public class CalendarDialog extends MonoDialog implements AlarmSubscriber {
         super.onStop();
 
         getContext().unregisterReceiver(timeReceiver);
-        AlarmService.getInstance().unsubscribe(this);
 
         // Avoid mem leak
         calendar = null;
@@ -58,9 +56,6 @@ public class CalendarDialog extends MonoDialog implements AlarmSubscriber {
     @Override
     protected void initialize() {
         calendar = findViewById(R.id.calendar_view);
-        alarmEta = findViewById(R.id.alarm_time);
-
-        AlarmService.getInstance().subscribe(this);
 
         Runnable clockRunner = () -> {
             Calendar current = Calendar.getInstance();
@@ -80,15 +75,5 @@ public class CalendarDialog extends MonoDialog implements AlarmSubscriber {
         timeFilter.addAction(Intent.ACTION_TIME_TICK);
         timeReceiver = new TimeReceiver(clockRunner);
         getContext().registerReceiver(timeReceiver, timeFilter);
-    }
-
-    @Override
-    public void update(Calendar nextAlarm) {
-        if (nextAlarm == null) {
-            alarmEta.setText(getContext().getString(R.string.widget_none_desc));
-            return;
-        }
-
-        alarmEta.setText(DTFormattertUtil.alarmDisplayFull.format(nextAlarm.getTime()));
     }
 }
