@@ -33,4 +33,31 @@
     <string name="widget_media_unknown">Unknown</string>
     <string name="widget_search_hint">Search…</string>
     <string name="widget_search_web">Search online</string>
+
+    <string name="settings_header">Monospace Settings</string>
+    <string name="settings_permission">Permission</string>
+    <string name="settings_fine_location_header">Fine Location Access</string>
+    <string name="settings_fine_location_desc">Use for determine the location for weather</string>
+    <string name="settings_notification_header">Notification Access</string>
+    <string name="settings_notification_desc">Use for displaying notification</string>
+    <string name="settings_draw_over_apps_header">Draw over other apps</string>
+    <string name="settings_draw_over_apps_desc">Use for displaying airpod dialog everywhere</string>
+    <string name="settings_airpod_header">Airpod Information access</string>
+    <string name="settings_airpod_desc">Use for displaying airpod information</string>
+    <string name="settings_weather">Weather</string>
+    <string name="settings_temp_unit">Temperature Unit</string>
+    <string name="settings_temp_unit_c">°C</string>
+    <string name="settings_temp_unit_f">°F</string>
+    <string name="settings_current_location">Current Location</string>
+    <string name="settings_locate">Locate</string>
+    <string name="settings_web_search_provider">Web Search Provider</string>
+    <string name="settings_permission_granted">Granted</string>
+    <string name="settings_permission_allow">Allow</string>
+
+    <string-array name="search_provider">
+        <item>Google</item>
+        <item>Bing</item>
+        <item>DuckDuckGo</item>
+        <item>Brave</item>
+    </string-array>
 </resources>

@@ -62,7 +62,7 @@ public class DialogService {
         }
 
         Window window = dialog.getWindow();
-        if (PermissionHelper.drawOverApps(context) && type.shouldDrawOver()) {
+        if (PermissionHelper.checkDrawOverApps(context) && type.shouldDrawOver()) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         }
         window.setGravity(Gravity.BOTTOM);

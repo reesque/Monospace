@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.NOTIFICATION_MANAGER" />
+    <uses-permission android:name="com.dosse.airpods.permission.ACCESS_AIRPOD_INFORMATION"/>
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,6 @@
         android:largeHeap="true"
         android:theme="@style/Theme.Monospace"
         tools:targetApi="31">
-        <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
         <activity
             android:name=".MainActivity"
             android:clearTaskOnLaunch="true"
@@ -46,6 +46,15 @@
                 <category android:name="android.intent.category.LAUNCHER_APP" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:clearTaskOnLaunch="true"
+            android:enabled="true"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:taskAffinity=""/>
         <receiver
             android:name=".receiver.AppPackageReceiver"
             android:exported="true">
@@ -80,7 +89,8 @@
         </receiver>
         <receiver
             android:name=".receiver.AirpodReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.dosse.airpods.permission.ACCESS_AIRPOD_INFORMATION">
             <intent-filter>
                 <action android:name="com.dosse.airpods.status" />
             </intent-filter>

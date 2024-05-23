@@ -9,10 +9,13 @@ import androidx.annotation.Nullable;
 public class HomeGestureListener extends GestureDetector.SimpleOnGestureListener {
     private final GestureCallback drawerCallback;
     private final GestureCallback searchCallback;
+    private final GestureCallback settingsCallback;
 
-    public HomeGestureListener(GestureCallback scrollCallback, GestureCallback searchCallback) {
+    public HomeGestureListener(GestureCallback scrollCallback, GestureCallback searchCallback,
+                               GestureCallback settingsCallback) {
         this.drawerCallback = scrollCallback;
         this.searchCallback = searchCallback;
+        this.settingsCallback = settingsCallback;
     }
 
     @Override
@@ -37,5 +40,10 @@ public class HomeGestureListener extends GestureDetector.SimpleOnGestureListener
         searchCallback.run();
 
         return true;
+    }
+
+    @Override
+    public void onLongPress(@NonNull MotionEvent e) {
+        settingsCallback.run();
     }
 }

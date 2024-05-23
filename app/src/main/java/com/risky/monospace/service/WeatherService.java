@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
+import com.risky.monospace.R;
 import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.model.WeatherForecast;
@@ -61,6 +62,13 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
                     TimeZone timeZone = currentTime.getTimeZone();
                     String timeZoneString = timeZone.getDisplayName(
                             timeZone.inDaylightTime(currentTime.getTime()), TimeZone.SHORT);
+                    String unit = "celsius";
+                    String unitAbbr = context.getString(R.string.settings_temp_unit_c);
+
+                    if (!context.getSharedPreferences("settings", MODE_PRIVATE).getBoolean("useMetric", true)) {
+                        unit = "fahrenheit";
+                        unitAbbr = context.getString(R.string.settings_temp_unit_f);
+                    }
 
                     JSONObject response = NetworkUtil.getJSONObjectFromURL(
                             "https://api.open-meteo.com/v1/forecast?&latitude="
@@ -68,12 +76,12 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
                                     + position.longitude + "&current=temperature_2m,weather_code"
                                     + "&forecast_days=7&daily=temperature_2m_min,"
                                     + "temperature_2m_max,weather_code&time_zone="
-                                    + timeZoneString);
+                                    + timeZoneString + "&temperature_unit=" + unit);
 
                     instance.currentWeather = new WeatherState(
                             LocalDate.parse(response.getJSONObject("daily").getJSONArray("time").getString(0))
                                     .getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                            (int) Math.round(response.getJSONObject("current").getDouble("temperature_2m")) + "°C",
+                            (int) Math.round(response.getJSONObject("current").getDouble("temperature_2m")) + unitAbbr,
                             WeatherCondition.getCondition(response.getJSONObject("current").getInt("weather_code")));
 
                     List<WeatherState> forecasts = new ArrayList<>();
@@ -86,7 +94,7 @@ public class WeatherService extends MonoService<WeatherSubscriber> {
                     for (int i = 1; i < minArray.length(); i++) {
                         forecasts.add(new WeatherState(LocalDate.parse(dateArray.getString(i))
                                 .getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                                (int) Math.round((minArray.getDouble(i) + maxArray.getDouble(i)) / 2) + "°C",
+                                (int) Math.round((minArray.getDouble(i) + maxArray.getDouble(i)) / 2) + unitAbbr,
                                 WeatherCondition.getCondition(codeArray.getInt(i))));
                     }
 

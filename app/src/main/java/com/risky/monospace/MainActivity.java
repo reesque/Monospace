@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -54,6 +55,7 @@ import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
 import com.risky.monospace.util.DTFormattertUtil;
+import com.risky.monospace.util.PermissionHelper;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -201,7 +203,8 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .addToBackStack(null)
                     .commit();
-        }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null));
+        }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
+            () -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
@@ -228,11 +231,6 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(batteryReceiver, batteryFilter);
 
         // ### Read airpod ###
-        /*
-        if (!Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:com.risky.monospace"));
-            startActivity(intent);
-        }*/
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
         airpodReceiver = new AirpodReceiver();
         registerReceiver(airpodReceiver, airpodFilter);

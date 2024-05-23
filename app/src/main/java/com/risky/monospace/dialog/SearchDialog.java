@@ -1,5 +1,6 @@
 package com.risky.monospace.dialog;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.os.Looper.getMainLooper;
 
 import android.content.Context;
@@ -10,6 +11,8 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import androidx.annotation.NonNull;
 import com.risky.monospace.R;
 import com.risky.monospace.model.AppListAdapter;
 import com.risky.monospace.model.AppPackage;
+import com.risky.monospace.model.SearchProvider;
 import com.risky.monospace.service.AppPackageService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.subscribers.AppPackageSubscriber;
@@ -60,7 +64,9 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
                 return;
             }
 
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com/search?q=" + query));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(SearchProvider.toProvider(
+                    getContext().getSharedPreferences("settings", MODE_PRIVATE)
+                            .getInt("searchProvider", 0)).baseUrl + query));
             new Handler(getMainLooper()).post(() -> getContext().startActivity(browserIntent));
             dismiss();
         });
@@ -74,8 +80,7 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -90,10 +95,10 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         searchBox.requestFocus();
     }
 
@@ -101,6 +106,7 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
     public void dismiss() {
         DialogService.getInstance().cancel(DialogType.SEARCH);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         super.dismiss();
     }
 

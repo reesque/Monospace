@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingTop="80dp"
+    android:paddingBottom="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/settings_header"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textSize="30sp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@drawable/scrollbar_white"
+        android:smoothScrollbar="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/settings_permission"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_fine_location_header"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/settings_fine_location_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_fine_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/settings_permission_granted"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_notification_header"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/settings_notification_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/settings_permission_granted"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_draw_over_apps_header"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/settings_draw_over_apps_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_draw_over_apps"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/settings_permission_granted"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_airpod_header"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/settings_airpod_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_airpod"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/settings_permission_granted"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/settings_weather"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:weightSum="1.0">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.8"
+                    android:text="@string/settings_temp_unit"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/settings_weather_unit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:textOff="@string/settings_temp_unit_c"
+                    android:textOn="@string/settings_temp_unit_f"
+                    app:showText="true"
+                    android:gravity="center"
+                    app:switchTextAppearance="@style/MonoSwitch"
+                    app:track="@drawable/temp_unit_track"
+                    android:thumb="@drawable/temp_unit_thumb" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_current_location"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/settings_weather_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/widget_none_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_weather_locate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:text="@string/settings_locate"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/settings_web_search_provider"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"/>
+
+            <Spinner
+                android:id="@+id/settings_search_provider"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/capsule_bg_white"
+                android:popupElevation="0dp"
+                android:spinnerMode="dialog"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

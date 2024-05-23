@@ -118,10 +118,8 @@ public class GreetFragment extends Fragment
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD, null));
 
         notifIcon.setOnClickListener(v -> {
-            if (!PermissionHelper.checkNotification()) {
-                // Has to run on main thread
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                new Handler(getMainLooper()).post(() -> startActivity(intent));
+            if (!PermissionHelper.checkNotificationAccess()) {
+                PermissionHelper.requestNotificationAccess(getContext());
                 return;
             }
 
