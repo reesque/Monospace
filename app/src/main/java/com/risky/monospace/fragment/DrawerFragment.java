@@ -49,7 +49,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         appList = view1.findViewById(R.id.app_list);
 
         // ### App list ###
-        AppPackageService.getInstance().subscribe(this);
+        AppPackageService.getInstance(getContext()).subscribe(this);
 
         PackageManager pm = getContext().getPackageManager();
         appList.setOnItemClickListener((parent, view, position, id) -> {
@@ -59,7 +59,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
         });
 
         appList.setOnItemLongClickListener((parent, view, position, id) -> {
-            AppPackageService.getInstance().toggleFav(getContext(),
+            AppPackageService.getInstance(getContext()).toggleFav(getContext(),
                     ((AppPackage) parent.getItemAtPosition(position)));
             return true;
         });
@@ -70,7 +70,7 @@ public class DrawerFragment extends Fragment implements AppPackageSubscriber {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppPackageService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(getContext()).unsubscribe(this);
 
         // Avoid mem leak
         appList.setAdapter(null);

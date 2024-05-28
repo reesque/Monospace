@@ -54,7 +54,7 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
         webSearchContainer = findViewById(R.id.web_container);
         appList = findViewById(R.id.app_list);
 
-        AppPackageService.getInstance().subscribe(this);
+        AppPackageService.getInstance(getContext()).subscribe(this);
 
         webSearchContainer.setOnClickListener(v -> {
             String query = "";
@@ -113,7 +113,7 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
     @Override
     protected void onStop() {
         super.onStop();
-        AppPackageService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(getContext()).unsubscribe(this);
 
         // Avoid mem leak
         searchBox = null;

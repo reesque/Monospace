@@ -8,7 +8,7 @@ import com.risky.monospace.service.AppPackageService;
 
 public class AppPackageReceiver extends BroadcastReceiver {
     public AppPackageReceiver(Context context) {
-        AppPackageService.getInstance().refresh(context);
+        AppPackageService.getInstance(context).refresh(context);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class AppPackageReceiver extends BroadcastReceiver {
         switch (intent.getAction()) {
             case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_REMOVED:
-                AppPackageService.getInstance().refresh(context);
+                AppPackageService.getInstance(context).refresh(context);
                 break;
         }
     }
