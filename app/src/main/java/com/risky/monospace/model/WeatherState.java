@@ -1,12 +1,10 @@
 package com.risky.monospace.model;
 
-public class WeatherState {
-    public final String dayOfWeek;
+public abstract class WeatherState {
     public final String temperature;
     public final WeatherCondition condition;
 
-    public WeatherState(String dayOfWeek, String temperature, WeatherCondition condition) {
-        this.dayOfWeek = dayOfWeek;
+    public WeatherState(String temperature, WeatherCondition condition) {
         this.temperature = temperature;
         this.condition = condition;
     }

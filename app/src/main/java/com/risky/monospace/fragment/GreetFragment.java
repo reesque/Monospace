@@ -27,13 +27,13 @@ import androidx.fragment.app.Fragment;
 import com.risky.monospace.R;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.model.Alarm;
+import com.risky.monospace.model.CurrentWeatherState;
 import com.risky.monospace.model.Media;
 import com.risky.monospace.model.Notification;
 import com.risky.monospace.model.Pod;
 import com.risky.monospace.model.RegularPod;
 import com.risky.monospace.model.SinglePod;
 import com.risky.monospace.model.WeatherForecast;
-import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.AirpodService;
 import com.risky.monospace.service.AlarmService;
 import com.risky.monospace.service.DialogService;
@@ -202,10 +202,11 @@ public class GreetFragment extends Fragment
     }
 
     @Override
-    public void update(WeatherState state) {
+    public void update(CurrentWeatherState state) {
         if (state != null) {
             this.temperature.setText(state.temperature);
             this.weatherIcon.setImageResource(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) <= 18
+                    && Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 5
                     ? state.condition.getIconDay() : state.condition.getIconNight());
             return;
         }
