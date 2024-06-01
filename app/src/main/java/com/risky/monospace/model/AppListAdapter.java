@@ -1,6 +1,11 @@
 package com.risky.monospace.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +50,7 @@ public class AppListAdapter extends ArrayAdapter<AppPackage> implements Filterab
 
         ShapeableImageView icon = convertView.findViewById(R.id.app_icon);
         icon.setImageDrawable(item.icon);
+        icon.setContentPadding(4, 4, 4, 4);
         icon.setShapeAppearanceModel(icon.getShapeAppearanceModel()
                 .toBuilder().setAllCorners(CornerFamily.ROUNDED, 50f).build());
 
