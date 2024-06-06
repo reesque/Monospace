@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,7 +53,6 @@ import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
 import com.risky.monospace.util.DTFormattertUtil;
-import com.risky.monospace.util.PermissionHelper;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -76,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     private TextView fri;
     private TextView sat;
     private TextView battPerc;
+    private ImageView battCharge;
     private ProgressBar battery;
     private ImageView network;
     private ImageView bluetooth;
@@ -124,6 +122,7 @@ public class MainActivity extends AppCompatActivity
         fri = findViewById(R.id.dow_fri);
         sat = findViewById(R.id.dow_sat);
         battPerc = findViewById(R.id.battery_perc_main);
+        battCharge = findViewById(R.id.battery_charge_main);
         battery = findViewById(R.id.battery_main);
         network = findViewById(R.id.network_main);
         bluetooth = findViewById(R.id.bluetooth_main);
@@ -198,8 +197,8 @@ public class MainActivity extends AppCompatActivity
             setBackgroundColor(true);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_anim,
-                            R.anim.fade_in_anim, R.anim.slide_out_slow_anim)
+                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_slow_anim,
+                            R.anim.fade_in_slow_anim, R.anim.slide_out_slow_anim)
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .addToBackStack(null)
                     .commit();
@@ -309,6 +308,26 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+
+        mainPanel = null;
+        month = null;
+        dom = null;
+        time = null;
+        mer = null;
+        sun = null;
+        mon = null;
+        tue = null;
+        wed = null;
+        thu = null;
+        fri = null;
+        sat = null;
+        battPerc = null;
+        battCharge = null;
+        battery = null;
+        network = null;
+        bluetooth = null;
+        location = null;
+        contentFragment = null;
     }
 
     private void setBackgroundColor(boolean reversed) {
@@ -330,7 +349,15 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint("DefaultLocale")
     @Override
     public void update(int level, boolean isCharging, boolean isFull) {
-        battPerc.setText(String.format("%d", level));
+        if (isCharging) {
+            battCharge.setVisibility(View.VISIBLE);
+            battPerc.setVisibility(View.GONE);
+        } else {
+            battCharge.setVisibility(View.GONE);
+            battPerc.setVisibility(View.VISIBLE);
+            battPerc.setText(String.format("%d", level));
+        }
+
         battery.setProgress(level);
     }
 

@@ -10,7 +10,6 @@ import com.risky.monospace.receiver.NotificationReceiver;
 import com.risky.monospace.service.NotificationService;
 
 public class Notification {
-    public final int id;
     public final int icon;
     public final String packageName;
     public final String title;
@@ -18,9 +17,8 @@ public class Notification {
     private final PendingIntent clickAction;
     private final String key;
 
-    public Notification(int id, int icon, String packageName, String title,
+    public Notification(int icon, String packageName, String title,
                         String description, PendingIntent clickAction, String key) {
-        this.id = id;
         this.icon = icon;
         this.packageName = packageName;
         this.title = title;
@@ -31,21 +29,13 @@ public class Notification {
 
     @Override
     public int hashCode() {
-        return id + icon + packageName.hashCode()
-                + (title == null ? "" : title).hashCode();
+        return key.hashCode();
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof Notification) {
-            String thisTitle = (title == null ? "" : title);
-            String objTitle = (((Notification) obj).title == null ? "" : ((Notification) obj).title);
-
-
-            return this.id == ((Notification) obj).id
-                    && this.icon == ((Notification) obj).icon
-                    && this.packageName.equals(((Notification) obj).packageName)
-                    && thisTitle.equals(objTitle);
+            return this.key.equals(((Notification) obj).key);
         }
 
         return false;

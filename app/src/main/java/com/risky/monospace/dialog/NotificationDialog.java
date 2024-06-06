@@ -26,8 +26,8 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
     private TextView dismissAllButton;
     private NotificationListAdapter adapter;
 
-    public NotificationDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public NotificationDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

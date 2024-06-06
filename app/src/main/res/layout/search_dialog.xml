@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
-    android:background="@drawable/dialog_bg_white"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="15dp">
@@ -12,38 +11,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/edittext_bg_black"
+        android:background="@drawable/edittext_bg_white"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:weightSum="1.0"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
+
+        <ImageView
+            android:id="@+id/search_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/search"
+            android:layout_marginStart="2dp"/>
 
         <EditText
             android:id="@+id/search_box"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="6dp"
             android:layout_marginEnd="5dp"
-            android:layout_weight="0.9"
             android:autofillHints="name"
             android:background="@android:color/transparent"
             android:hint="@string/widget_search_hint"
             android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
-            android:textColor="@color/white"
-            android:textColorHighlight="@color/bg_white_blur"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/bg_black_blur"
             android:textColorHint="@color/gray"
-            android:textCursorDrawable="@drawable/cursor_white"
+            android:textCursorDrawable="@drawable/cursor_black"
             android:textSize="20sp"
             android:focusableInTouchMode="true"/>
-
-        <ImageView
-            android:id="@+id/search_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:src="@drawable/search" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +77,7 @@
             android:textStyle="bold"
             android:lines="1"
             android:text="@string/widget_search_web"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -89,7 +88,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"
         android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@drawable/scrollbar_black"
+        android:scrollbarThumbVertical="@drawable/scrollbar_white"
         android:fadeScrollbars="false"
         android:smoothScrollbar="true"
         android:listSelector="@drawable/search_list_selector"

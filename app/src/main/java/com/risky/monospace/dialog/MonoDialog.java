@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -14,9 +15,12 @@ import com.risky.monospace.R;
 
 public abstract class MonoDialog extends Dialog {
     protected boolean isDestroyed = false;
+    private final float dimAlpha;
 
-    public MonoDialog(@NonNull Context context, int themeResId) {
+    public MonoDialog(@NonNull Context context, int themeResId, float dimAlpha) {
         super(context, themeResId);
+
+        this.dimAlpha = dimAlpha;
     }
 
     @Override
@@ -26,6 +30,7 @@ public abstract class MonoDialog extends Dialog {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(layout());
+        getWindow().setDimAmount(dimAlpha);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         initialize();

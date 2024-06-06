@@ -37,8 +37,8 @@ public class AirpodDialog extends MonoDialog implements AirpodSubscriber {
     private LinearLayout leftPanel;
     private LinearLayout rightPanel;
 
-    public AirpodDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public AirpodDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

@@ -182,6 +182,15 @@
                 android:textColor="@color/mp_green"
                 android:textSize="9sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/battery_charge_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:src="@drawable/charging"
+                android:padding="7dp"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <ImageView

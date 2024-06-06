@@ -27,8 +27,8 @@ public class CalendarDialog extends MonoDialog {
     private Calendar checkpointDate;
     private BroadcastReceiver timeReceiver;
 
-    public CalendarDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public CalendarDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

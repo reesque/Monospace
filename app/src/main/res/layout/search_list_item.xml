@@ -12,10 +12,9 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/app_icon"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/round_black"
-            android:foreground="@drawable/round_foreground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -25,8 +24,8 @@
             android:id="@+id/app_fav"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="-6dp"
-            android:layout_marginBottom="-4dp"
+            android:layout_marginEnd="-4dp"
+            android:layout_marginBottom="-2dp"
             android:src="@drawable/star"
             app:layout_constraintBottom_toBottomOf="@id/app_icon"
             app:layout_constraintEnd_toEndOf="@id/app_icon" />
@@ -40,6 +39,6 @@
         android:textStyle="bold"
         android:lines="1"
         android:text="Text"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 </LinearLayout>

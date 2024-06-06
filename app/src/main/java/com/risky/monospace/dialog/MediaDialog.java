@@ -25,8 +25,8 @@ public class MediaDialog extends MonoDialog implements MediaSubscriber {
     private ImageView play;
     private ImageView next;
 
-    public MediaDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public MediaDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

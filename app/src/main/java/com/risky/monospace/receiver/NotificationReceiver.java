@@ -139,8 +139,7 @@ public class NotificationReceiver extends NotificationListenerService {
         String desc = sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT) == null ? "" :
                 sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT).toString();
 
-        return new Notification(sbn.getId(),
-                sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
+        return new Notification(sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
                 sbn.getNotification().contentIntent, sbn.getKey());
     }
 }

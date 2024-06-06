@@ -65,8 +65,8 @@ public class WeatherDialog extends MonoDialog implements WeatherSubscriber {
         }
     }
 
-    public WeatherDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public WeatherDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

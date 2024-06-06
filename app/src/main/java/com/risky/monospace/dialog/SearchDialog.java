@@ -39,8 +39,8 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
     private ListView appList;
     private LinearLayout webSearchContainer;
 
-    public SearchDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
+    public SearchDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+        super(context, themeResId, dimAlpha);
     }
 
     @Override

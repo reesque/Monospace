@@ -2,7 +2,6 @@ package com.risky.monospace.service;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -42,31 +41,35 @@ public class DialogService {
         Dialog dialog = null;
         switch (type) {
             case AIRPOD:
-                dialog = new AirpodDialog(context, R.style.MonoDialog);
+                dialog = new AirpodDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
                 break;
             case MEDIA:
-                dialog = new MediaDialog(context, R.style.MonoDialog);
+                dialog = new MediaDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
                 break;
             case WEATHER:
-                dialog = new WeatherDialog(context, R.style.MonoDialog);
+                dialog = new WeatherDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
                 break;
             case NOTIFICATION:
-                dialog = new NotificationDialog(context, R.style.MonoDialog);
+                dialog = new NotificationDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
                 break;
             case SEARCH:
-                dialog = new SearchDialog(context, R.style.MonoDialog);
+                dialog = new SearchDialog(context, R.style.MonoDialogFade, type.dimAlpha);
                 break;
             case CALENDAR:
-                dialog = new CalendarDialog(context, R.style.MonoDialog);
+                dialog = new CalendarDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
                 break;
         }
 
         Window window = dialog.getWindow();
-        if (PermissionHelper.checkDrawOverApps(context) && type.shouldDrawOver()) {
+        if (PermissionHelper.checkDrawOverApps(context) && type.shouldDrawOver) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+
+            if (type.shouldClickThrough) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            }
         }
-        window.setGravity(Gravity.BOTTOM);
-        window.getAttributes().windowAnimations = R.style.MonoDialogAnimation;
+
+        window.setGravity(type.gravity);
         active.put(type, dialog);
         dialog.show();
     }
