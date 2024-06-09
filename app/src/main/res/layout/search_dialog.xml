@@ -7,43 +7,32 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/search_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edittext_bg_white"
-        android:orientation="horizontal"
-        android:padding="10dp"
+        android:autofillHints="name"
+        android:hint="@string/widget_search_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textColorHighlight="@color/bg_black_blur"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_black"
+        android:textSize="18sp"
+        android:focusableInTouchMode="true"
+        android:drawableStart="@drawable/search"
+        android:drawablePadding="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp">
-
-        <ImageView
-            android:id="@+id/search_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/search"
-            android:layout_marginStart="2dp"/>
-
-        <EditText
-            android:id="@+id/search_box"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="5dp"
-            android:autofillHints="name"
-            android:background="@android:color/transparent"
-            android:hint="@string/widget_search_hint"
-            android:imeOptions="actionDone"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHighlight="@color/bg_black_blur"
-            android:textColorHint="@color/gray"
-            android:textCursorDrawable="@drawable/cursor_black"
-            android:textSize="20sp"
-            android:focusableInTouchMode="true"/>
-    </LinearLayout>
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edittext_bg_white"/>
 
     <LinearLayout
         android:id="@+id/web_container"
