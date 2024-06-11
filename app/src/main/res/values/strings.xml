@@ -28,7 +28,7 @@
     <string name="widget_airpod_desc">Connected</string>
     <string name="widget_notif_clear">Clear</string>
     <string name="widget_notif_no_new">No new notification</string>
-    <string name="widget_weather_today">Today</string>
+    <string name="widget_weather_current">Now</string>
     <string name="widget_weather_updating">Updating…</string>
     <string name="widget_weather_no_data">No Data</string>
     <string name="widget_media_unknown">Unknown</string>

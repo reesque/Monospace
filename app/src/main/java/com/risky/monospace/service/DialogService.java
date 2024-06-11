@@ -63,10 +63,6 @@ public class DialogService {
         Window window = dialog.getWindow();
         if (PermissionHelper.checkDrawOverApps(context) && type.shouldDrawOver) {
             window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-
-            if (type.shouldClickThrough) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-            }
         }
 
         window.setGravity(type.gravity);

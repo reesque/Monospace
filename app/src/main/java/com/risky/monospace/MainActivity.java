@@ -41,6 +41,7 @@ import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
+import com.risky.monospace.receiver.NotificationReceiver;
 import com.risky.monospace.receiver.TimeReceiver;
 import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity
     private AirpodReceiver airpodReceiver;
     private TimeReceiver timeReceiver;
     private AlarmReceiver alarmReceiver;
+    private Intent notificationReceiver;
     private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -242,6 +244,10 @@ public class MainActivity extends AppCompatActivity
         appPackageReceiver = new AppPackageReceiver(this);
         registerReceiver(appPackageReceiver, appPackageFilter);
 
+        // ### Bind notification service
+        notificationReceiver = new Intent(this, NotificationReceiver.class);
+        startService(notificationReceiver);
+
         // ### Back ###
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (!isHome && getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -280,10 +286,6 @@ public class MainActivity extends AppCompatActivity
         getWindow().getAttributes().layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         View decorView = getWindow().getDecorView();
-        // Hide both the navigation bar and the status bar.
-        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
-        // a general rule, you should design your app to hide the status bar whenever you
-        // hide the navigation bar.
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -304,6 +306,8 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(airpodReceiver);
         unregisterReceiver(timeReceiver);
         unregisterReceiver(alarmReceiver);
+
+        stopService(notificationReceiver);
 
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);

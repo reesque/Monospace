@@ -205,6 +205,7 @@ public class WeatherDialog extends MonoDialog implements WeatherSubscriber {
                 dataSet.setValueFormatter(new YAxisFormatter());
                 dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
                 dataSet.setCubicIntensity(0.2f);
+                dataSet.setLineWidth(1f);
                 dataSet.setDrawFilled(true);
                 dataSet.setDrawCircles(false);
                 dataSet.setHighLightColor(getContext().getColor(R.color.black));
