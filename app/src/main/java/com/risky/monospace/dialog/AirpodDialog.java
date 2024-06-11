@@ -1,11 +1,7 @@
 package com.risky.monospace.dialog;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,8 +33,8 @@ public class AirpodDialog extends MonoDialog implements AirpodSubscriber {
     private LinearLayout leftPanel;
     private LinearLayout rightPanel;
 
-    public AirpodDialog(@NonNull Context context, int themeResId, float dimAlpha) {
-        super(context, themeResId, dimAlpha);
+    public AirpodDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
+        super(context, themeResId, dimAlpha, isFullscreen);
     }
 
     @Override

@@ -28,12 +28,17 @@
     <string name="widget_airpod_desc">Connected</string>
     <string name="widget_notif_clear">Clear</string>
     <string name="widget_notif_no_new">No new notification</string>
+    <string name="widget_no_event">No event</string>
     <string name="widget_weather_current">Now</string>
     <string name="widget_weather_updating">Updating…</string>
     <string name="widget_weather_no_data">No Data</string>
     <string name="widget_media_unknown">Unknown</string>
     <string name="widget_search_hint">Search…</string>
     <string name="widget_search_web">Search online</string>
+    <string name="widget_event_no_desc">No description</string>
+    <string name="widget_event_no_location">No location</string>
+    <string name="widget_event_in_thirty">Upcoming events in 30 days</string>
+    <string name="widget_event_at">At</string>
 
     <string name="settings_header">Monospace Settings</string>
     <string name="settings_permission">Permission</string>
@@ -45,6 +50,8 @@
     <string name="settings_draw_over_apps_desc">Use for displaying airpod dialog everywhere</string>
     <string name="settings_airpod_header">Airpod Information access</string>
     <string name="settings_airpod_desc">Use for displaying airpod information</string>
+    <string name="settings_calendar_header">Calendar access</string>
+    <string name="settings_calendar_desc">Use for reading upcoming events</string>
     <string name="settings_weather">Weather</string>
     <string name="settings_temp_unit">Temperature Unit</string>
     <string name="settings_temp_unit_c">°C</string>

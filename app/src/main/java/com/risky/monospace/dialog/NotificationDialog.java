@@ -2,10 +2,7 @@ package com.risky.monospace.dialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,14 +23,20 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
     private TextView dismissAllButton;
     private NotificationListAdapter adapter;
 
-    public NotificationDialog(@NonNull Context context, int themeResId, float dimAlpha) {
-        super(context, themeResId, dimAlpha);
+    public NotificationDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
+        super(context, themeResId, dimAlpha, isFullscreen);
     }
 
     @Override
     public void update(List<Notification> notifications) {
         if (isDestroyed) {
             return;
+        }
+
+        if (notifications.isEmpty()) {
+            dismissAllButton.setVisibility(View.GONE);
+        } else {
+            dismissAllButton.setVisibility(View.VISIBLE);
         }
 
         adapter = new NotificationListAdapter(getContext(), notifications);

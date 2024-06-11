@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,8 +38,8 @@ public class SearchDialog extends MonoDialog implements AppPackageSubscriber {
     private ListView appList;
     private LinearLayout webSearchContainer;
 
-    public SearchDialog(@NonNull Context context, int themeResId, float dimAlpha) {
-        super(context, themeResId, dimAlpha);
+    public SearchDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
+        super(context, themeResId, dimAlpha, isFullscreen);
     }
 
     @Override

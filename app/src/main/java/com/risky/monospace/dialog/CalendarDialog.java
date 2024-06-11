@@ -1,34 +1,34 @@
 package com.risky.monospace.dialog;
 
-import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
 import com.risky.monospace.R;
+import com.risky.monospace.model.CalendarEvent;
+import com.risky.monospace.model.CalendarEventListAdapter;
 import com.risky.monospace.receiver.TimeReceiver;
-import com.risky.monospace.service.AlarmService;
+import com.risky.monospace.service.CalendarService;
 import com.risky.monospace.service.DialogService;
-import com.risky.monospace.service.subscribers.AlarmSubscriber;
-import com.risky.monospace.util.DTFormattertUtil;
+import com.risky.monospace.service.subscribers.CalendarSubscriber;
 
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.List;
 
-public class CalendarDialog extends MonoDialog {
+public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
     private CalendarView calendar;
     private Calendar checkpointDate;
+    private ListView eventList;
     private BroadcastReceiver timeReceiver;
+    private CalendarEventListAdapter adapter;
 
-    public CalendarDialog(@NonNull Context context, int themeResId, float dimAlpha) {
-        super(context, themeResId, dimAlpha);
+    public CalendarDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
+        super(context, themeResId, dimAlpha, isFullscreen);
     }
 
     @Override
@@ -43,9 +43,13 @@ public class CalendarDialog extends MonoDialog {
         super.onStop();
 
         getContext().unregisterReceiver(timeReceiver);
+        CalendarService.getInstance().unsubscribe(this);
 
         // Avoid mem leak
+        eventList.setAdapter(null);
+        adapter = null;
         calendar = null;
+        eventList = null;
     }
 
     @Override
@@ -56,6 +60,8 @@ public class CalendarDialog extends MonoDialog {
     @Override
     protected void initialize() {
         calendar = findViewById(R.id.calendar_view);
+        eventList = findViewById(R.id.calendar_event_list);
+        eventList.setEmptyView(findViewById(R.id.empty_view_list));
 
         Runnable clockRunner = () -> {
             Calendar current = Calendar.getInstance();
@@ -75,5 +81,17 @@ public class CalendarDialog extends MonoDialog {
         timeFilter.addAction(Intent.ACTION_TIME_TICK);
         timeReceiver = new TimeReceiver(clockRunner);
         getContext().registerReceiver(timeReceiver, timeFilter);
+
+        CalendarService.getInstance().subscribe(this);
+    }
+
+    @Override
+    public void update(List<CalendarEvent> events) {
+        if (isDestroyed) {
+            return;
+        }
+
+        adapter = new CalendarEventListAdapter(getContext(), events);
+        eventList.setAdapter(adapter);
     }
 }

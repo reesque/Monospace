@@ -94,6 +94,39 @@
         app:layout_constraintStart_toEndOf="@id/dow_fri"
         app:layout_constraintTop_toBottomOf="@id/header_top" />
 
+    <LinearLayout
+        android:id="@+id/notification_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/status_bar"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/dow_sat"
+        app:layout_constraintTop_toTopOf="@id/dow_sat"
+        app:layout_constraintStart_toEndOf="@id/dow_sat">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/notification_black"/>
+
+        <TextView
+            android:id="@+id/notification_count"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginStart="5dp"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/month_main"
         android:layout_width="wrap_content"
@@ -147,6 +180,7 @@
         app:layout_constraintStart_toEndOf="@id/time_main" />
 
     <LinearLayout
+        android:id="@+id/status_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -236,10 +270,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:layout_marginTop="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content_top" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_padding"

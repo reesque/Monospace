@@ -45,7 +45,7 @@ public class NotificationListAdapter extends ArrayAdapter<Notification> implemen
 
             ImageView icon = convertView.findViewById(R.id.notification_icon);
             icon.setImageDrawable(iconDrawable);
-            icon.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+            icon.setColorFilter(ContextCompat.getColor(getContext(), R.color.black));
         } catch (PackageManager.NameNotFoundException e) {
             // No need to handle. This application simply doesn't have an icon.
         }

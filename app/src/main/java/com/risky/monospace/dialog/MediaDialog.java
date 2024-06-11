@@ -1,10 +1,6 @@
 package com.risky.monospace.dialog;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,8 +21,8 @@ public class MediaDialog extends MonoDialog implements MediaSubscriber {
     private ImageView play;
     private ImageView next;
 
-    public MediaDialog(@NonNull Context context, int themeResId, float dimAlpha) {
-        super(context, themeResId, dimAlpha);
+    public MediaDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
+        super(context, themeResId, dimAlpha, isFullscreen);
     }
 
     @Override

@@ -34,11 +34,13 @@ import com.risky.monospace.gesture.HomeGestureListener;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
+import com.risky.monospace.model.Notification;
 import com.risky.monospace.receiver.AirpodReceiver;
 import com.risky.monospace.receiver.AlarmReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
+import com.risky.monospace.receiver.CalendarReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
 import com.risky.monospace.receiver.NotificationReceiver;
@@ -47,19 +49,23 @@ import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.LocationService;
 import com.risky.monospace.service.NetworkService;
+import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
+import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
 import com.risky.monospace.util.DTFormattertUtil;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
+        implements BatterySubscriber, NetworkSubscriber,BluetoothSubscriber,
+        LocationSubscriber, NotificationSubscriber {
     private static Runnable clockRunner;
     private ConstraintLayout mainPanel;
     private TextView month;
@@ -79,6 +85,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView network;
     private ImageView bluetooth;
     private ImageView location;
+    private TextView notificationCount;
     private LinearLayout contentFragment;
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
@@ -89,6 +96,7 @@ public class MainActivity extends AppCompatActivity
     private TimeReceiver timeReceiver;
     private AlarmReceiver alarmReceiver;
     private Intent notificationReceiver;
+    private CalendarReceiver calendarReceiver;
     private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -130,6 +138,7 @@ public class MainActivity extends AppCompatActivity
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
+        notificationCount = findViewById(R.id.notification_count);
 
         // ###  Clock control ###
         clockRunner = () -> {
@@ -173,16 +182,6 @@ public class MainActivity extends AppCompatActivity
         timeReceiver = new TimeReceiver(clockRunner);
         registerReceiver(timeReceiver, timeFilter);
 
-        month.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        dom.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        mon.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        tue.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        wed.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        thu.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        fri.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        sat.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        sun.setOnClickListener(v -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-
         IntentFilter alarmFilter = new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
         alarmReceiver = new AlarmReceiver(this);
         registerReceiver(alarmReceiver, alarmFilter);
@@ -199,13 +198,15 @@ public class MainActivity extends AppCompatActivity
             setBackgroundColor(true);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_slow_anim, R.anim.fade_out_slow_anim,
-                            R.anim.fade_in_slow_anim, R.anim.slide_out_slow_anim)
+                    .setCustomAnimations(R.anim.slide_bottom_in_slow_anim, R.anim.fade_out_slow_anim,
+                            R.anim.fade_in_slow_anim, R.anim.slide_bottom_out_slow_anim)
                     .replace(R.id.fragment_container, DrawerFragment.newInstance())
                     .addToBackStack(null)
                     .commit();
         }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
-            () -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
+            () -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)),
+            () -> DialogService.getInstance().show(this, DialogType.NOTIFICATION, null),
+            () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
@@ -247,6 +248,12 @@ public class MainActivity extends AppCompatActivity
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
         startService(notificationReceiver);
+        NotificationService.getInstance().subscribe(this);
+
+        // ### Read calendar ###
+        IntentFilter calendarFilter = new IntentFilter(Intent.ACTION_PROVIDER_CHANGED);
+        calendarReceiver = new CalendarReceiver(this);
+        registerReceiver(calendarReceiver, calendarFilter);
 
         // ### Back ###
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
@@ -306,12 +313,14 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(airpodReceiver);
         unregisterReceiver(timeReceiver);
         unregisterReceiver(alarmReceiver);
+        unregisterReceiver(calendarReceiver);
 
         stopService(notificationReceiver);
 
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+        NotificationService.getInstance().unsubscribe(this);
 
         mainPanel = null;
         month = null;
@@ -402,5 +411,10 @@ public class MainActivity extends AppCompatActivity
                 location.setImageResource(R.drawable.location_black);
                 break;
         }
+    }
+
+    @Override
+    public void update(List<Notification> notifications) {
+        notificationCount.setText(String.valueOf(notifications.size()));
     }
 }

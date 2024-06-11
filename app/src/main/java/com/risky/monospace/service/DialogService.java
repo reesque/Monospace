@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.risky.monospace.R;
 import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.CalendarDialog;
 import com.risky.monospace.dialog.DialogType;
@@ -41,22 +40,22 @@ public class DialogService {
         Dialog dialog = null;
         switch (type) {
             case AIRPOD:
-                dialog = new AirpodDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
+                dialog = new AirpodDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case MEDIA:
-                dialog = new MediaDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
+                dialog = new MediaDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case WEATHER:
-                dialog = new WeatherDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
+                dialog = new WeatherDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case NOTIFICATION:
-                dialog = new NotificationDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
+                dialog = new NotificationDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case SEARCH:
-                dialog = new SearchDialog(context, R.style.MonoDialogFade, type.dimAlpha);
+                dialog = new SearchDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case CALENDAR:
-                dialog = new CalendarDialog(context, R.style.MonoDialogSlide, type.dimAlpha);
+                dialog = new CalendarDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
         }
 

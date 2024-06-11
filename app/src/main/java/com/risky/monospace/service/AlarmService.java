@@ -3,8 +3,6 @@ package com.risky.monospace.service;
 import com.risky.monospace.model.Alarm;
 import com.risky.monospace.service.subscribers.AlarmSubscriber;
 
-import java.util.Calendar;
-
 public class AlarmService extends MonoService<AlarmSubscriber> {
     private static AlarmService instance;
     private Alarm currentAlarm;

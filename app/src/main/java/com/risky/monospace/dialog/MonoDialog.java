@@ -4,23 +4,23 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
-import com.risky.monospace.R;
-
 public abstract class MonoDialog extends Dialog {
     protected boolean isDestroyed = false;
     private final float dimAlpha;
+    private final boolean isFullscreen;
 
-    public MonoDialog(@NonNull Context context, int themeResId, float dimAlpha) {
+    public MonoDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
         super(context, themeResId);
 
         this.dimAlpha = dimAlpha;
+        this.isFullscreen = isFullscreen;
     }
 
     @Override
@@ -31,7 +31,17 @@ public abstract class MonoDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(layout());
         getWindow().setDimAmount(dimAlpha);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        if (isFullscreen) {
+            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        } else {
+            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
 
         initialize();
     }

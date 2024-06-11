@@ -1,25 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="355dp"
-    android:background="@drawable/dialog_bg_white"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <CalendarView
-        android:id="@+id/calendar_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/MonoCalendar"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/status_bar"
+            android:paddingBottom="15dp"/>
+
+        <!-- Prevent clicking different date -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="290dp"
+            app:layout_constraintBottom_toBottomOf="@id/calendar_view"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:layout_marginTop="10dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/widget_event_in_thirty"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+    <ListView
+        android:id="@+id/calendar_event_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="3sp"
+        android:listSelector="@drawable/white_list_selector"
+        android:scrollbars="none"
+        android:overScrollMode="always"/>
+
+    <TextView
+        android:id="@+id/empty_view_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/MonoCalendar"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <!-- Prevent clicking different date -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="290dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:gravity="center"
+        android:text="@string/widget_no_event"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</LinearLayout>

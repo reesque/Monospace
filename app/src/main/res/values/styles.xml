@@ -26,15 +26,36 @@
     </style>
 
     <style name="MonoDialogSlide" parent="@android:style/Theme.Dialog">
-        <item name="android:windowAnimationStyle">@style/MonoDialogSlideAnimation</item>
         <item name="android:textSelectHandle">@color/black</item>
         <item name="android:textSelectHandleLeft">@color/black</item>
         <item name="android:textSelectHandleRight">@color/black</item>
     </style>
 
-    <style name="MonoDialogSlideAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_fast_anim</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_fast_anim</item>
+    <style name="MonoDialogSlideBottom" parent="MonoDialogSlide">
+        <item name="android:windowAnimationStyle">@style/MonoDialogSlideBottomAnimation</item>
+    </style>
+
+    <style name="MonoDialogSlideBottomAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_bottom_in_fast_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom_out_fast_anim</item>
+    </style>
+
+    <style name="MonoDialogSlideStart" parent="MonoDialogSlide">
+        <item name="android:windowAnimationStyle">@style/MonoDialogSlideStartAnimation</item>
+    </style>
+
+    <style name="MonoDialogSlideStartAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_start_in_fast_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_start_out_fast_anim</item>
+    </style>
+
+    <style name="MonoDialogSlideEnd" parent="MonoDialogSlide">
+        <item name="android:windowAnimationStyle">@style/MonoDialogSlideEndAnimation</item>
+    </style>
+
+    <style name="MonoDialogSlideEndAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_end_in_fast_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_end_out_fast_anim</item>
     </style>
 
     <style name="MonoDialogFade" parent="@android:style/Theme.Dialog">

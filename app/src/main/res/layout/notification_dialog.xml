@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:background="@drawable/dialog_bg_white"
-    android:gravity="center"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -15,7 +14,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/notification" />
+            android:src="@drawable/notification_white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,7 +22,7 @@
             android:layout_marginStart="5dp"
             android:gravity="center_vertical"
             android:text="@string/widget_notif_header"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -37,12 +36,12 @@
                 android:id="@+id/notification_dismiss_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_bg_black"
+                android:background="@drawable/button_bg_white"
                 android:gravity="center"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="@string/widget_notif_clear"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -51,12 +50,13 @@
     <ListView
         android:id="@+id/notification_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="3sp"
-        android:listSelector="@drawable/notification_list_selector"
-        android:scrollbars="none" />
+        android:listSelector="@drawable/white_list_selector"
+        android:scrollbars="none"
+        android:overScrollMode="always"/>
 
     <TextView
         android:id="@+id/empty_view_list"
@@ -64,6 +64,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/widget_notif_no_new"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 </LinearLayout>

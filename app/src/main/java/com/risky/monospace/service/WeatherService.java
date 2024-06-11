@@ -16,7 +16,6 @@ import com.risky.monospace.model.GeoPosition;
 import com.risky.monospace.model.UpcomingWeatherState;
 import com.risky.monospace.model.WeatherCondition;
 import com.risky.monospace.model.WeatherForecast;
-import com.risky.monospace.model.WeatherState;
 import com.risky.monospace.service.subscribers.WeatherSubscriber;
 import com.risky.monospace.util.NetworkUtil;
 import com.risky.monospace.util.PermissionHelper;

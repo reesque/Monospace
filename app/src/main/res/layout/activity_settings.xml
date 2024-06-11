@@ -185,6 +185,42 @@
                     android:layout_marginTop="5dp"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/settings_calendar_header"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:text="@string/settings_calendar_desc"
+                    android:textColor="@color/gray"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/settings_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/capsule_bg_gray"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:text="@string/settings_permission_granted"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

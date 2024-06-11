@@ -25,6 +25,7 @@ public class SettingsActivity  extends AppCompatActivity {
     private TextView notificationRequestButton;
     private TextView drawOverAppsRequestButton;
     private TextView airpodRequestButton;
+    private TextView calendarRequestButton;
     private SwitchCompat tempUnit;
     private TextView weatherLocation;
     private TextView weatherLocateButton;
@@ -42,6 +43,7 @@ public class SettingsActivity  extends AppCompatActivity {
         notificationRequestButton = findViewById(R.id.settings_notification);
         drawOverAppsRequestButton = findViewById(R.id.settings_draw_over_apps);
         airpodRequestButton = findViewById(R.id.settings_airpod);
+        calendarRequestButton = findViewById(R.id.settings_calendar);
         tempUnit = findViewById(R.id.settings_weather_unit);
         weatherLocation = findViewById(R.id.settings_weather_location);
         weatherLocateButton = findViewById(R.id.settings_weather_locate);
@@ -70,6 +72,8 @@ public class SettingsActivity  extends AppCompatActivity {
                 () -> PermissionHelper.requestDrawOverApps(this));
         enablePermissionButton(airpodRequestButton, !PermissionHelper.checkAirpod(this),
                 () -> PermissionHelper.requestAirpod(this));
+        enablePermissionButton(calendarRequestButton, !PermissionHelper.checkCalendar(this),
+                () -> PermissionHelper.requestCalendar(this));
 
         // Weather
         SharedPreferences sharedPref = getSharedPreferences("settings", MODE_PRIVATE);
