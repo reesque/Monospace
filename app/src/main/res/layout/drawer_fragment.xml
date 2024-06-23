@@ -16,5 +16,6 @@
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
         android:smoothScrollbar="true"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:layout_gravity="center"/>
 </LinearLayout>

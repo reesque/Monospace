@@ -74,6 +74,9 @@ public class NotificationDialog extends MonoDialog implements NotificationSubscr
         notificationList.setEmptyView(findViewById(R.id.empty_view_list));
         dismissAllButton = findViewById(R.id.notification_dismiss_button);
 
+        findViewById(R.id.empty_view_list).setOnClickListener(v -> dismiss());
+        findViewById(R.id.dialog_pane).setOnClickListener(v -> dismiss());
+
         notificationList.setOnItemClickListener((parent, view, position, id)
                 -> ((Notification) parent.getItemAtPosition(position)).expand(getContext()));
 

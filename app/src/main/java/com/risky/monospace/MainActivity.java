@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber,BluetoothSubscriber,
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber,
         LocationSubscriber, NotificationSubscriber {
     private static Runnable clockRunner;
     private ConstraintLayout mainPanel;
@@ -283,6 +283,11 @@ public class MainActivity extends AppCompatActivity
         getOnBackPressedDispatcher().onBackPressed();
         DialogService.getInstance().dismissAll();
 
+        NetworkService.getInstance().unsubscribe(this);
+        BluetoothService.getInstance().unsubscribe(this);
+        LocationService.getInstance().unsubscribe(this);
+        NotificationService.getInstance().unsubscribe(this);
+
         super.onPause();
     }
 
@@ -297,6 +302,12 @@ public class MainActivity extends AppCompatActivity
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+
+        NetworkService.getInstance().subscribe(this);
+        BluetoothService.getInstance().subscribe(this);
+        LocationService.getInstance().subscribe(this);
+        NotificationService.getInstance().subscribe(this);
 
         WeatherService.getInstance(this).notifySubscriber();
     }

@@ -63,6 +63,9 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
         eventList = findViewById(R.id.calendar_event_list);
         eventList.setEmptyView(findViewById(R.id.empty_view_list));
 
+        findViewById(R.id.empty_view_list).setOnClickListener(v -> dismiss());
+        findViewById(R.id.dialog_pane).setOnClickListener(v -> dismiss());
+
         Runnable clockRunner = () -> {
             Calendar current = Calendar.getInstance();
             if (checkpointDate == null || checkpointDate.get(Calendar.YEAR) != current.get(Calendar.YEAR)

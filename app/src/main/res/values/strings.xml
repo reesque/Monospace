@@ -37,7 +37,6 @@
     <string name="widget_search_web">Search online</string>
     <string name="widget_event_no_desc">No description</string>
     <string name="widget_event_no_location">No location</string>
-    <string name="widget_event_in_thirty">Upcoming events in 30 days</string>
     <string name="widget_event_at">At</string>
 
     <string name="settings_header">Monospace Settings</string>
