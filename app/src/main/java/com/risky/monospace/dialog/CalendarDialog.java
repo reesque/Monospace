@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.risky.monospace.R;
 import com.risky.monospace.model.CalendarEvent;
 import com.risky.monospace.model.CalendarEventListAdapter;
+import com.risky.monospace.receiver.CalendarReceiver;
 import com.risky.monospace.receiver.TimeReceiver;
 import com.risky.monospace.service.CalendarService;
 import com.risky.monospace.service.DialogService;
@@ -25,6 +26,7 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
     private Calendar checkpointDate;
     private ListView eventList;
     private BroadcastReceiver timeReceiver;
+    private CalendarReceiver calendarReceiver;
     private CalendarEventListAdapter adapter;
 
     public CalendarDialog(@NonNull Context context, int themeResId, float dimAlpha, boolean isFullscreen) {
@@ -43,6 +45,7 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
         super.onStop();
 
         getContext().unregisterReceiver(timeReceiver);
+        getContext().unregisterReceiver(calendarReceiver);
         CalendarService.getInstance().unsubscribe(this);
 
         // Avoid mem leak
@@ -86,6 +89,11 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
         getContext().registerReceiver(timeReceiver, timeFilter);
 
         CalendarService.getInstance().subscribe(this);
+
+        // ### Read calendar ###
+        IntentFilter calendarFilter = new IntentFilter(Intent.ACTION_PROVIDER_CHANGED);
+        calendarReceiver = new CalendarReceiver(getContext());
+        getContext().registerReceiver(calendarReceiver, calendarFilter);
     }
 
     @Override

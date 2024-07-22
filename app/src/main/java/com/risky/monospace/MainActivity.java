@@ -34,7 +34,6 @@ import com.risky.monospace.gesture.HomeGestureListener;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
-import com.risky.monospace.model.Notification;
 import com.risky.monospace.receiver.AirpodReceiver;
 import com.risky.monospace.receiver.AlarmReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
@@ -64,8 +63,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber,
-        LocationSubscriber, NotificationSubscriber {
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
     private static Runnable clockRunner;
     private ConstraintLayout mainPanel;
     private TextView month;
@@ -85,7 +83,6 @@ public class MainActivity extends AppCompatActivity
     private ImageView network;
     private ImageView bluetooth;
     private ImageView location;
-    private TextView notificationCount;
     private LinearLayout contentFragment;
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity
     private TimeReceiver timeReceiver;
     private AlarmReceiver alarmReceiver;
     private Intent notificationReceiver;
-    private CalendarReceiver calendarReceiver;
     private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -138,7 +134,6 @@ public class MainActivity extends AppCompatActivity
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
-        notificationCount = findViewById(R.id.notification_count);
 
         // ###  Clock control ###
         clockRunner = () -> {
@@ -248,12 +243,6 @@ public class MainActivity extends AppCompatActivity
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
         startService(notificationReceiver);
-        NotificationService.getInstance().subscribe(this);
-
-        // ### Read calendar ###
-        IntentFilter calendarFilter = new IntentFilter(Intent.ACTION_PROVIDER_CHANGED);
-        calendarReceiver = new CalendarReceiver(this);
-        registerReceiver(calendarReceiver, calendarFilter);
 
         // ### Back ###
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
@@ -286,7 +275,6 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
-        NotificationService.getInstance().unsubscribe(this);
 
         super.onPause();
     }
@@ -307,7 +295,6 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().subscribe(this);
         BluetoothService.getInstance().subscribe(this);
         LocationService.getInstance().subscribe(this);
-        NotificationService.getInstance().subscribe(this);
 
         WeatherService.getInstance(this).notifySubscriber();
     }
@@ -324,14 +311,12 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(airpodReceiver);
         unregisterReceiver(timeReceiver);
         unregisterReceiver(alarmReceiver);
-        unregisterReceiver(calendarReceiver);
 
         stopService(notificationReceiver);
 
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
-        NotificationService.getInstance().unsubscribe(this);
 
         mainPanel = null;
         month = null;
@@ -422,10 +407,5 @@ public class MainActivity extends AppCompatActivity
                 location.setImageResource(R.drawable.location_black);
                 break;
         }
-    }
-
-    @Override
-    public void update(List<Notification> notifications) {
-        notificationCount.setText(String.valueOf(notifications.size()));
     }
 }
