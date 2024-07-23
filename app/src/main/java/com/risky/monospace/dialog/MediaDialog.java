@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.CornerFamily;
 import com.risky.monospace.R;
 import com.risky.monospace.model.Media;
 import com.risky.monospace.service.DialogService;
@@ -13,7 +15,7 @@ import com.risky.monospace.service.MediaService;
 import com.risky.monospace.service.subscribers.MediaSubscriber;
 
 public class MediaDialog extends MonoDialog implements MediaSubscriber {
-    private ImageView mediaArt;
+    private ShapeableImageView mediaArt;
     private TextView album;
     private TextView track;
     private TextView artist;

@@ -69,4 +69,9 @@
         <item name="android:windowEnterAnimation">@anim/fade_in_fast_anim</item>
         <item name="android:windowExitAnimation">@anim/fade_out_fast_anim</item>
     </style>
+
+    <style name="MonoMediaOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8%</item>
+    </style>
 </resources>
