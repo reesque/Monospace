@@ -117,15 +117,6 @@ public class GreetFragment extends Fragment
 
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD, null));
 
-        notifIcon.setOnClickListener(v -> {
-            if (!PermissionHelper.checkNotificationAccess()) {
-                PermissionHelper.requestNotificationAccess(getContext());
-                return;
-            }
-
-            DialogService.getInstance().show(getContext(), DialogType.NOTIFICATION, null);
-        });
-
         // Funny scrolling title
         track.setSelected(true);
 

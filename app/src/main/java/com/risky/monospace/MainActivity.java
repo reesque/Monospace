@@ -203,8 +203,6 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commit();
         }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
-            () -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)),
-            () -> DialogService.getInstance().show(this, DialogType.NOTIFICATION, null),
             () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));

@@ -62,7 +62,6 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
         return R.layout.calendar_dialog;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void initialize() {
         calendar = findViewById(R.id.calendar_view);
