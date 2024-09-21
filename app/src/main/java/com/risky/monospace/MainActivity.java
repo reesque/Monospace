@@ -5,9 +5,12 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -230,7 +234,12 @@ public class MainActivity extends AppCompatActivity
         // ### Read airpod ###
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
         airpodReceiver = new AirpodReceiver();
-        registerReceiver(airpodReceiver, airpodFilter);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(airpodReceiver, airpodFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(airpodReceiver, airpodFilter);
+        }
 
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
@@ -288,9 +297,13 @@ public class MainActivity extends AppCompatActivity
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
         NetworkService.getInstance().subscribe(this);
         BluetoothService.getInstance().subscribe(this);
