@@ -1,7 +1,5 @@
 package com.risky.monospace;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
@@ -12,6 +10,7 @@ import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,7 +21,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -30,11 +29,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.risky.monospace.dialog.DialogType;
-import com.risky.monospace.fragment.DrawerFragment;
 import com.risky.monospace.fragment.GreetFragment;
 import com.risky.monospace.gesture.HomeGestureListener;
+import com.risky.monospace.model.AppPackage;
+import com.risky.monospace.model.AppPagerAdapter;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
@@ -43,31 +48,31 @@ import com.risky.monospace.receiver.AlarmReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
-import com.risky.monospace.receiver.CalendarReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
 import com.risky.monospace.receiver.NotificationReceiver;
 import com.risky.monospace.receiver.TimeReceiver;
+import com.risky.monospace.service.AppPackageService;
 import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.LocationService;
 import com.risky.monospace.service.NetworkService;
-import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
-import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
 import com.risky.monospace.util.DTFormattertUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber, AppPackageSubscriber {
     private static Runnable clockRunner;
     private ConstraintLayout mainPanel;
     private TextView month;
@@ -88,6 +93,12 @@ public class MainActivity extends AppCompatActivity
     private ImageView bluetooth;
     private ImageView location;
     private LinearLayout contentFragment;
+    private ConstraintLayout drawer;
+    private BottomSheetBehavior<View> bsb;
+    private AppPagerAdapter appAdapter;
+    private TabLayout appPageIndicator;
+    private ViewPager2 appList;
+    private TabLayoutMediator tabLayoutMediator;
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
     private NetworkStateMonitor networkMonitor;
@@ -97,7 +108,6 @@ public class MainActivity extends AppCompatActivity
     private TimeReceiver timeReceiver;
     private AlarmReceiver alarmReceiver;
     private Intent notificationReceiver;
-    private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -138,6 +148,9 @@ public class MainActivity extends AppCompatActivity
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
+        drawer = findViewById(R.id.drawer);
+        appList = findViewById(R.id.app_page);
+        appPageIndicator = findViewById(R.id.app_page_indicator);
 
         // ###  Clock control ###
         clockRunner = () -> {
@@ -191,22 +204,6 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, GreetFragment.newInstance())
                 .commit();
 
-        // ### Content fragment ###
-        HomeGestureListener homeGestureListener = new HomeGestureListener(() -> {
-            isHome = false;
-            setBackgroundColor(true);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_bottom_in_slow_anim, R.anim.fade_out_slow_anim,
-                            R.anim.fade_in_slow_anim, R.anim.slide_bottom_out_slow_anim)
-                    .replace(R.id.fragment_container, DrawerFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
-        }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
-            () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
-        contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
-
         // ### Read network ###
         networkMonitor = new NetworkStateMonitor(this);
         networkMonitor.register();
@@ -247,27 +244,58 @@ public class MainActivity extends AppCompatActivity
         appPackageReceiver = new AppPackageReceiver(this);
         registerReceiver(appPackageReceiver, appPackageFilter);
 
+        // ### App list ###
+        AppPackageService.getInstance(this).subscribe(this);
+
+        bsb = BottomSheetBehavior.from(drawer);
+        bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        drawer.setAlpha(0);
+        bsb.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        appList.setVisibility(View.GONE);
+                        appList.setCurrentItem(0, false);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        appList.setVisibility(View.VISIBLE);
+                        contentFragment.setVisibility(View.GONE);
+                        break;
+                    default:
+                        appList.setVisibility(View.VISIBLE);
+                        contentFragment.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                contentFragment.setAlpha(1 - slideOffset);
+                bottomSheet.setAlpha(slideOffset);
+
+                mainPanel.setBackgroundColor(Color.valueOf(0.165f, 0.165f, 0.165f,
+                        (1 - slideOffset) * 0.6f + slideOffset * 0.933f).toArgb());
+            }
+        });
+        HomeGestureListener homeGestureListener = new HomeGestureListener(
+                () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
+                () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+        GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
+        drawer.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
         startService(notificationReceiver);
 
         // ### Back ###
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (!isHome && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                isHome = true;
-                setBackgroundColor(false);
-                getSupportFragmentManager().popBackStack();
-            }
+            bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (!isHome) {
-                    isHome = true;
-                    setBackgroundColor(false);
-                    getSupportFragmentManager().popBackStack();
-                }
+                bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         };
 
@@ -282,6 +310,7 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(this).unsubscribe(this);
 
         super.onPause();
     }
@@ -328,6 +357,7 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(this).unsubscribe(this);
 
         mainPanel = null;
         month = null;
@@ -348,22 +378,10 @@ public class MainActivity extends AppCompatActivity
         bluetooth = null;
         location = null;
         contentFragment = null;
-    }
 
-    private void setBackgroundColor(boolean reversed) {
-        int colorMain = ContextCompat.getColor(MainActivity.this, R.color.bg_black_blur);
-        int colorSub = ContextCompat.getColor(MainActivity.this, R.color.bg_dark_black_blur);
-
-        ValueAnimator colorAnimation;
-        if (reversed) {
-            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorMain, colorSub);
-        } else {
-            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
-        }
-        colorAnimation.setDuration(300); // milliseconds
-        colorAnimation.addUpdateListener(animator ->
-                mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
-        colorAnimation.start();
+        appList.setAdapter(null);
+        appAdapter = null;
+        appList = null;
     }
 
     @SuppressLint("DefaultLocale")
@@ -418,5 +436,40 @@ public class MainActivity extends AppCompatActivity
                 location.setImageResource(R.drawable.location_black);
                 break;
         }
+    }
+
+    @Override
+    public void update(List<AppPackage> packages) {
+        appAdapter = new AppPagerAdapter(this, createPages(packages));
+        appList.setAdapter(appAdapter);
+
+        // Makes the bottom sheet works
+        RecyclerView innerRecyclerView = (RecyclerView) appList.getChildAt(0);
+        if (innerRecyclerView != null) {
+            innerRecyclerView.setNestedScrollingEnabled(false);
+            innerRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        }
+
+        if (tabLayoutMediator != null && tabLayoutMediator.isAttached()) {
+            tabLayoutMediator.detach();
+        }
+        tabLayoutMediator = new TabLayoutMediator(appPageIndicator, appList, ((tab, position) -> {}));
+        tabLayoutMediator.attach();
+    }
+
+    private List<List<AppPackage>> createPages(List<AppPackage> items) {
+        List<List<AppPackage>> pages = new ArrayList<>();
+
+        // Get the screen height in pixels
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenHeightInDp = displayMetrics.heightPixels / displayMetrics.density;
+
+        int pageSize = ((int) (4 * (screenHeightInDp / 170)) + 2) / 4 * 4;
+
+        for (int i = 0; i < items.size(); i += pageSize) {
+            int end = Math.min(i + pageSize, items.size());
+            pages.add(items.subList(i, end));
+        }
+        return pages;
     }
 }
