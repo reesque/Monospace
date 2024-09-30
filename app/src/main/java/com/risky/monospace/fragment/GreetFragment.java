@@ -177,7 +177,7 @@ public class GreetFragment extends Fragment
                 Resources res = getContext().getPackageManager()
                         .getResourcesForApplication(n.packageName);
                 icon = ResourcesCompat.getDrawable(res, n.icon, null);
-            } catch (PackageManager.NameNotFoundException e) {
+            } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
                 continue;
             }
 

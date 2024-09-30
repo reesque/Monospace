@@ -198,6 +198,18 @@ public class MainActivity extends AppCompatActivity
         alarmReceiver = new AlarmReceiver(this);
         registerReceiver(alarmReceiver, alarmFilter);
 
+        month.setOnClickListener(v -> calendarPopup());
+        dom.setOnClickListener(v -> calendarPopup());
+        time.setOnClickListener(v -> calendarPopup());
+        mer.setOnClickListener(v -> calendarPopup());
+        sun.setOnClickListener(v -> calendarPopup());
+        mon.setOnClickListener(v -> calendarPopup());
+        tue.setOnClickListener(v -> calendarPopup());
+        wed.setOnClickListener(v -> calendarPopup());
+        thu.setOnClickListener(v -> calendarPopup());
+        fri.setOnClickListener(v -> calendarPopup());
+        sat.setOnClickListener(v -> calendarPopup());
+
         // ### Greeter ###
         getSupportFragmentManager()
                 .beginTransaction()
@@ -249,6 +261,7 @@ public class MainActivity extends AppCompatActivity
 
         bsb = BottomSheetBehavior.from(drawer);
         bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        appList.setVisibility(View.GONE);
         drawer.setAlpha(0);
         bsb.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -278,8 +291,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         HomeGestureListener homeGestureListener = new HomeGestureListener(
-                () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
-                () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
+                () -> DialogService.getInstance().show(this, DialogType.SEARCH, null));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
         drawer.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
@@ -455,6 +467,10 @@ public class MainActivity extends AppCompatActivity
         }
         tabLayoutMediator = new TabLayoutMediator(appPageIndicator, appList, ((tab, position) -> {}));
         tabLayoutMediator.attach();
+    }
+
+    private void calendarPopup() {
+        DialogService.getInstance().show(this, DialogType.CALENDAR, null);
     }
 
     private List<List<AppPackage>> createPages(List<AppPackage> items) {
