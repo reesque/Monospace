@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,6 +25,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -93,7 +95,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView bluetooth;
     private ImageView location;
     private LinearLayout contentFragment;
-    private ConstraintLayout drawer;
+    private ConstraintLayout drawerLayout;
+    private CoordinatorLayout drawerContainer;
     private BottomSheetBehavior<View> bsb;
     private AppPagerAdapter appAdapter;
     private TabLayout appPageIndicator;
@@ -148,7 +151,8 @@ public class MainActivity extends AppCompatActivity
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
         contentFragment = findViewById(R.id.fragment_container);
-        drawer = findViewById(R.id.drawer);
+        drawerLayout = findViewById(R.id.drawer);
+        drawerContainer = findViewById(R.id.drawer_container);
         appList = findViewById(R.id.app_page);
         appPageIndicator = findViewById(R.id.app_page_indicator);
 
@@ -219,19 +223,16 @@ public class MainActivity extends AppCompatActivity
         // ### Read network ###
         networkMonitor = new NetworkStateMonitor(this);
         networkMonitor.register();
-        NetworkService.getInstance().subscribe(MainActivity.this);
 
         // ### Read bluetooth ###
         IntentFilter bluetoothFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, bluetoothFilter);
-        BluetoothService.getInstance().subscribe(MainActivity.this);
 
         // ### Read location ###
         IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         locationReceiver = new LocationReceiver(this);
         registerReceiver(locationReceiver, locationFilter);
-        LocationService.getInstance().subscribe(MainActivity.this);
 
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -257,12 +258,10 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(appPackageReceiver, appPackageFilter);
 
         // ### App list ###
-        AppPackageService.getInstance(this).subscribe(this);
-
-        bsb = BottomSheetBehavior.from(drawer);
+        bsb = BottomSheetBehavior.from(drawerLayout);
         bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
         appList.setVisibility(View.GONE);
-        drawer.setAlpha(0);
+        drawerLayout.setAlpha(0);
         bsb.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -293,7 +292,8 @@ public class MainActivity extends AppCompatActivity
         HomeGestureListener homeGestureListener = new HomeGestureListener(
                 () -> DialogService.getInstance().show(this, DialogType.SEARCH, null));
         GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
-        drawer.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        drawerLayout.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        drawerContainer.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().subscribe(this);
         BluetoothService.getInstance().subscribe(this);
         LocationService.getInstance().subscribe(this);
+        AppPackageService.getInstance(this).subscribe(this);
 
         WeatherService.getInstance(this).notifySubscriber();
     }

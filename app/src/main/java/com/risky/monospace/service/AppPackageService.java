@@ -79,7 +79,6 @@ public class AppPackageService extends MonoService<AppPackageSubscriber> {
         }
 
         refresh(context);
-        notifySubscriber();
         Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show();
 
         // Do this in the background while front ground is updated with the change

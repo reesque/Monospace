@@ -56,6 +56,8 @@ public class AppPagerAdapter extends RecyclerView.Adapter<AppPagerAdapter.PageVi
         return pages.size();
     }
 
+
+
     static class PageViewHolder extends RecyclerView.ViewHolder {
         public PageViewHolder(View itemView) {
             super(itemView);
