@@ -1,19 +1,20 @@
 package com.risky.monospace;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,11 +27,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.risky.monospace.dialog.DialogType;
-import com.risky.monospace.fragment.DrawerFragment;
-import com.risky.monospace.fragment.GreetFragment;
 import com.risky.monospace.gesture.HomeGestureListener;
+import com.risky.monospace.model.AppPackage;
+import com.risky.monospace.model.ContentPagerAdapter;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
@@ -39,31 +42,31 @@ import com.risky.monospace.receiver.AlarmReceiver;
 import com.risky.monospace.receiver.AppPackageReceiver;
 import com.risky.monospace.receiver.BatteryReceiver;
 import com.risky.monospace.receiver.BluetoothReceiver;
-import com.risky.monospace.receiver.CalendarReceiver;
 import com.risky.monospace.receiver.LocationReceiver;
 import com.risky.monospace.receiver.NetworkStateMonitor;
 import com.risky.monospace.receiver.NotificationReceiver;
 import com.risky.monospace.receiver.TimeReceiver;
+import com.risky.monospace.service.AppPackageService;
 import com.risky.monospace.service.BluetoothService;
 import com.risky.monospace.service.DialogService;
 import com.risky.monospace.service.LocationService;
 import com.risky.monospace.service.NetworkService;
-import com.risky.monospace.service.NotificationService;
 import com.risky.monospace.service.WeatherService;
+import com.risky.monospace.service.subscribers.AppPackageSubscriber;
 import com.risky.monospace.service.subscribers.BatterySubscriber;
 import com.risky.monospace.service.subscribers.BluetoothSubscriber;
 import com.risky.monospace.service.subscribers.LocationSubscriber;
 import com.risky.monospace.service.subscribers.NetworkSubscriber;
-import com.risky.monospace.service.subscribers.NotificationSubscriber;
 import com.risky.monospace.util.AirpodBroadcastParam;
 import com.risky.monospace.util.DTFormattertUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber {
+        implements BatterySubscriber, NetworkSubscriber, BluetoothSubscriber, LocationSubscriber, AppPackageSubscriber {
     private static Runnable clockRunner;
     private ConstraintLayout mainPanel;
     private TextView month;
@@ -83,7 +86,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView network;
     private ImageView bluetooth;
     private ImageView location;
-    private LinearLayout contentFragment;
+    private ContentPagerAdapter appAdapter;
+    private ViewPager2 contentView;
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
     private NetworkStateMonitor networkMonitor;
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity
     private TimeReceiver timeReceiver;
     private AlarmReceiver alarmReceiver;
     private Intent notificationReceiver;
-    private boolean isHome = true;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -133,7 +136,9 @@ public class MainActivity extends AppCompatActivity
         network = findViewById(R.id.network_main);
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
-        contentFragment = findViewById(R.id.fragment_container);
+        contentView = findViewById(R.id.app_page);
+
+        contentView.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         // ###  Clock control ###
         clockRunner = () -> {
@@ -181,46 +186,31 @@ public class MainActivity extends AppCompatActivity
         alarmReceiver = new AlarmReceiver(this);
         registerReceiver(alarmReceiver, alarmFilter);
 
-        // ### Greeter ###
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, GreetFragment.newInstance())
-                .commit();
-
-        // ### Content fragment ###
-        HomeGestureListener homeGestureListener = new HomeGestureListener(() -> {
-            isHome = false;
-            setBackgroundColor(true);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_bottom_in_slow_anim, R.anim.fade_out_slow_anim,
-                            R.anim.fade_in_slow_anim, R.anim.slide_bottom_out_slow_anim)
-                    .replace(R.id.fragment_container, DrawerFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
-        }, () -> DialogService.getInstance().show(this, DialogType.SEARCH, null),
-            () -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)),
-            () -> DialogService.getInstance().show(this, DialogType.NOTIFICATION, null),
-            () -> DialogService.getInstance().show(this, DialogType.CALENDAR, null));
-        GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
-        contentFragment.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        month.setOnClickListener(v -> calendarPopup());
+        dom.setOnClickListener(v -> calendarPopup());
+        time.setOnClickListener(v -> calendarPopup());
+        mer.setOnClickListener(v -> calendarPopup());
+        sun.setOnClickListener(v -> calendarPopup());
+        mon.setOnClickListener(v -> calendarPopup());
+        tue.setOnClickListener(v -> calendarPopup());
+        wed.setOnClickListener(v -> calendarPopup());
+        thu.setOnClickListener(v -> calendarPopup());
+        fri.setOnClickListener(v -> calendarPopup());
+        sat.setOnClickListener(v -> calendarPopup());
 
         // ### Read network ###
         networkMonitor = new NetworkStateMonitor(this);
         networkMonitor.register();
-        NetworkService.getInstance().subscribe(MainActivity.this);
 
         // ### Read bluetooth ###
         IntentFilter bluetoothFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, bluetoothFilter);
-        BluetoothService.getInstance().subscribe(MainActivity.this);
 
         // ### Read location ###
         IntentFilter locationFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         locationReceiver = new LocationReceiver(this);
         registerReceiver(locationReceiver, locationFilter);
-        LocationService.getInstance().subscribe(MainActivity.this);
 
         // ### Read battery ###
         IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -230,37 +220,42 @@ public class MainActivity extends AppCompatActivity
         // ### Read airpod ###
         IntentFilter airpodFilter = new IntentFilter(AirpodBroadcastParam.ACTION_STATUS);
         airpodReceiver = new AirpodReceiver();
-        registerReceiver(airpodReceiver, airpodFilter);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(airpodReceiver, airpodFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(airpodReceiver, airpodFilter);
+        }
 
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
-        appPackageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        appPackageFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        appPackageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         appPackageFilter.addDataScheme("package");
         appPackageReceiver = new AppPackageReceiver(this);
         registerReceiver(appPackageReceiver, appPackageFilter);
+
+        // ### Content View ###
+        contentView.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+                if (position == 0) {
+                    float scrollPercentage = position + positionOffset;
+                    mainPanel.setBackgroundColor(Color.valueOf(0.165f, 0.165f, 0.165f,
+                            (1 - scrollPercentage) * 0.6f + scrollPercentage * 0.933f).toArgb());
+                }
+            }
+        });
 
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
         startService(notificationReceiver);
 
         // ### Back ###
-        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (!isHome && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                isHome = true;
-                setBackgroundColor(false);
-                getSupportFragmentManager().popBackStack();
-            }
-        });
-
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (!isHome) {
-                    isHome = true;
-                    setBackgroundColor(false);
-                    getSupportFragmentManager().popBackStack();
-                }
             }
         };
 
@@ -275,6 +270,7 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(this).unsubscribe(this);
 
         super.onPause();
     }
@@ -288,13 +284,18 @@ public class MainActivity extends AppCompatActivity
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
         NetworkService.getInstance().subscribe(this);
         BluetoothService.getInstance().subscribe(this);
         LocationService.getInstance().subscribe(this);
+        AppPackageService.getInstance(this).subscribe(this);
 
         WeatherService.getInstance(this).notifySubscriber();
     }
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity
         NetworkService.getInstance().unsubscribe(this);
         BluetoothService.getInstance().unsubscribe(this);
         LocationService.getInstance().unsubscribe(this);
+        AppPackageService.getInstance(this).unsubscribe(this);
 
         mainPanel = null;
         month = null;
@@ -336,23 +338,10 @@ public class MainActivity extends AppCompatActivity
         network = null;
         bluetooth = null;
         location = null;
-        contentFragment = null;
-    }
 
-    private void setBackgroundColor(boolean reversed) {
-        int colorMain = ContextCompat.getColor(MainActivity.this, R.color.bg_black_blur);
-        int colorSub = ContextCompat.getColor(MainActivity.this, R.color.bg_dark_black_blur);
-
-        ValueAnimator colorAnimation;
-        if (reversed) {
-            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorMain, colorSub);
-        } else {
-            colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorSub, colorMain);
-        }
-        colorAnimation.setDuration(300); // milliseconds
-        colorAnimation.addUpdateListener(animator ->
-                mainPanel.setBackgroundColor((int) animator.getAnimatedValue()));
-        colorAnimation.start();
+        contentView.setAdapter(null);
+        appAdapter = null;
+        contentView = null;
     }
 
     @SuppressLint("DefaultLocale")
@@ -407,5 +396,38 @@ public class MainActivity extends AppCompatActivity
                 location.setImageResource(R.drawable.location_black);
                 break;
         }
+    }
+
+    @Override
+    public void update(List<AppPackage> packages) {
+        appAdapter = new ContentPagerAdapter(this, createPages(packages));
+        contentView.setAdapter(appAdapter);
+
+        // Makes the bottom sheet works
+        RecyclerView innerRecyclerView = (RecyclerView) contentView.getChildAt(0);
+        if (innerRecyclerView != null) {
+            innerRecyclerView.setNestedScrollingEnabled(false);
+            innerRecyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        }
+    }
+
+    private void calendarPopup() {
+        DialogService.getInstance().show(this, DialogType.CALENDAR, null);
+    }
+
+    private List<List<AppPackage>> createPages(List<AppPackage> items) {
+        List<List<AppPackage>> pages = new ArrayList<>();
+
+        // Get the screen height in pixels
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenHeightInDp = displayMetrics.heightPixels / displayMetrics.density;
+
+        int pageSize = ((int) (4 * (screenHeightInDp / 170)) + 2) / 4 * 4;
+
+        for (int i = 0; i < items.size(); i += pageSize) {
+            int end = Math.min(i + pageSize, items.size());
+            pages.add(items.subList(i, end));
+        }
+        return pages;
     }
 }

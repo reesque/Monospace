@@ -11,7 +11,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/app_icon"
-            android:layout_width="54dp"
+            android:layout_width="55dp"
             android:layout_height="55dp"
             android:src="@drawable/round_white"
             app:layout_constraintEnd_toEndOf="parent"

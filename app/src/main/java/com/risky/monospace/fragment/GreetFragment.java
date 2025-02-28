@@ -117,15 +117,6 @@ public class GreetFragment extends Fragment
 
         airpodIcon.setOnClickListener(v -> DialogService.getInstance().show(getContext(), DialogType.AIRPOD, null));
 
-        notifIcon.setOnClickListener(v -> {
-            if (!PermissionHelper.checkNotificationAccess()) {
-                PermissionHelper.requestNotificationAccess(getContext());
-                return;
-            }
-
-            DialogService.getInstance().show(getContext(), DialogType.NOTIFICATION, null);
-        });
-
         // Funny scrolling title
         track.setSelected(true);
 
@@ -186,7 +177,7 @@ public class GreetFragment extends Fragment
                 Resources res = getContext().getPackageManager()
                         .getResourcesForApplication(n.packageName);
                 icon = ResourcesCompat.getDrawable(res, n.icon, null);
-            } catch (PackageManager.NameNotFoundException e) {
+            } catch (PackageManager.NameNotFoundException | Resources.NotFoundException e) {
                 continue;
             }
 

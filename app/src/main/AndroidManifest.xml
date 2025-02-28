@@ -50,16 +50,22 @@
             android:name=".SettingsActivity"
             android:enabled="true"
             android:excludeFromRecents="true"
-            android:exported="false"
+            android:exported="true"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:icon="@mipmap/ic_launcher">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <receiver
             android:name=".receiver.AppPackageReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <data android:scheme="package" />

@@ -8,9 +8,7 @@ public enum DialogType {
     MEDIA(false, false, Gravity.BOTTOM, 0.7f, R.style.MonoDialogSlideBottom),
     AIRPOD(true, false, Gravity.BOTTOM, 0.7f, R.style.MonoDialogSlideBottom),
     WEATHER(false, false, Gravity.BOTTOM, 0.7f, R.style.MonoDialogSlideBottom),
-    NOTIFICATION(false, true, Gravity.TOP, 0.95f, R.style.MonoDialogSlideStart),
-    SEARCH(false, false, Gravity.TOP, 0.95f, R.style.MonoDialogFade),
-    CALENDAR(false, true, Gravity.TOP, 0.95f, R.style.MonoDialogSlideEnd);
+    CALENDAR(false, true, Gravity.TOP, 0.95f, R.style.MonoDialogFade);
 
     public final boolean shouldDrawOver;
     public final boolean shouldFullscreen;

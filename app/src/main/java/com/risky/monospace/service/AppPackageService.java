@@ -78,13 +78,12 @@ public class AppPackageService extends MonoService<AppPackageSubscriber> {
                     context.getText(R.string.toast_to_fav));
         }
 
-        refresh(context);
-        notifySubscriber();
         Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show();
 
         // Do this in the background while front ground is updated with the change
         context.getSharedPreferences("apps", MODE_PRIVATE)
                 .edit().putStringSet("favorite_app", favList).apply();
+        refresh(context);
     }
 
     @Override

@@ -23,28 +23,7 @@ import com.risky.monospace.service.NotificationService;
 import java.util.List;
 
 public class NotificationReceiver extends NotificationListenerService {
-    public static final String NOTIFICATION_DISMISS_ACTION = "com.risky.dismiss_notification";
-    public static final String NOTIFICATION_DISMISS_ALL_ACTION = "com.risky.dismiss_all_notification";
-    public static final String EXTRA_NOTIFICATION_KEY = "notification_key";
     private static boolean isPermissionGranted = false;
-    private final BroadcastReceiver internalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null) {
-                switch (action) {
-                    case NOTIFICATION_DISMISS_ACTION:
-                        String notificationKey = intent.getStringExtra(EXTRA_NOTIFICATION_KEY);
-                        cancelNotification(notificationKey);
-                        break;
-                    case NOTIFICATION_DISMISS_ALL_ACTION:
-                        cancelAllNotifications();
-                        break;
-                }
-            }
-        }
-    };
-
     public static boolean checkPermission() {
         return isPermissionGranted;
     }
@@ -53,17 +32,6 @@ public class NotificationReceiver extends NotificationListenerService {
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
-
-        // Register the broadcast receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(NOTIFICATION_DISMISS_ACTION);
-        filter.addAction(NOTIFICATION_DISMISS_ALL_ACTION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(internalReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
-        } else {
-            registerReceiver(internalReceiver, filter);
-        }
-
         isPermissionGranted = true;
 
         mediaUpdate();
@@ -80,7 +48,6 @@ public class NotificationReceiver extends NotificationListenerService {
     @Override
     public void onListenerDisconnected() {
         super.onListenerDisconnected();
-        unregisterReceiver(internalReceiver);
 
         isPermissionGranted = false;
     }
@@ -134,12 +101,7 @@ public class NotificationReceiver extends NotificationListenerService {
     }
 
     private Notification notificationBuilder(StatusBarNotification sbn) {
-        String title = sbn.getNotification().extras.get(android.app.Notification.EXTRA_TITLE) == null ? "" :
-                        sbn.getNotification().extras.get(android.app.Notification.EXTRA_TITLE).toString();
-        String desc = sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT) == null ? "" :
-                sbn.getNotification().extras.get(android.app.Notification.EXTRA_TEXT).toString();
-
-        return new Notification(sbn.getNotification().getSmallIcon().getResId(), sbn.getPackageName(), title, desc,
-                sbn.getNotification().contentIntent, sbn.getKey());
+        return new Notification(sbn.getNotification().getSmallIcon().getResId(),
+                sbn.getPackageName(), sbn.getKey());
     }
 }

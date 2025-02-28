@@ -232,16 +232,19 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/fragment_container"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/app_page"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:layout_marginTop="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_bar" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar"
+        android:orientation="vertical"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:focusable="false"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_padding"
@@ -262,6 +265,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30" />
+        app:layout_constraintGuide_begin="219dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

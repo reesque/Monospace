@@ -4,10 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.risky.monospace.R;
 import com.risky.monospace.model.CalendarEvent;
@@ -93,7 +95,11 @@ public class CalendarDialog extends MonoDialog implements CalendarSubscriber {
         // ### Read calendar ###
         IntentFilter calendarFilter = new IntentFilter(Intent.ACTION_PROVIDER_CHANGED);
         calendarReceiver = new CalendarReceiver(getContext());
-        getContext().registerReceiver(calendarReceiver, calendarFilter);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getContext().registerReceiver(calendarReceiver, calendarFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getContext().registerReceiver(calendarReceiver, calendarFilter);
+        }
     }
 
     @Override

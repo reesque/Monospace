@@ -13,8 +13,8 @@
         android:layout_marginEnd="10dp"
         android:columnWidth="95dp"
         android:divider="@null"
-        android:horizontalSpacing="5dp"
-        android:numColumns="auto_fit"
+        android:horizontalSpacing="6dp"
+        android:numColumns="4"
         android:smoothScrollbar="true"
         android:scrollbars="none"
         android:layout_gravity="center"/>
