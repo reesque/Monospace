@@ -251,8 +251,7 @@ public class MainActivity extends AppCompatActivity
 
         // ### Read installed apps ###
         IntentFilter appPackageFilter = new IntentFilter();
-        appPackageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        appPackageFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        appPackageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         appPackageFilter.addDataScheme("package");
         appPackageReceiver = new AppPackageReceiver(this);
         registerReceiver(appPackageReceiver, appPackageFilter);

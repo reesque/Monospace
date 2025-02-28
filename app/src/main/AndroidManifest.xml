@@ -65,8 +65,7 @@
             android:name=".receiver.AppPackageReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <data android:scheme="package" />
