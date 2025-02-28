@@ -9,7 +9,6 @@ import com.risky.monospace.dialog.AirpodDialog;
 import com.risky.monospace.dialog.CalendarDialog;
 import com.risky.monospace.dialog.DialogType;
 import com.risky.monospace.dialog.MediaDialog;
-import com.risky.monospace.dialog.SearchDialog;
 import com.risky.monospace.dialog.WeatherDialog;
 import com.risky.monospace.util.PermissionHelper;
 
@@ -46,9 +45,6 @@ public class DialogService {
                 break;
             case WEATHER:
                 dialog = new WeatherDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
-                break;
-            case SEARCH:
-                dialog = new SearchDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);
                 break;
             case CALENDAR:
                 dialog = new CalendarDialog(context, type.theme, type.dimAlpha, type.shouldFullscreen);

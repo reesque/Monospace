@@ -232,49 +232,8 @@
 
     </LinearLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/drawer_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_bar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/app_page"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"/>
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/app_page_indicator"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                app:tabGravity="center"
-                app:tabMode="scrollable"
-                app:tabIndicator="@android:color/transparent"
-                app:tabBackground="@drawable/app_tab_selector"
-                app:tabMaxWidth="12dp"
-                app:tabMinWidth="12dp"
-                app:tabIndicatorFullWidth="false"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@id/drawer"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:id="@+id/fragment_container"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/app_page"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="25dp"

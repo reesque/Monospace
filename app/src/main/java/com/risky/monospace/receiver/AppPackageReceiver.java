@@ -15,7 +15,6 @@ public class AppPackageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_CHANGED)) {
-            Log.d("TEST", " " + intent.getAction());
             AppPackageService.getInstance(context).refresh(context);
         }
     }

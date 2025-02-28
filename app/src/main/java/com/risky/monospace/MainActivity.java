@@ -11,21 +11,17 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,14 +30,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.risky.monospace.dialog.DialogType;
-import com.risky.monospace.fragment.GreetFragment;
 import com.risky.monospace.gesture.HomeGestureListener;
 import com.risky.monospace.model.AppPackage;
-import com.risky.monospace.model.AppPagerAdapter;
+import com.risky.monospace.model.ContentPagerAdapter;
 import com.risky.monospace.model.BluetoothStatus;
 import com.risky.monospace.model.LocationStatus;
 import com.risky.monospace.model.NetworkStatus;
@@ -94,14 +86,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView network;
     private ImageView bluetooth;
     private ImageView location;
-    private LinearLayout contentFragment;
-    private ConstraintLayout drawerLayout;
-    private CoordinatorLayout drawerContainer;
-    private BottomSheetBehavior<View> bsb;
-    private AppPagerAdapter appAdapter;
-    private TabLayout appPageIndicator;
-    private ViewPager2 appList;
-    private TabLayoutMediator tabLayoutMediator;
+    private ContentPagerAdapter appAdapter;
+    private ViewPager2 contentView;
     private BatteryReceiver batteryReceiver;
     private AppPackageReceiver appPackageReceiver;
     private NetworkStateMonitor networkMonitor;
@@ -150,11 +136,9 @@ public class MainActivity extends AppCompatActivity
         network = findViewById(R.id.network_main);
         bluetooth = findViewById(R.id.bluetooth_main);
         location = findViewById(R.id.location_main);
-        contentFragment = findViewById(R.id.fragment_container);
-        drawerLayout = findViewById(R.id.drawer);
-        drawerContainer = findViewById(R.id.drawer_container);
-        appList = findViewById(R.id.app_page);
-        appPageIndicator = findViewById(R.id.app_page_indicator);
+        contentView = findViewById(R.id.app_page);
+
+        contentView.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         // ###  Clock control ###
         clockRunner = () -> {
@@ -214,12 +198,6 @@ public class MainActivity extends AppCompatActivity
         fri.setOnClickListener(v -> calendarPopup());
         sat.setOnClickListener(v -> calendarPopup());
 
-        // ### Greeter ###
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, GreetFragment.newInstance())
-                .commit();
-
         // ### Read network ###
         networkMonitor = new NetworkStateMonitor(this);
         networkMonitor.register();
@@ -256,57 +234,28 @@ public class MainActivity extends AppCompatActivity
         appPackageReceiver = new AppPackageReceiver(this);
         registerReceiver(appPackageReceiver, appPackageFilter);
 
-        // ### App list ###
-        bsb = BottomSheetBehavior.from(drawerLayout);
-        bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        appList.setVisibility(View.GONE);
-        drawerLayout.setAlpha(0);
-        bsb.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        // ### Content View ###
+        contentView.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        appList.setVisibility(View.GONE);
-                        appList.setCurrentItem(0, false);
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        appList.setVisibility(View.VISIBLE);
-                        contentFragment.setVisibility(View.GONE);
-                        break;
-                    default:
-                        appList.setVisibility(View.VISIBLE);
-                        contentFragment.setVisibility(View.VISIBLE);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+                if (position == 0) {
+                    float scrollPercentage = position + positionOffset;
+                    mainPanel.setBackgroundColor(Color.valueOf(0.165f, 0.165f, 0.165f,
+                            (1 - scrollPercentage) * 0.6f + scrollPercentage * 0.933f).toArgb());
                 }
             }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                contentFragment.setAlpha(1 - slideOffset);
-                bottomSheet.setAlpha(slideOffset);
-
-                mainPanel.setBackgroundColor(Color.valueOf(0.165f, 0.165f, 0.165f,
-                        (1 - slideOffset) * 0.6f + slideOffset * 0.933f).toArgb());
-            }
         });
-        HomeGestureListener homeGestureListener = new HomeGestureListener(
-                () -> DialogService.getInstance().show(this, DialogType.SEARCH, null));
-        GestureDetector gestureDetector = new GestureDetector(this, homeGestureListener);
-        drawerLayout.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
-        drawerContainer.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
         // ### Bind notification service
         notificationReceiver = new Intent(this, NotificationReceiver.class);
         startService(notificationReceiver);
 
         // ### Back ###
-        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        });
-
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         };
 
@@ -389,11 +338,10 @@ public class MainActivity extends AppCompatActivity
         network = null;
         bluetooth = null;
         location = null;
-        contentFragment = null;
 
-        appList.setAdapter(null);
+        contentView.setAdapter(null);
         appAdapter = null;
-        appList = null;
+        contentView = null;
     }
 
     @SuppressLint("DefaultLocale")
@@ -452,21 +400,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void update(List<AppPackage> packages) {
-        appAdapter = new AppPagerAdapter(this, createPages(packages));
-        appList.setAdapter(appAdapter);
+        appAdapter = new ContentPagerAdapter(this, createPages(packages));
+        contentView.setAdapter(appAdapter);
 
         // Makes the bottom sheet works
-        RecyclerView innerRecyclerView = (RecyclerView) appList.getChildAt(0);
+        RecyclerView innerRecyclerView = (RecyclerView) contentView.getChildAt(0);
         if (innerRecyclerView != null) {
             innerRecyclerView.setNestedScrollingEnabled(false);
-            innerRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            innerRecyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
         }
-
-        if (tabLayoutMediator != null && tabLayoutMediator.isAttached()) {
-            tabLayoutMediator.detach();
-        }
-        tabLayoutMediator = new TabLayoutMediator(appPageIndicator, appList, ((tab, position) -> {}));
-        tabLayoutMediator.attach();
     }
 
     private void calendarPopup() {
