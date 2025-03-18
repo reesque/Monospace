@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                contentView.setCurrentItem(0, true);
             }
         };
 
@@ -298,6 +299,8 @@ public class MainActivity extends AppCompatActivity
         AppPackageService.getInstance(this).subscribe(this);
 
         WeatherService.getInstance(this).notifySubscriber();
+
+        getOnBackPressedDispatcher().onBackPressed();
     }
 
     @Override
